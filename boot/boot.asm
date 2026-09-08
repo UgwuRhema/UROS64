@@ -48,5 +48,5 @@ printb:
 msg db "UROS Bootloader!", 13, 10, 0
 boot_drive db 0
 
-times 512 - ($ - $$) db 0
+times 510 - ($ - $$) db 0
 dw 0xaa55
