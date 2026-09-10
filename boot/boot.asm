@@ -113,7 +113,7 @@ detect_memory:
 
 .mem_done:
 	popad ;as you know what this does, restore all registers
-	re
+	ret
 
 intro db "UROS Bootloader", 13, 10, 0
 boot_drive db 0
