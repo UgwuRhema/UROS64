@@ -25,6 +25,8 @@ _start:
 
 	mov si, intro
 	call printb
+
+	call enable_a20
 	
 	cli
 	hlt
@@ -39,6 +41,13 @@ printb:
 	jmp printb ;recursive printing
 .done:
 	ret
+
+enable_a20:
+	in al, 0x92
+	or al, 0x02
+	and al, 0xfe
+	out 0x92, al
+	ret	
 
 intro db "UROS Bootloader", 13, 10, 0
 
