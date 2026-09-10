@@ -30,6 +30,9 @@ _start:
 
 	call enable_a20
 
+	;we will now detect memory via BIOS using the SMAP method
+	call detect_memory
+
 	call read_disk ;reads the disk and loads the kernel into memory
 	
 	cli
@@ -79,6 +82,38 @@ dap_count:
 	dw KERNEL ;the magic number we made earlier, this is what we would jump to when we enter long mode
 	dw 0 ;segment?
 	dq 1   ;starting LBS(Logical Block Sector), its the sector right after the boot sector
+
+;memory constants, magic numbers
+NUM_MEMORY_ENTRIES_PTR equ 0x1000
+MEMORY_MAP_BUFFER_PTR equ 0x1004
+
+detect_memory:
+	pushad ;save all registers safely
+	xor ebx, ebx
+	mov edx, 0x534d4150 ;magic number 'SMAP'
+	mov di, MEMORY_MAP_BUFFER_PTR
+
+	;zero out initial counter slot
+	mov dword [NUM_MEMORY_ENTRIES_PTR], 0
+
+.mem_loop:
+	mov eax, 0xe820 ;bios function request map!
+	mov ecx, 24 ;request a 24-byte entry structure
+	int 0x15
+	jc .mem_done ;if carry flag is set, list is complete
+
+	cmp eax, 0x534d4150 ;verify CPU responded with 'SMAP'
+	jne .mem_done
+
+	add di, 24 ;incerment buffer pointer foward
+	inc dword [NUM_MEMORY_ENTRIES_PTR] ;increment map entry counter
+
+	test ebx, ebx ;if ebx is 0, parsing is done
+	jne .mem_loop
+
+.mem_done:
+	popad ;as you know what this does, restore all registers
+	re
 
 intro db "UROS Bootloader", 13, 10, 0
 boot_drive db 0
