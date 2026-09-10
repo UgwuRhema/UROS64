@@ -22,6 +22,6 @@ qemu:
 		-m 512 \
 		-smp 1 \
 		-enable-kvm \
-		-machine pc \
+		-machine q35 \
 		-cpu Nehalem-v2 \
 		-display gtk
