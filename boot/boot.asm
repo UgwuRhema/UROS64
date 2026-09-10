@@ -1,7 +1,7 @@
 bits 16
 org 0x7c00
 
-KERNEL_EQU equ 0x8000 ;magic number, this is the address i would like to load our kernel in
+KERNEL equ 0x8000 ;magic number, this is the address i would like to load our kernel in
 
 global start
 section .text
