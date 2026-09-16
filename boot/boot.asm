@@ -25,15 +25,24 @@ _start:
 	mov ax, 0x0003
 	int 0x10
 
-	mov si, intro
+	mov si, intro ;greeter message
 	call printb
 
-	call enable_a20
+	call enable_a20 ;fast a20
 
 	;we will now detect memory via BIOS using the SMAP method
 	call detect_memory
 
 	call read_disk ;reads the disk and loads the kernel into memory
+
+	lgdt [gdt_desc]
+
+	cli
+	mov eax, cr0
+	or eax, 1
+	mov cr0, eax
+
+	jmp 0x08:protected
 	
 	cli
 	hlt
@@ -115,9 +124,53 @@ detect_memory:
 	popad ;as you know what this does, restore all registers
 	ret
 
+gdt_start:
+	gdt_null:
+		;null descriptor, always zero....
+		dd 0x00000000
+		dd 0x00000000
+	gdt_code:
+		dw 0xffff
+		dw 0x0000
+		db 0x00
+		db 0b10011010
+		db 0b11001111
+		db 0x00
+	gdt_data:
+		dw 0xffff
+		dw 0x0000
+		db 0x00
+		db 0b10010010
+		db 0b11001111
+		db 0x00
+gdt_end:
+
+gdt_desc:
+	dw gdt_end - gdt_start - 1
+	dd gdt_start
+
+bits 32
+protected:
+	cli
+	mov ebp, 0x90000
+	mov ax, 0x10
+	mov ds, ax
+	mov es, ax
+	mov fs, ax
+	mov gs, ax
+	mov ss, ax
+	mov esp, ebp
+
+	jmp KERNEL
+
+
+;just keeping in mind these magic numbers
+CODE_SEL equ 0x08
+DATA_SEL equ 0x10
+
 intro db "UROS Bootloader", 13, 10, 0
 boot_drive db 0
-err_msg db "Failed to Read disk! Halting...", 13,10,0
+err_msg db "Failed to Read disk! Halting...", 0
 
 times 510 - ($ - $$) db 0
 dw 0xaa55
