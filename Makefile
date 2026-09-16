@@ -22,5 +22,7 @@ qemu:
 		-drive format=raw,file=$(IMG),if=ide \
 		-m 512 \
 		-smp 1 \
+		-enable-kvm \
+		-cpu host \
 		-machine pc \
 		-display gtk
