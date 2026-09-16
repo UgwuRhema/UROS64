@@ -23,5 +23,4 @@ qemu:
 		-m 512 \
 		-smp 1 \
 		-machine pc \
-		-cpu host \
 		-display gtk
