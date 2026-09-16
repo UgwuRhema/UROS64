@@ -9,7 +9,6 @@ IMG := uros.img
 .PHONY: bloader
 bloader: ./boot/boot.asm
 	$(AS) $(ASF) -o $(BOOT) $(BOOT_SRC)
-	chmod 755 $(BOOT)
 
 img:
 	qemu-img create -f raw $(IMG) 30M
