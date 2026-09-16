@@ -124,6 +124,20 @@ detect_memory:
 	popad ;as you know what this does, restore all registers
 	ret
 
+bits 32
+protected:
+	cli
+	mov ebp, 0x90000
+	mov ax, 0x10
+	mov ds, ax
+	mov es, ax
+	mov fs, ax
+	mov gs, ax
+	mov ss, ax
+	mov esp, ebp
+
+	jmp KERNEL
+
 gdt_start:
 	gdt_null:
 		;null descriptor, always zero....
@@ -148,21 +162,6 @@ gdt_end:
 gdt_desc:
 	dw gdt_end - gdt_start - 1
 	dd gdt_start
-
-bits 32
-protected:
-	cli
-	mov ebp, 0x90000
-	mov ax, 0x10
-	mov ds, ax
-	mov es, ax
-	mov fs, ax
-	mov gs, ax
-	mov ss, ax
-	mov esp, ebp
-
-	jmp KERNEL
-
 
 ;just keeping in mind these magic numbers
 CODE_SEL equ 0x08
