@@ -19,15 +19,13 @@ _start:
 
 	;building page tables at 0x10000
 	mov edi, PML
-	mov cr3, edi  ;this let's the CPU know where page tables are
-	 
+	mov cr3, edi  ;this let's the CPU know where page tables are 
 	xor eax, eax
 	mov ecx, SIZE_OF_PAGE_TABLES
 	rep  stosd   ;writes 4 * SIZE_OF_PAGE_TABLES, which is enough space...
-	mov edi, cr3
 
-	mov dword [0x70000], 0x21003
-	mov dword [0x71000], 0x22003
+	mov dword [0x70000], 0x71003
+	mov dword [0x71000], 0x72003
 	mov dword [0x72000], 0x00000083
 
 	; Enable PAE
@@ -54,7 +52,7 @@ _start:
 gdt64_start:
 	dq 0x0000000000000000
 gdt64_code:
-	dq 0x002090a000000000  ; L=1, D=0
+	dq 0x00209a0000000000  ; L=1, D=0
 gdt64_data:
 	dq 0x0000920000000000
 gdt64_end:
