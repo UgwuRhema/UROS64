@@ -4,7 +4,8 @@ ASF2 := -f elf64
 CC := cc
 CFLAGS := -ffreestanding -c -fno-pie -fno-stack-protector -mgeneral-regs-only -nostdlib -fno-builtin -Wall -Wextra -O2 -march=x86-64 -mno-red-zone
 LD := /usr/bin/ld
-LDFLAGS := -T ./src/linked.ld
+LDFLAGS := -nostdlib -static
+LINK := ./src/linker.ld
 
 BOOT_SRC := ./boot/boot.asm
 BOOT := ./boot/uboot
@@ -14,9 +15,8 @@ KE_SRC := ./src/kernel/entry.asm
 KE_O := ./src/kernel/entry.o
 K := ./src/kernel/kmain.c
 K_O := ./src/kernel/kmain.o
+KER := ./src/kernel/uroskrnl.elf
 KERN := ./src/kernel/uroskrnl
-
-LINK := ./src/linker.ld
 
 IMG := uros.img
 
@@ -30,7 +30,9 @@ bloader: ./boot/boot.asm
 kernel:
 	$(AS) $(ASF2) -o $(KE_O) $(KE_SRC)
 	$(CC) $(CFLAGS)	-o $(K_O) $(K)
-
+	$(LD) $(LDFLAGS) -T $(LINK) -o $(KER) $(KE_O) $(K_O)
+	objcopy -O binary $(KER) $(KERN)
+	rm -rf $(KER)
 img:
 	qemu-img create -f raw $(IMG) 10M
 
