@@ -20,7 +20,7 @@ KERN := ./src/kernel/uroskrnl
 
 IMG := uros.img
 
-.PHONY: bloader stage2
+.PHONY: bloader
 bloader: ./boot/boot.asm
 	$(AS) $(ASF) -o $(BOOT) $(BOOT_SRC)
 	chmod +x $(BOOT)
