@@ -1,7 +1,7 @@
 bits 16
 org 0x7c00
 
-KERNEL equ 0x8000 ;magic number, this is the address i would like to load our kernel in
+STAGE2 equ 0x8000 ;magic number, this is the address i would like to load our kernel in
 
 global start
 section .text
@@ -88,7 +88,7 @@ dap:
 
 dap_count:
 	dw 2       ;only 2 sectors
-	dw KERNEL ;the magic number we made earlier, this is what we would jump to when we enter long mode
+	dw STAGE2 ;the magic number we made earlier, this is what we would jump to when we enter long mode
 	dw 0 ;segment?
 	dq 1   ;starting LBS(Logical Block Sector), its the sector right after the boot sector
 
@@ -141,8 +141,8 @@ protected:
 	;mov byte [0xB8002], 'M'
 	;mov byte [0xB8003], 'M'
 
-	mov eax, KERNEL
-	jmp KERNEL
+	mov eax, STAGE2
+	jmp eax
 
 gdt_start:
 	gdt_null:
