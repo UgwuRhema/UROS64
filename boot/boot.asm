@@ -73,7 +73,7 @@ read_stage2:
 	mov ah, 0x42
 	mov dl, [boot_drive]
 	int 0x13
-	jc .err
+	jc err
 	ret
 
 read_kernel:
@@ -81,10 +81,10 @@ read_kernel:
 	mov ah, 0x42
 	mov dl, [boot_drive]
 	int 0x13
-	jc .err
+	jc err
 	ret
 
-.err:
+err:
 	mov si, err_msg
 	call printb
 	cli
