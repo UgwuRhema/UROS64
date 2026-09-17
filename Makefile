@@ -11,7 +11,7 @@ bloader: ./boot/boot.asm
 	$(AS) $(ASF) -o $(BOOT) $(BOOT_SRC)
 
 img:
-	qemu-img create -f raw $(IMG) 30M
+	qemu-img create -f raw $(IMG) 10M
 
 loadb:
 	dd if=$(BOOT) of=$(IMG) bs=512 count=1 conv=notrunc
