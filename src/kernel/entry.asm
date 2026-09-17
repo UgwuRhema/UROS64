@@ -15,6 +15,20 @@ _begin:
 	mov gs, ax
 	mov ss, ax
 
+	lea     rdi, [rel __bss_start] ; 64‑bit RIP‑relative load
+	xor     rax, rax   ; rax = 0
+	mov     rcx, __bss_end
+	sub     rcx, rdi     ; rcx = size in bytes
+	shr     rcx, 3     ; divide by 8 → # of qwords
+	rep     stosq   ; write 8‑byte zeros
+
+	mov     rcx, __bss_end
+	sub     rcx, rdi ; total byte count again
+	and     rcx, 7  ; remaining 0‑7 bytes
+	jz      .bss_done
+	rep     stosb ; store remaining bytes
+.bss_done:
+
 	call kmain
 ;infinite loop!
 .hang:
