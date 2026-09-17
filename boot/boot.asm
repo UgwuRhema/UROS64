@@ -136,7 +136,13 @@ protected:
 	mov ss, ax
 	mov esp, ebp
 
-	jmp KERNEL
+	mov byte [0xB8000], 'P'
+	mov byte [0xB8001], 'M'
+
+.halt:
+	cli
+	hlt
+	jmp .halt
 
 gdt_start:
 	gdt_null:
