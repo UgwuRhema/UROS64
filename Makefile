@@ -20,10 +20,8 @@ stage2:
 img:
 	qemu-img create -f raw $(IMG) 10M
 
-loadb:
+load:
 	dd if=$(BOOT) of=$(IMG) bs=512 count=1 conv=notrunc
-
-loadb2:
 	dd if=$(S2) of=$(IMG) bs=512 seek=1 conv=notrunc
 
 qemu:
