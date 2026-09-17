@@ -15,9 +15,9 @@ _begin:
 
 	;let's print something to verfiy successful jump
 	mov byte [0xb8000], 'K'
-	mov byte [0xb8001], 0x5f
+	mov byte [0xb8001], 0xf5
 	mov byte [0xb8002], 'M'
-	mov byte [0xb8003], 0x5f
+	mov byte [0xb8003], 0xf5
 
 ;infinite loop!
 .hang:
