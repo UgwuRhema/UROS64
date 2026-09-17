@@ -38,6 +38,13 @@ _start:
 
 	lgdt [gdt_desc]
 
+	;a pause function call will be here
+	;just like a realistic delay for 2 seconds....
+
+	;last clear screen
+	mov ax, 0x0003
+	int 0x10
+
 	cli
 	mov eax, cr0
 	or eax, 1
