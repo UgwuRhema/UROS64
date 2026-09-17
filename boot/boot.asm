@@ -137,7 +137,9 @@ protected:
 	mov esp, ebp
 
 	mov byte [0xB8000], 'P'
-	mov byte [0xB8001], 'M'
+	mov byte [0xB8001], 0x07
+	mov byte [0xB8002], 'M'
+	mov byte [0xB8003], 0x07
 
 .halt:
 	cli
