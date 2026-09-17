@@ -33,7 +33,8 @@ _start:
 	;we will now detect memory via BIOS using the SMAP method
 	call detect_memory
 
-	call read_disk ;reads the disk and loads the kernel into memory
+	call read_stage2 ;reads the disk and load the second stage into memory at 0x8000
+	call read_kernel ;reads LBA 3 and beyond and loads kernel at 0x10000
 
 	lgdt [gdt_desc]
 
@@ -66,9 +67,17 @@ enable_a20:
 	out 0x92, al
 	ret
 
-read_disk:
+read_stage2:
 	;let's use the extende LBA read then, really i forgot
 	mov si, dap
+	mov ah, 0x42
+	mov dl, [boot_drive]
+	int 0x13
+	jc .err
+	ret
+
+read_kernel:
+	mov si, dap_kernel
 	mov ah, 0x42
 	mov dl, [boot_drive]
 	int 0x13
@@ -85,12 +94,18 @@ read_disk:
 dap:
 	db 0x10 ;packet size, 16 bytes
 	db 0 ; reserved, must be 0
-
-dap_count:
 	dw 2       ;only 2 sectors
 	dw STAGE2 ;the magic number we made earlier, this is what we would jump to when we enter long mode
 	dw 0 ;segment?
 	dq 1   ;starting LBS(Logical Block Sector), its the sector right after the boot sector
+
+dap_kernel:
+	db 0x10
+	db 0
+	dw 120 ;120 sectors for kernel...
+	dw 0x0000
+	dw 0x1000 ;0x10000
+	dq 3 ;start from sector 3
 
 ;memory constants, magic numbers
 NUM_MEMORY_ENTRIES_PTR equ 0x1000
