@@ -1,12 +1,14 @@
 AS := nasm
 ASF := -f bin
+ASF2 := -f elf64
 
 BOOT_SRC := ./boot/boot.asm
 BOOT := ./boot/uboot
 S2_SRC := ./boot/stage2.asm
 S2 := ./boot/uboot2
-KE_SRC := ./src/entry.asm
-KE := ./src/uroskrnl
+KE_SRC := ./src/kernel/entry.asm
+KE_O := ./src/kernel/entry.o
+KE := ./src/kernel/uroskrnl
 
 IMG := uros.img
 
@@ -18,8 +20,7 @@ bloader: ./boot/boot.asm
 	chmod +x $(S2)
 
 kernel:
-	$(AS) $(ASF) -o $(KE) $(KE_SRC)
-	chmod +x $(KE)
+	$(AS) $(ASF2) -o $(KE_O) $(KE_SRC)
 
 img:
 	qemu-img create -f raw $(IMG) 10M

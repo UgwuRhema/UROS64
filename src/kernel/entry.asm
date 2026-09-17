@@ -1,5 +1,4 @@
 bits 64
-org 0x0
 
 section .text
 
@@ -18,7 +17,7 @@ _begin:
 
 	call kmain
 ;infinite loop!
-;.hang:
-;	cli
-;	hlt
-;	jmp .hang
+.hang:
+	cli
+	hlt
+	jmp .hang
