@@ -40,6 +40,7 @@ _start:
 
 	;a pause function call will be here
 	;just like a realistic delay for 2 seconds....
+	call delay2_secs
 
 	;last clear screen
 	mov ax, 0x0003
@@ -73,6 +74,18 @@ enable_a20:
 	and al, 0xfe
 	out 0x92, al
 	ret
+
+delay2_secs:
+	mov ax, 0x8600
+	mov cx, 0x001e
+	mov dx, 0x8480
+	int 0x15
+	jc .wait_error
+	ret
+.wait_error:
+	cli
+	hlt 
+	jmp $-2
 
 read_stage2:
 	;let's use the extende LBA read then, really i forgot
