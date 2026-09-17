@@ -69,4 +69,7 @@ long_mode:
 	mov ss, ax
 	mov rsp, 0x90000
 
-	jmp KERNEL
+.hang:
+	cli
+	hlt
+	jmp .hang
