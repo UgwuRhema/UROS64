@@ -23,6 +23,9 @@ img:
 loadb:
 	dd if=$(BOOT) of=$(IMG) bs=512 count=1 conv=notrunc
 
+loadb2:
+	dd if=$(S2) of=$(IMG) bs=512 seek=1 conv=notrunc
+
 qemu:
 	qemu-system-x86_64 \
 		-boot menu=on \
