@@ -87,7 +87,7 @@ dap:
 	db 0 ; reserved, must be 0
 
 dap_count:
-	dw 120       ;120 sectors is a lot
+	dw 2       ;only 2 sectors
 	dw KERNEL ;the magic number we made earlier, this is what we would jump to when we enter long mode
 	dw 0 ;segment?
 	dq 1   ;starting LBS(Logical Block Sector), its the sector right after the boot sector
@@ -136,15 +136,13 @@ protected:
 	mov ss, ax
 	mov esp, ebp
 
-	mov byte [0xB8000], 'P'
-	mov byte [0xB8001], 0x07
-	mov byte [0xB8002], 'M'
-	mov byte [0xB8003], 0x07
+	;mov byte [0xB8000], 'P'
+	;mov byte [0xB8001], 'M'
+	;mov byte [0xB8002], 'M'
+	;mov byte [0xB8003], 'M'
 
-.halt:
-	cli
-	hlt
-	jmp .halt
+	mov eax, KERNEL
+	jmp KERNEL
 
 gdt_start:
 	gdt_null:
@@ -171,7 +169,7 @@ gdt_desc:
 	dw gdt_end - gdt_start - 1
 	dd gdt_start
 
-;just keeping in mind these magic numbers
+;magic number section
 CODE_SEL equ 0x08
 DATA_SEL equ 0x10
 
