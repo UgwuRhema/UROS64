@@ -31,7 +31,7 @@ kernel:
 	$(AS) $(ASF2) -o $(KE_O) $(KE_SRC)
 	$(CC) $(CFLAGS)	-o $(K_O) $(K)
 	$(CC) $(CFLAGS) -o ./src/vga/vga.o ./src/vga/vga.c
-	$(LD) $(LDFLAGS) -T $(LINK) -o $(KER) $(KE_O) $(K_O)
+	$(LD) $(LDFLAGS) -T $(LINK) -o $(KER) $(KE_O) $(K_O) ./src/vga/vga.o
 	objcopy -O binary $(KER) $(KERN)
 	rm -rf $(KER)
 img:
