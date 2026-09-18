@@ -5,7 +5,7 @@
 void 
 kmain()
 {
-    cursor_pos = 898034;
+    kprint("Hello World", BLUE);
 	/* infinte loop */
 	while (1)
 	{
