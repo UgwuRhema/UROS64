@@ -1,15 +1,18 @@
 #include <stdint.h>
 
+typedef uint16_t u16;
+
 #define _VGA_ADDR 0xb8000 /* vga mem address */
 #define _VGA_COLS 80
 #define _VGA_ROWS 25
 
 /* my attributes UROS is only allowed to use */
-#define WHITE 0x07
-#define BLUE
-#define YELLOW
+static const u16 WHITE = 0x07; /* for some reason i dont wann use #define MACROS */
+static const u16 BLUE = ;
+static const u16 YELLOW = ;
 
 static long unsigned int cursor_pos = 0;
+#define _VGA_BUF ((volatile u16 *)_VGA_ADDR)
 
-extern void kprint_c(char, uint16_t);
-extern void kprint(const char *, uint16_t);
+extern void kprint_c(char, u16);
+extern void kprint(const char *, u16);
