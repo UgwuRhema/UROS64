@@ -5,7 +5,9 @@
 void 
 kmain()
 {
-    kprint("Hello World", BLUE);
+    kprint("Hello World\n", BLUE);
+    kprint("Another Hello World\n", WHITE);
+    kprint("Final boss hello World\n", YELLOW);
 	/* infinte loop */
 	while (1)
 	{
