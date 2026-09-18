@@ -14,5 +14,5 @@ static const u16 YELLOW = 0x06;
 static long unsigned int cursor_pos = 0;
 #define _VGA_BUF ((volatile u16 *)_VGA_ADDR)
 
-void kprint_c(char, u16);
-void kprint(const char *, u16);
+extern void kprint_c(char, u16);
+extern void kprint(const char *, u16);
