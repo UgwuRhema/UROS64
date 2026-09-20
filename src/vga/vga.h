@@ -2,7 +2,8 @@
 
 typedef uint16_t u16;
 
-#define _VGA_ADDR 0xb8000 /* vga mem address */
+#define _VGA_ADDR 0xb8000 /* vga address */
+/* VGA screen width and breadth respectively */
 #define _VGA_COLS 80
 #define _VGA_ROWS 25
 
@@ -14,7 +15,9 @@ static const u16 PURPLE = 0x05;
 static const u16 GREEN = 0x0A;
 
 [[maybe_unused]]static long unsigned int cursor_pos = 0;
+/* the space using the VGA buffer */
 #define _VGA_BUF ((volatile u16 *)_VGA_ADDR)
 
+/* important printing functions */
 extern void kprint_c(char, u16);
 extern void kprint(const char *, u16);
