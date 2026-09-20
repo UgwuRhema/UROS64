@@ -17,6 +17,11 @@ K := ./src/kernel/kmain.c
 K_O := ./src/kernel/kmain.o
 KER := ./src/kernel/uroskrnl.elf
 KERN := ./src/kernel/uroskrnl
+VGA := ./src/vga/vga.c
+VGA_O := ./src/vga/vga.o
+FUNC := ./src/func/func.c
+FUNC_O := ./src/func/func.o
+
 
 IMG := uros.img
 
@@ -30,8 +35,9 @@ bloader: ./boot/boot.asm
 kernel:
 	$(AS) $(ASF2) -o $(KE_O) $(KE_SRC)
 	$(CC) $(CFLAGS)	-o $(K_O) $(K)
-	$(CC) $(CFLAGS) -o ./src/vga/vga.o ./src/vga/vga.c
-	$(LD) $(LDFLAGS) -T $(LINK) -o $(KER) $(KE_O) $(K_O) ./src/vga/vga.o
+	$(CC) $(CFLAGS) -o $(VGA_O) $(VGA)
+	$(CC) $(CFLAGS) -o $(FUNC_O) $(FUNC)
+	$(LD) $(LDFLAGS) -T $(LINK) -o $(KER) $(KE_O) $(K_O) $(VGA_O) $(FUNC_O)
 	objcopy -O binary $(KER) $(KERN)
 	rm -rf $(KER)
 img:
