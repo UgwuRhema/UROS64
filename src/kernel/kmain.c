@@ -5,7 +5,9 @@
 void 
 kmain()
 {
-	kprint("UROS(Unrestricted Runtime Operating System) KERNEL v0.01\n", BLUE);
+	kprint("Loading Kernel...\n" , WHITE);
+	kprint("UROS(Unrestricted Runtime Operating System) KERNEL ", WHITE);
+	kprint("v0.01\n", GREEN);
 	/* infinte loop */
 	while (1)
 	{

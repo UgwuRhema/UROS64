@@ -11,6 +11,7 @@ static const u16 WHITE = 0x07; /* for some reason i dont wann use #define MACROS
 static const u16 BLUE = 0x01;
 static const u16 YELLOW = 0x0e;
 static const u16 PURPLE = 0x05;
+static const u16 GREEN = 0x0A;
 
 static long unsigned int cursor_pos = 0;
 #define _VGA_BUF ((volatile u16 *)_VGA_ADDR)
