@@ -32,9 +32,13 @@ _start:
 
 	;we will now detect memory via BIOS using the SMAP method
 	call detect_memory
+	mov si, mem
+	call printb
 
 	call read_stage2 ;reads the disk and load the second stage into memory at 0x8000
 	call read_kernel ;reads LBA 3 and beyond and loads kernel at 0x10000
+	mov si, msg
+	call printb
 
 	lgdt [gdt_desc]
 
@@ -211,6 +215,8 @@ DATA_SEL equ 0x10
 intro db "UROS Bootloader", 13, 10, 0
 boot_drive db 0
 err_msg db "Failed to Read disk! Halting...", 0
+mem db "Detecting available memory from the BIOS...", 13, 10, 0
+msg db "Disk OK! Loading Kernel...", 13, 10, 0
 
 times 510 - ($ - $$) db 0
 dw 0xaa55
