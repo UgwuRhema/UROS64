@@ -1,26 +1,36 @@
 #include "vga.h"
+#include "../func/func.h"
 
 void 
 kprint_c(char c, u16 attr)
 {
+    /* handle newline */
     if (c == '\n')
     {
         cursor_pos = (cursor_pos / _VGA_COLS + 1) * _VGA_COLS;         
-    } else if (c == '\b'){
+    } else if (c == '\b'){ /* handle backspace */
         if (cursor_pos > 0)
         {
             cursor_pos--;
             _VGA_BUF[cursor_pos] = (u16)32 | (attr << 8);
         }
     } else {
+        /* else it's just a normal character... */
         _VGA_BUF[cursor_pos] = (u16)c | (attr << 8);
         cursor_pos++;
     }
+    
+    /* track the blinking cursor */
+    outb(0x3d4, 0x0f);
+    outb(0x3d5, (u8)(cursor_pos & 0xff));
+    outb(0x3d4, 0x0e);
+    outb(0x3d5, (u8)(cursor_pos >> 8) & 0xff);
 }
 
 void 
 kprint(const char *str, u16 attr)
 {
+    /* while the current character is not the '\0' null terminator */
     while (*str)
     {
        kprint_c(*str++, attr);
