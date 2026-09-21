@@ -13,9 +13,15 @@ kmain()
 	kprint("v0.01\n", GREEN);
 	kprint("Initializing Components and Necessities... \n", GREEN);
     idt_init();
-    volatile int a = 10;
-    volatile int b = 0;
-    int c = a / b;
+
+	/* Trigger synchronous CPU Exception 0 */
+	__asm__ volatile (
+		"xor %%rax, %%rax\n\t"
+		"xor %%rdx, %%rdx\n\t"
+		"div %%rax"
+		::: "rax", "rdx"
+	);
+
     /* infinte loop */
 	while (1)
 	{
