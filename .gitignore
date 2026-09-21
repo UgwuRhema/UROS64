@@ -2,3 +2,4 @@ uboot
 uboot2
 uroskrnl
 *.o
+*.img
