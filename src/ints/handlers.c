@@ -1,7 +1,9 @@
 #include "handlers.h"
 
-__attribute__((interrupt)) void divide_by_zero(void *frame)
+__attribute__((interrupt)) void
+divide_by_zero(void *frame)
 {
+    struct interrupt_frame *int_frame = (struct interrupt_frame *)frame;
     clear_screen();
     kprint("KERNEL PANIC!\n", PURPLE);
     kprint("Fatal exception in interrupt!\n", PURPLE);

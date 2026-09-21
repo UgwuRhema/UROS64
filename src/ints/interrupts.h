@@ -27,6 +27,18 @@ struct __attribute__((packed)) IDTR
     uint64_t address;
 };
 
+/* the frame containing the values and registers the CPU pushes onto the stack */
+struct __attribute__((packed)) interrupt_frame
+{
+	uint64_t rip;  /* instruction pointer to resume */
+	uint16_t cs; /* code segment selector */
+	uint16_t __cs_pad; /* padding to align the next 64bit field */
+	uint64_t rflags;
+	uint64_t rsp; /* stack pointer before the interrupt */
+	uint16_t ss; /* stack segment selector */
+	uint16_t __ss_pad;
+};
+
 extern void idt_set_entry(int, uint8_t, uint64_t, uint16_t, uint8_t); /* function to set 1 IDT Entry... */
 extern void idt_load(void);
 extern void idt_init(void);
