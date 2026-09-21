@@ -1,14 +1,14 @@
 #include "interrupts.h"
-#include <stdatomic.h>
 
 void
-idt_set_entry(int index, uint64_t hand_addr, uint16_t selector, uint8_t attr)
+idt_set_entry(int index, uint8_t ist,uint64_t hand_addr, uint16_t selector, uint8_t attr)
 {
    idt[index].offset_low = hand_addr & 0xffff; /* low 16 bits */
    idt[index].offset_middle = (hand_addr >> 16) & 0xffff; /* blah blah */
    idt[index].offset_high = (hand_addr >> 32);
+   idt[index].ist = ist;
    idt[index].selector = selector;
-   idt[index].zero = (uint8_t)0; /* i know this is pointless haha */
+   idt[index].zero = (uint8_t)0x0; /* i know this is pointless haha */
    idt[index].type_attr = attr; /* 0x8e for active and 0x0e for inactive */
 }
 
