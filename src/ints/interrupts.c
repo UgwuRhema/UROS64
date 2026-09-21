@@ -1,4 +1,5 @@
 #include "interrupts.h"
+#include "handlers.h"
 
 void
 idt_set_entry(int index, uint8_t ist,uint64_t hand_addr, uint16_t selector, uint8_t attr)
@@ -27,5 +28,24 @@ idt_load(void)
 void
 idt_init(void)
 {
-    /* coming soon... */
+    __asm__ volatile ("cli"); /* clear interrupts..we don't want those here hehe! */
+    int i;
+    /* yknow we have to clear all first cause we wont be using all 256 entries so some have to be null */
+    for (i = 0; i < _IDT_ENTRIES; ++i)
+    {
+        /* a null gate: all zeros means not present... */
+        idt[i].offset_low   = 0;
+        idt[i].selector     = 0;
+        idt[i].ist          = 0;
+        idt[i].type_attr    = 0;   // present bit cleared = invalid
+        idt[i].offset_middle= 0;
+        idt[i].offset_high  = 0;
+        idt[i].zero         = 0;
+    }
+    
+    /* let's check it out... */
+    idt_set_entry(0, 0, (uint64_t)divide_by_zero, 0x08, 0x8e);
+
+    idt_load();
+    __asm__ volatile ("sti");
 }
