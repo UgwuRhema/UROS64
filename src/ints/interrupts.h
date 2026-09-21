@@ -10,10 +10,11 @@ struct __attribute__((packed)) IDT_Entry
 {
     uint16_t offset_low; /* low 16 bits of handler address */
     uint16_t selector; /* like i said 0x08 */
-    uint16_t offset_middle; /* since we are doing 64 bit, this has to be here*/ 
-    uint8_t zero; /* default must be zero */
+    uint8_t ist; /* ist index (priviledged array of registers to special exceptions/interrupts) */
     uint8_t type_attr; /* apparently this is the interrupt gate... */
+    uint16_t offset_middle; /* since we are doing 64 bit, this has to be here*/ 
     uint32_t offset_high; /* high 16 bits of the handler address */
+    uint32_t zero; /* reserved must be zero */
 } static idt[_IDT_ENTRIES]; /* always 256 IDT Entries both on 32 and 64 bit OSes(not that it matters the architecture) */
 
 /* you know...the register...*/
@@ -24,6 +25,6 @@ struct __attribute__((packed)) IDTR
     uint64_t address;
 };
 
-extern void idt_set_entry(int, uint64_t, uint16_t, uint8_t); /* function to set 1 IDT Entry... */
+extern void idt_set_entry(int, uint8_t, uint64_t, uint16_t, uint8_t); /* function to set 1 IDT Entry... */
 extern void idt_load(void);
 extern void idt_init(void);
