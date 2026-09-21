@@ -37,12 +37,10 @@ kprint(const char *str, u16 attr)
     }
 }
 
+/* better or nah? */
 void
 clear_screen(void)
 {
-    int i;
-    for (i = 0; i < _VGA_COLS * _VGA_ROWS; ++i)
-    {
-        _VGA_BUF[i] = (u16)' ' | (WHITE << 8);
-    }
+    u16 blank = (WHITE << 8) | ' ';
+    memset((void *)_VGA_BUF, blank, _VGA_COLS * _VGA_ROWS);
 }
