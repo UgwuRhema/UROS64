@@ -1,6 +1,8 @@
 #include "interrupts.h"
 #include "handlers.h"
 
+struct IDT_Entry idt[_IDT_ENTRIES];
+
 void
 idt_set_entry(int index, uint8_t ist,uint64_t hand_addr, uint16_t selector, uint8_t attr)
 {
