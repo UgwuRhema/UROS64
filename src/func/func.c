@@ -15,3 +15,14 @@ inb(u16 port)
 	__asm__ volatile ("inb %1, %0" : "=a"(val) : "Nd"(port));
 	return val;
 }
+
+/* your typical memset */
+void
+memset(void *dest, u8 val, u32 len)
+{
+	u8 *ptr = (u8 *)dest;
+	while (len--)
+	{
+		*ptr = val;
+	}
+}
