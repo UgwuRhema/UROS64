@@ -36,3 +36,13 @@ kprint(const char *str, u16 attr)
        kprint_c(*str++, attr);
     }
 }
+
+void
+clear_screen(void)
+{
+    int i;
+    for (i = 0; i < _VGA_COLS * _VGA_ROWS; ++i)
+    {
+        _VGA_BUF[i] = (u16)' ' | (WHITE << 8);
+    }
+}

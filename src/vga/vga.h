@@ -21,3 +21,4 @@ static long unsigned int cursor_pos = 0;
 /* important printing functions */
 extern void kprint_c(char, u16);
 extern void kprint(const char *, u16);
+extern void clear_screen(void);
