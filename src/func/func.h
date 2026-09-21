@@ -8,4 +8,4 @@ typedef uint32_t u32;
 /* writes and reads data from hardware ports respectively */
 extern void outb(u16, u8);
 extern u8 inb(u16);
-extern void memset(void *, u8, u32);
+extern void memset(void *, u16, u32);
