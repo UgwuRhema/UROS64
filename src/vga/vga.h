@@ -14,7 +14,7 @@ static const u16 YELLOW = 0x0e;
 static const u16 PURPLE = 0x05;
 static const u16 GREEN = 0x0A;
 
-[[maybe_unused]]static long unsigned int cursor_pos = 0;
+static long unsigned int cursor_pos = 0;
 /* the space using the VGA buffer */
 #define _VGA_BUF ((volatile u16 *)_VGA_ADDR)
 
