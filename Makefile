@@ -52,6 +52,8 @@ kernel:
 img:
 	qemu-img create -f raw $(IMG) 10M
 
+# i added this line cause i wanted to commit hehe
+
 load:
 	dd if=$(BOOT) of=$(IMG) bs=512 count=1 conv=notrunc
 	dd if=$(S2) of=$(IMG) bs=512 seek=1 conv=notrunc
