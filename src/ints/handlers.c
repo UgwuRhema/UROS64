@@ -2,6 +2,7 @@
 
 __attribute__((interrupt)) void divide_by_zero(void *frame)
 {
+    clear_screen();
     kprint("KERNEL PANIC!\n", PURPLE);
     kprint("Fatal exception in interrupt!\n", YELLOW);
     kprint("Interrupt divide by zero\n", WHITE);
