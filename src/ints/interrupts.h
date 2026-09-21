@@ -1,3 +1,4 @@
+#include <cstdint>
 #include <stddef.h>
 #include <stdint.h>
 
@@ -37,6 +38,7 @@ struct __attribute__((packed)) interrupt_frame
 	uint64_t rsp; /* stack pointer before the interrupt */
 	uint16_t ss; /* stack segment selector */
 	uint16_t __ss_pad;
+    uint64_t error_code; /* the error code */
 };
 
 extern void idt_set_entry(int, uint8_t, uint64_t, uint16_t, uint8_t); /* function to set 1 IDT Entry... */
