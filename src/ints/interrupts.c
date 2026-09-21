@@ -23,3 +23,9 @@ idt_load(void)
     /* the assembly command... */
     __asm__ volatile ("lidt %0" : : "m"(idtr));
 }
+
+void
+idt_init(void)
+{
+    /* coming soon... */
+}
