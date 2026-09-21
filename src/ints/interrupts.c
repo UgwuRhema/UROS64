@@ -47,5 +47,4 @@ idt_init(void)
     idt_set_entry(0, 0, (uint64_t)divide_by_zero, 0x08, 0x8e);
 
     idt_load();
-    __asm__ volatile ("sti");
 }

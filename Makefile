@@ -23,6 +23,11 @@ VGA := ./src/vga/vga.c
 VGA_O := ./src/vga/vga.o
 FUNC := ./src/func/func.c
 FUNC_O := ./src/func/func.o
+INT := ./src/ints/interrupts.c
+INT_O := ./src/ints/interrupts.o
+HAND := ./src/ints/handlers.c
+HAND_O := ./src/ints/handlers.o
+
 
 
 IMG := uros.img
@@ -39,7 +44,9 @@ kernel:
 	$(CC) $(CFLAGS)	-o $(K_O) $(K)
 	$(CC) $(CFLAGS) -o $(VGA_O) $(VGA)
 	$(CC) $(CFLAGS) -o $(FUNC_O) $(FUNC)
-	$(LD) $(LDFLAGS) -T $(LINK) -o $(KER) $(KE_O) $(K_O) $(VGA_O) $(FUNC_O)
+	$(CC) $(CFLAGS) -o $(HAND_O) $(HAND)
+	$(CC) $(CFLAGS) -o $(INT_O) $(INT)
+	$(LD) $(LDFLAGS) -T $(LINK) -o $(KER) $(KE_O) $(K_O) $(VGA_O) $(FUNC_O) $(INT_O) $(HAND_O)
 	objcopy -O binary $(KER) $(KERN)
 	rm -rf $(KER)
 img:

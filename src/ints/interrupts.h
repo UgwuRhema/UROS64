@@ -15,7 +15,7 @@ struct __attribute__((packed)) IDT_Entry
     uint16_t offset_middle; /* since we are doing 64 bit, this has to be here*/ 
     uint32_t offset_high; /* high 16 bits of the handler address */
     uint32_t zero; /* reserved must be zero */
-} static idt[_IDT_ENTRIES]; /* always 256 IDT Entries both on 32 and 64 bit OSes(not that it matters the architecture) */
+} extern idt[_IDT_ENTRIES]; /* always 256 IDT Entries both on 32 and 64 bit OSes(not that it matters the architecture) */
 
 /* you know...the register...*/
 /* like how we did lgdt [gdt_decriptor], we'll do that same thing for the IDT */
