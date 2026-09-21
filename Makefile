@@ -1,3 +1,5 @@
+# unrestricted means it yours
+# figure out the building yourself
 AS := nasm
 ASF := -f bin
 ASF2 := -f elf64
