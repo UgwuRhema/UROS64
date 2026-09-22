@@ -17,7 +17,7 @@ kmain()
     idt_init();
 
 	/* Trigger synchronous CPU Exception 0 */
-	u64 *yes = (void *)0x0;
+	volatile u64 *yes = (volatile u64 *)0xdeadbeef;
 	*yes = 50;
 
 	//Ohhhhh i know why it didnt workkkk!! I havnet loaded other interrupts!!
