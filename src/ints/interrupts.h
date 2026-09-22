@@ -30,14 +30,12 @@ struct __attribute__((packed)) IDTR
 /* the frame containing the values and registers the CPU pushes onto the stack */
 struct __attribute__((packed)) interrupt_frame
 {
+    uint64_t error_code; /* error code */
 	uint64_t rip;  /* instruction pointer to resume */
-	uint16_t cs; /* code segment selector */
-	uint16_t __cs_pad; /* padding to align the next 64bit field */
+	uint64_t cs; /* code segment selector */
 	uint64_t rflags;
 	uint64_t rsp; /* stack pointer before the interrupt */
-	uint16_t ss; /* stack segment selector */
-	uint16_t __ss_pad;
-    uint64_t error_code; /* the error code */
+	uint64_t ss; /* stack segment selector */
 };
 
 extern void idt_set_entry(int, uint8_t, uint64_t, uint16_t, uint8_t); /* function to set 1 IDT Entry... */
