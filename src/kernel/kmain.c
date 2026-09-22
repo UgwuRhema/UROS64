@@ -20,6 +20,8 @@ kmain()
 	//u64 *yes = (void *)0x0;
 	//*yes = 50;
 
+	//Ohhhhh i know why it didnt workkkk!! I havnet loaded other interrupts!!
+
     /* infinte loop */
 	while (1)
 	{
