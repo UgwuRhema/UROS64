@@ -3,3 +3,4 @@ uboot2
 uroskrnl
 *.o
 *.img
+gdb_tips.md
