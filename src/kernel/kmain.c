@@ -15,12 +15,10 @@ kmain()
     idt_init();
 
 	/* Trigger synchronous CPU Exception 0 */
-	__asm__ volatile (
-		"xor %%rax, %%rax\n\t"
-		"xor %%rdx, %%rdx\n\t"
-		"div %%rax"
-		::: "rax", "rdx"
-	);
+	int a = 10;
+	int b = 0;
+	int c = a / b;
+	(void)c; 
 
     /* infinte loop */
 	while (1)
