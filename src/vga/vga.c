@@ -44,3 +44,18 @@ clear_screen(void)
     u16 blank = (WHITE << 8) | ' ';
     memset((void *)_VGA_BUF, blank, _VGA_COLS * _VGA_ROWS);
 }
+
+void
+kp_log(const char *str, enum status s)
+{
+    kprint("* ", BLUE);
+    kprint(str, WHITE);
+    kprint(" [ ", WHITE);
+    if (s == 0)
+    {
+        kprint("done ", GREEN);
+    } else {
+        kprint("fail ", PURPLE);
+    }
+    kprint("] \n", WHITE);
+}

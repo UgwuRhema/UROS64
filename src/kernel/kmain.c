@@ -10,18 +10,12 @@ typedef uint64_t u64;
 void 
 kmain()
 {
+	idt_init();
 	kprint("Kernel loading...\n" , WHITE);
 	kprint("UROS(Unrestricted Runtime Operating System) KERNEL ", WHITE);
 	kprint("v0.01\n", GREEN);
 	kprint("Initializing Components and Necessities... \n", GREEN);
-    idt_init();
-
-	/* Trigger synchronous CPU Exception 0 */
-	volatile u64 *yes = (volatile u64 *)0xdeadbeef;
-	*yes = 50;
-
-	//Ohhhhh i know why it didnt workkkk!! I havnet loaded other interrupts!!
-
+	kp_log("Set up Interrupt Descriptor Table and loaded CPU Exceptions", DONE);
     /* infinte loop */
 	while (1)
 	{

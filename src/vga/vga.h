@@ -2,6 +2,12 @@
 
 typedef uint16_t u16;
 
+enum status
+{
+    DONE,
+    NOT_DONE,
+};
+
 #define _VGA_ADDR 0xb8000 /* vga address */
 /* VGA screen width and breadth respectively */
 #define _VGA_COLS 80
@@ -22,3 +28,4 @@ static long unsigned int cursor_pos = 0;
 extern void kprint_c(char, u16);
 extern void kprint(const char *, u16);
 extern void clear_screen(void);
+extern void kp_log(const char *, enum status);
