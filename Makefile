@@ -59,6 +59,11 @@ load:
 	dd if=$(S2) of=$(IMG) bs=512 seek=1 conv=notrunc
 	dd if=$(KERN) of=$(IMG) bs=512 seek=3 conv=notrunc
 
+max:
+	$(MAKE) kernel
+	$(MAKE) load
+	$(MAKE) qemu
+
 qemu:
 	qemu-system-x86_64 \
 		-drive format=raw,file=$(IMG),if=ide \

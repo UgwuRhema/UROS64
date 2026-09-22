@@ -19,8 +19,7 @@ kmain()
 	kp_log("Mask PIC Interrupts and set up PIC IRQs", NOT_DONE);
 
 	/* causing  a page fault again! */
-	volatile u64 *fart = (volatile u64 *)0xdeadbeef;
-	*fart = 50;
+	__asm__ volatile ("ud2");
     /* infinte loop */
 	while (1)
 	{
