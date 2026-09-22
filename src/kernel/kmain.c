@@ -16,7 +16,11 @@ kmain()
 	kprint("v0.01\n", GREEN);
 	kprint("Initializing Components and Necessities... \n", GREEN);
 	kp_log("Set up Interrupt Descriptor Table and loaded CPU Exceptions", DONE);
-	kp_log("Mask PIC Interrupts and setup PIC IRQs", NOT_DONE);
+	kp_log("Mask PIC Interrupts and set up PIC IRQs", NOT_DONE);
+
+	/* causing  a page fault again! */
+	volatile u64 *fart = (volatile u64 *)0xdeadbeef;
+	*fart = 50;
     /* infinte loop */
 	while (1)
 	{

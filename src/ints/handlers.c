@@ -188,7 +188,8 @@ page_fault(void *frame)
     clear_screen();
     kprint("KERNEL PANIC!\n", WHITE);
     kprint("Page Fault!\n", PURPLE);
-    kprint("Interrupt #14\n", YELLOW);
+    kprint("Interrupt #14 | Error Code: ", YELLOW); kprint_hex(int_frame->error_code, PURPLE);
+    kprint("\n", WHITE);
     kprint("System Halted. Please reboot\n", BLUE);
     while(1)
         __asm__ volatile ("hlt");

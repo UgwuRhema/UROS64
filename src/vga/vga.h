@@ -29,3 +29,4 @@ extern void kprint_c(char, u16);
 extern void kprint(const char *, u16);
 extern void clear_screen(void);
 extern void kp_log(const char *, enum status);
+extern void kprint_hex(uint64_t, u16);
