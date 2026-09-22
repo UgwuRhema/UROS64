@@ -61,7 +61,6 @@ load:
 
 qemu:
 	qemu-system-x86_64 \
-		-boot menu=on \
 		-drive format=raw,file=$(IMG),if=ide \
 		-m 512 \
 		-smp 1 \
