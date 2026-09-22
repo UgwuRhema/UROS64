@@ -1,6 +1,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
+typedef uint64_t u64;
+
 #include "../vga/vga.h"
 #include "../func/func.h"
 #include "../ints/interrupts.h"
@@ -15,10 +17,8 @@ kmain()
     idt_init();
 
 	/* Trigger synchronous CPU Exception 0 */
-	int a = 10;
-	int b = 0;
-	int c = a / b;
-	(void)c; 
+	u64 *yes = (void *)0x0;
+	*yes = 50;
 
     /* infinte loop */
 	while (1)
