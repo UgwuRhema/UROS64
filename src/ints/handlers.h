@@ -8,7 +8,7 @@ extern __attribute__((interrupt)) void non_maskable(void *);
 extern __attribute__((interrupt)) void break_point(void *);
 extern __attribute__((interrupt)) void overflow(void *);
 extern __attribute__((interrupt)) void bound_range_exceeded(void *);
-extern __attribute__((interrupt)) void ivalid_opcode(void *);;
+extern __attribute__((interrupt)) void invalid_opcode(void *);;
 extern __attribute__((interrupt)) void device_not_available(void *);
 extern __attribute__((interrupt)) void double_fault(void *);
 /* vector 9 is unused */
