@@ -17,9 +17,7 @@ kmain()
 	kprint("Initializing Components and Necessities... \n", GREEN);
 	kp_log("Set up Interrupt Descriptor Table and loaded CPU Exceptions", DONE);
 	kp_log("Mask PIC Interrupts and set up PIC IRQs", NOT_DONE);
-
-	/* causing  a page fault again! */
-	__asm__ volatile ("ud2");
+	
     /* infinte loop */
 	while (1)
 	{
