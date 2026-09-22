@@ -1,0 +1,1 @@
+__asm__ volatile ("mov %%cr2, %0" : "=r"(faulting_address));
