@@ -47,6 +47,23 @@ idt_init(void)
     
     /* let's check it out... */
     idt_set_entry(0, 0, (uint64_t)divide_by_zero, 0x08, 0x8e);
+    idt_set_entry(1, 0, (uint64_t)debug, 0x08, 0x8e);
+    idt_set_entry(2, 0, (uint64_t)non_maskable, 0x08, 0x8e);
+    idt_set_entry(3, 0, (uint64_t)break_point, 0x08, 0x8e);
+    idt_set_entry(4, 0, (uint64_t)overflow, 0x08, 0x8e);
+    idt_set_entry(5, 0, (uint64_t)bound_range_exceeded, 0x08, 0x8e);
+    idt_set_entry(6, 0, (uint64_t)invalid_opcode, 0x08, 0x8e);
+    idt_set_entry(7, 0, (uint64_t)device_not_available, 0x08, 0x8e);
+    idt_set_entry(8, 0, (uint64_t)double_fault, 0x08, 0x8e);
+    idt_set_entry(10, 0, (uint64_t)invalid_tss, 0x08, 0x8e);
+    idt_set_entry(11, 0, (uint64_t)segement_not_present, 0x08, 0x8e);
+    idt_set_entry(12, 0, (uint64_t)stack_segfault, 0x08, 0x8e);
+    idt_set_entry(13, 0, (uint64_t)general_protection, 0x08, 0x8e);
+    idt_set_entry(14, 0, (uint64_t)page_fault, 0x08, 0x8e);
+    idt_set_entry(16, 0, (uint64_t)x87_fpu_error, 0x08, 0x8e);
+    idt_set_entry(17, 0, (uint64_t)alignment_check, 0x08, 0x8e);
+    idt_set_entry(18, 0, (uint64_t)machine_check, 0x08, 0x8e);
+    idt_set_entry(19, 0, (uint64_t)simd_error, 0x08, 0x8e);
 
     idt_load();
 }
