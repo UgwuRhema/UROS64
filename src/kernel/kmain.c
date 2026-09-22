@@ -17,8 +17,8 @@ kmain()
     idt_init();
 
 	/* Trigger synchronous CPU Exception 0 */
-	u64 *yes = (void *)0x0;
-	*yes = 50;
+	//u64 *yes = (void *)0x0;
+	//*yes = 50;
 
     /* infinte loop */
 	while (1)
