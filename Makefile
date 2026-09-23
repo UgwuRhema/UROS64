@@ -81,7 +81,7 @@ max:
 qemu:
 	qemu-system-x86_64 \
 		-drive format=raw,file=$(IMG),if=ide \
-		-m 1024 \
+		-m 4G \
 		-smp 2 \
 		-enable-kvm \
 		-cpu host \
