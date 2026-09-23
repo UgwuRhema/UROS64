@@ -73,7 +73,7 @@ idt_init(void)
     //bring up APIC hardware
     lapic_init();
     /* route keyboard (IRQ 1) to  vector 33 or 0x21 */
-    ioapic_map_irq(1, 33, 0);
+   // ioapic_map_irq(1, 33, 0);
     /* finally unmask all interrupts */
     __asm__ volatile ("sti");
 }
