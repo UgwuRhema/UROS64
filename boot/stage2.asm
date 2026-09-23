@@ -2,7 +2,7 @@ bits 32
 org 0x8000
 
 KERNEL equ 0x10000 ;kernel address magic number
-SIZE_OF_PAGE_TABLES equ 3072 ;size of Page tables, i believe the name makes it clear
+SIZE_OF_PAGE_TABLES equ 6144 ;size of Page tables, i believe the name makes it clear
 PML equ 0x70000
 
 global _start
@@ -24,9 +24,26 @@ _start:
 	mov ecx, SIZE_OF_PAGE_TABLES
 	rep  stosd   ;writes 4 * SIZE_OF_PAGE_TABLES, which is enough space...
 
+	; PML4 -> PDPT
 	mov dword [0x70000], 0x71003
-	mov dword [0x71000], 0x72003
-	mov dword [0x72000], 0x00000083
+
+	; PDPT -> 4 Page Directories (1GB each)
+	mov dword [0x71000], 0x72003 ; 0 - 1GB
+	mov dword [0x71008], 0x73003 ; 1 - 2GB
+	mov dword [0x71010], 0x74003 ; 2 - 3GB
+	mov dword [0x71018], 0x75003 ; 3 - 4GB (Covers LAPIC at 0xFEE00000)
+
+	; Fill 2048 Page Directory entries (2048 * 2MB = 4GB)
+	mov edi, 0x72000
+	mov eax, 0x00000083          ; Present + Writable + 2MB Page Bit
+	mov ecx, 2048                ; Total 2MB pages to map
+
+	.map_4gb_loop:
+	mov dword [edi], eax
+	mov dword [edi + 4], 0       ; High 32 bits
+	add eax, 0x200000            ; Advance physical base address by 2MB
+	add edi, 8                   ; Next 64-bit table entry
+	loop .map_4gb_loop	
 
 	; Enable PAE
 	mov eax, cr4
