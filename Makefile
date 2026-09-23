@@ -55,8 +55,9 @@ iso:
 	mkdir -p ./iso_root
 	cp $(IMG) ./iso_root
 	xorriso -as mkisofs \
-		-hard-disk-boot \
+		-no-emul-boot \
 		-b uros.img \
+		-boot-load-size 4 \
 		-o uros.ISO \
 		./iso_root
 	rm -rf iso_root
