@@ -14,7 +14,9 @@ kmain()
 	kprint("Kernel loading...\n" , WHITE);
 	kprint("UROS(Unrestricted Runtime Operating System) KERNEL ", WHITE);
 	kprint("v0.01\n", GREEN);
-	kprint("Initializing Components and Necessities... \n", GREEN);
+	kprint("x86 Monolithic 64-bit Kernel written in URSL\n", GREEN);
+	kprint("\n", WHITE);
+	kprint("Setting up... \n", GREEN);
 	kp_log("Enable 64-bit Paging. ", DONE);
 	kp_log("Set up Interrupt Descriptor Table and load CPU Exceptions. ", DONE);
 	kp_log("Enable LAPIC and IOAPIC Hardware Interrupts. ", NOT_DONE);
