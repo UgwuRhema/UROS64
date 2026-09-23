@@ -26,3 +26,21 @@ memset(void *dest, u16 val, u32 len)
 		*ptr++ = val;
 	}
 }
+
+/* write to a 64 bit Model Specific Register */
+void
+wrmsr(u32 msr, u64 val)
+{
+	u32 low = (u32)val;
+	u32 high = (u32)(val >> 32);
+	__asm__ volatile ("wrmsr" :: "a"(low), "d"(high), "c"(msr));
+}
+
+/* read from a Model Specific Register */
+u64
+rdmsr(u32 msr)
+{
+	u32 low, high;
+	__asm__ volatile ("rdmsr" : "=a"(low), "=d"(high) : "c"(msr));
+	return ((u64)high << 32) | low;
+}
