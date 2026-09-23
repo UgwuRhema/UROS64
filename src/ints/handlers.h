@@ -23,3 +23,7 @@ extern __attribute__((interrupt)) void alignment_check(void *); //17
 extern __attribute__((interrupt)) void machine_check(void *); //18
 extern __attribute__((interrupt)) void simd_error(void *); //19
 /* vectors 20 - 31 currentl unused... */
+
+
+/* APIC IRQ handlers */
+extern __attribute__((interrupt)) void keyboard_handler(void *);

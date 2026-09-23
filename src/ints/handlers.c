@@ -177,8 +177,13 @@ general_protection(void *frame)
     
     struct interrupt_frame *int_frame = (struct interrupt_frame *)frame;
     clear_screen();
+    uint64_t faulting_address;
+    /* get the faulting address from the cr2 register */
+    __asm__ volatile ("mov %%cr2, %0" : "=r"(faulting_address));
     kprint("KERNEL PANIC!\n", WHITE);
     kprint("General Protection Fault!\n", PURPLE);
+    kprint("The faulting address was: ", YELLOW); kprint_hex(faulting_address, PURPLE);
+    kprint("\n", WHITE);
     kprint("Interrupt #13 | Error Code: ", YELLOW); kprint_hex(int_frame->error_code, PURPLE);
     kprint("\n", WHITE);
     kprint("System Halted. Please reboot\n", BLUE);
