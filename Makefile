@@ -51,6 +51,16 @@ kernel:
 	rm -rf $(KER)
 img:
 	qemu-img create -f raw $(IMG) 10M
+iso:
+	mkdir -p ./iso_root/boot
+	cp $(BOOT) $(S2) $(KERN) ./iso_root/boot/
+	xorriso -as mkisofs \
+		-b boot/uboot \
+		-no-emul-boot \
+		-boot-load-size 4 \
+		-boot-info-table \
+		-o uros.ISO \
+		iso_root
 
 # i added this line cause i wanted to commit hehe
 
