@@ -15,11 +15,10 @@ kmain()
 	kprint("UROS(Unrestricted Runtime Operating System) KERNEL ", WHITE);
 	kprint("v0.01\n", GREEN);
 	kprint("Initializing Components and Necessities... \n", GREEN);
-	kp_log("Set up Interrupt Descriptor Table and loaded CPU Exceptions", DONE);
-	kp_log("Mask PIC Interrupts and set up PIC IRQs", NOT_DONE);
-
-	volatile u64 *num = (volatile u64 *)0xdeadbeef;
-	*num = 0x1234;
+	kp_log("Enable 64-bit Paging. ", DONE);
+	kp_log("Set up Interrupt Descriptor Table and load CPU Exceptions. ", DONE);
+	kp_log("Enable LAPIC and IOAPIC Hardware Interrupts. ", NOT_DONE);
+	kp_log("Set up Device Drivers and Driver Models. ", NOT_DONE);
 	
     /* infinte loop */
 	while (1)
