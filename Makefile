@@ -96,5 +96,5 @@ gdb:
 		-m 512 \
 		-d int,cpu_reset \
 		-no-reboot \
-		-display sdl
+		-display gtk
 
