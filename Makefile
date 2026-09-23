@@ -27,7 +27,8 @@ INT := ./src/ints/interrupts.c
 INT_O := ./src/ints/interrupts.o
 HAND := ./src/ints/handlers.c
 HAND_O := ./src/ints/handlers.o
-
+APIC := ./src/ints/apic.c
+APIC_O := ./src/ints/apic.o
 
 
 IMG := uros.img
@@ -47,7 +48,9 @@ kernel:
 	$(CC) $(CFLAGS) -o $(FUNC_O) $(FUNC)
 	$(CC) $(CFLAGS) -o $(HAND_O) $(HAND)
 	$(CC) $(CFLAGS) -o $(INT_O) $(INT)
-	$(LD) $(LDFLAGS) -T $(LINK) -o $(KER) $(KE_O) $(K_O) $(VGA_O) $(FUNC_O) $(INT_O) $(HAND_O)
+	$(CC) $(CFLAGS) -o $(APIC_O) $(APIC)
+	$(LD) $(LDFLAGS) -T $(LINK) -o $(KER) $(KE_O) $(K_O) $(VGA_O) $(FUNC_O) $(INT_O) $(HAND_O) \
+	$(APIC_O)
 	objcopy -O binary $(KER) $(KERN)
 	rm -rf $(KER)
 img:
