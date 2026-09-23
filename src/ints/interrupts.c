@@ -66,6 +66,9 @@ idt_init(void)
     idt_set_entry(18, 0, (uint64_t)machine_check, 0x08, 0x8e);
     idt_set_entry(19, 0, (uint64_t)simd_error, 0x08, 0x8e);
 
+    /* hardware IRQs */
+    idt_set_entry(33, 0, (uint64_t)keyboard_handler, 0x08, 0x8e);
+
     idt_load();
 
     /* disable legacy PIC */
@@ -73,7 +76,7 @@ idt_init(void)
     //bring up APIC hardware
     lapic_init();
     /* route keyboard (IRQ 1) to  vector 33 or 0x21 */
-   // ioapic_map_irq(1, 33, 0);
+    ioapic_map_irq(1, 33, 0);
     /* finally unmask all interrupts */
     __asm__ volatile ("sti");
 }
