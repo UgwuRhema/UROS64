@@ -17,6 +17,9 @@ kmain()
 	kprint("Initializing Components and Necessities... \n", GREEN);
 	kp_log("Set up Interrupt Descriptor Table and loaded CPU Exceptions", DONE);
 	kp_log("Mask PIC Interrupts and set up PIC IRQs", NOT_DONE);
+
+	volatile u64 *num = (volatile u64 *)0xdeadbeef;
+	*num = 0x1234;
 	
     /* infinte loop */
 	while (1)

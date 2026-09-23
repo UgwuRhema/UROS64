@@ -193,7 +193,7 @@ page_fault(void *frame)
     clear_screen();
     uint64_t faulting_address;
     /* get the faulting address from the cr2 register */
-    __asm__ volatile ("mov %%cr2. %0" : "=r"(faulting_address));
+    __asm__ volatile ("mov %%cr2, %0" : "=r"(faulting_address));
     kprint("KERNEL PANIC!\n", WHITE);
     kprint("Page Fault!\n", PURPLE);
     kprint("The faulting address was: ", YELLOW); kprint_hex(faulting_address, PURPLE);
