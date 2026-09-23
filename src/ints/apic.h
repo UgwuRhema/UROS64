@@ -2,7 +2,7 @@
 #include "../func/func.h"
 
 #define IA32_APIC_BASE_MSR 0x1b 
-#define IA32_APIC_BASE_ENABLE (1ULL < 11)
+#define IA32_APIC_BASE_ENABLE (1ULL << 11)
 
 #define LAPIC_BASE 0xfee00000ULL
 #define LAPIC_REG_TPR 0x0080 /* task priority register */
