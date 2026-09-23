@@ -18,6 +18,7 @@ kmain()
 	kprint("\n", WHITE);
 	kprint("Setting up... \n", GREEN);
 	kp_log("Enable 64-bit Paging. ", DONE);
+	kp_log("Setup up VGA and VGA functions. ", DONE);
 	kp_log("Set up Interrupt Descriptor Table and load CPU Exceptions. ", DONE);
 	kp_log("Enable LAPIC and IOAPIC Hardware Interrupts. ", NOT_DONE);
 	kp_log("Set up Device Drivers and Driver Models. ", NOT_DONE);
