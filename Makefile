@@ -15,8 +15,8 @@ S2_SRC := ./boot/stage2.asm
 S2 := ./boot/uboot2
 KE_SRC := ./src/kernel/entry.asm
 KE_O := ./src/kernel/entry.o
-K := ./src/kernel/kmain.c
-K_O := ./src/kernel/kmain.o
+K := ./src/kernel/uroskrnl.c
+K_O := ./src/kernel/uroskrnl.o
 KER := ./src/kernel/uroskrnl.elf
 KERN := ./src/kernel/uroskrnl
 VGA := ./src/vga/vga.c
@@ -78,8 +78,8 @@ max:
 qemu:
 	qemu-system-x86_64 \
 		-drive format=raw,file=$(IMG),if=ide \
-		-m 512 \
-		-smp 1 \
+		-m 1024 \
+		-smp 2 \
 		-enable-kvm \
 		-cpu host \
 		-machine pc \
