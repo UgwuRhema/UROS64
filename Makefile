@@ -87,3 +87,14 @@ qemu:
 		-cpu host \
 		-machine pc \
 		-display gtk
+
+gdb:
+	qemu-system-x86_64 \
+		-s \
+		-S \
+		-hda $(IMG) \
+		-m 512 \
+		-d int,cpu_reset \
+		-no-reboot \
+		-display sdl
+
