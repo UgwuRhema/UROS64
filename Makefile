@@ -37,6 +37,7 @@ bloader: ./boot/boot.asm
 	$(AS) $(ASF) -o $(BOOT) $(BOOT_SRC)
 	chmod +x $(BOOT)
 	$(AS) $(ASF) -o $(S2) $(S2_SRC)
+	truncate -s 1024 $(S2)
 	chmod +x $(S2)
 
 kernel:
@@ -57,7 +58,7 @@ iso:
 	xorriso -as mkisofs \
 		-no-emul-boot \
 		-b uros.img \
-		-boot-load-size 4 \
+		-boot-load-size 10 \
 		-o uros.ISO \
 		./iso_root
 	rm -rf iso_root
