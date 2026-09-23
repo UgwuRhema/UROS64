@@ -20,8 +20,10 @@ kmain()
 	kp_log("Enable 64-bit Paging. ", DONE);
 	kp_log("Setup up VGA and VGA functions. ", DONE);
 	kp_log("Set up Interrupt Descriptor Table and load CPU Exceptions. ", DONE);
-	kp_log("Enable LAPIC and IOAPIC Hardware Interrupts. ", NOT_DONE);
+	kp_log("Enable LAPIC and IOAPIC Hardware Interrupts. ", DONE);
 	kp_log("Set up Device Drivers and Driver Models. ", NOT_DONE);
+	kp_log("Implement the Memory Management Unit. ", NOT_DONE);
+	kp_log("Same as the last one; Implement PMM and VMM. ", NOT_DONE);
 	
     /* infinte loop */
 	while (1)
