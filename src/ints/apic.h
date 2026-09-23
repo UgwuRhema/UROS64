@@ -9,6 +9,8 @@
 #define LAPIC_REG_EOI 0x00b0 /* end of interrupt register */
 #define LAPIC_REG_SVR 0x00f0 /* spurious interrupt vector register */
 
+#define IOAPIC_BASE 0xfec00000ULL
+
 /* disable PIC */
 void pic_disable(void);
 /* write and read to and from the LAPIC respectively */

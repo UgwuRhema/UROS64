@@ -1,5 +1,6 @@
 #include "interrupts.h"
 #include "handlers.h"
+#include "apic.h"
 
 struct IDT_Entry idt[_IDT_ENTRIES];
 
