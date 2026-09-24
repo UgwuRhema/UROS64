@@ -1,6 +1,8 @@
 #include "vga.h"
 #include "../func/func.h"
 
+uint64_t cursor_pos = 0;
+
 void 
 kprint_c(char c, u16 attr)
 {
