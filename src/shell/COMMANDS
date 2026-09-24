@@ -20,4 +20,5 @@ grep -> fsi (Find in Standard-In)
 exec -> run (This would be used to execute UROS Scripts(basically URSL but yet 'run' will call the 'urlsc' compiler, JIT Compile whatever file was
 passed as parameter, and run it immediately and when it's done is deletes the .ubin/.bin executable but still leaves the .urslc/.urc source code or "script" in that use case))
 
+
 [Note: The default editor is going to be open through the 'buffer' command]

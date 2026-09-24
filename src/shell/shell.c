@@ -22,7 +22,7 @@ static void execute_command(const char *cmd)
         while (good & 0x02) good = inb(0x64);
         outb(0x64, 0xfe);
     } else if (strcmp(cmd, "trigger_pf_panic") == 0){
-        volatile u64 *panic_ptr = (volatile u64 *)0xdeadbeefULL;
+        volatile u64 *panic_ptr = (volatile u64 *)0x100000000ULL;
         *panic_ptr = 0x1234;
     }else {
         kprint("Unknown Command: ", PURPLE);
