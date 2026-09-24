@@ -6,8 +6,9 @@ typedef uint64_t u64;
 #include "../vga/vga.h"
 #include "../func/func.h"
 #include "../ints/interrupts.h"
+#include "../shell/shell.h"
 
-void 
+void
 kmain()
 {
 	idt_init();
@@ -24,10 +25,13 @@ kmain()
 	kp_log("Set up PS/2 Keyboard Driver and Model", DONE);
 	kp_log("Implement the Memory Management Unit. ", NOT_DONE);
 	kp_log("Same as the last one; Implement PMM and VMM. ", NOT_DONE);
-	
+	kp_log("Starting shell...", DONE);
+	shell_init();
+		
     /* infinte loop */
 	while (1)
 	{
-		__asm__("hlt");
+		shell_update(); /* process queued characters from key_buffer */
+		__asm__ volatile ("hlt");
 	}
 }
