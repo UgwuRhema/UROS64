@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <stddef.h>
 
 /* protos... */
 typedef uint8_t u8;
@@ -12,3 +13,5 @@ extern u8 inb(u16);
 extern void memset(void *, u16, u32);
 extern void wrmsr(u32, u64);
 extern u64 rdmsr(u32);
+extern int strcmp(const char *, const char *);
+extern size_t strlen(const char *);

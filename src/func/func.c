@@ -44,3 +44,28 @@ rdmsr(u32 msr)
 	__asm__ volatile ("rdmsr" : "=a"(low), "=d"(high) : "c"(msr));
 	return ((u64)high << 32) | low;
 }
+
+int
+strcmp(const char *str1, const char *str2)
+{
+	while(*str1 && (*str1 == *str2))
+	{
+		str1++;
+		str2++;
+	}
+
+	return *(const unsigned char *)str1 - *(const unsigned char *)str2;
+}
+
+size_t
+strlen(const char *str)
+{
+	size_t count = 0;
+	while (*str)
+	{
+		count++;
+		str++;
+	}
+
+	return count;
+}
