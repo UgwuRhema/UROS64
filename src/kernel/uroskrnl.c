@@ -3,7 +3,7 @@
 
 typedef uint64_t u64;
 
-#include "../vga/vga.h"
+//#include "../vga/vga.h"
 #include "../func/func.h"
 #include "../ints/interrupts.h"
 #include "../shell/shell.h"
