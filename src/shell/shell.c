@@ -7,22 +7,23 @@ static void execute_command(const char *cmd)
     if (strcmp(cmd, "help") == 0)
     {
         kprint("USH(Unrestrcited SHell) Commands:\n", WHITE);
-        kprint("  help, clear, sysinfo, reboot\n", GREEN);
+        kprint("  help, clear, sysinfo, vreboot\n", GREEN);
     } else if (strcmp(cmd, "clear") == 0){
         clear_screen();
     } else if (strcmp(cmd, "sysinfo") == 0){
-        kp_log("OS: UROS (Unrestricted Runtime Operating System) ", DONE);
-        kp_log("Kernel: UROS KERNEL(uroskrnl.ubin/uroskrnl) ", DONE);
-        kp_log("Architecture: x86-64 Ring 0 Flat Architecture ", DONE);
-        kp_log("APIC Status: LAPIC/IOAPIC Online. ", DONE);
-        kp_log("Identity Map: 0 - 4GB (2MB Pages) ", DONE);
+        kp_log("OS: UROS (Unrestricted Runtime Operating System) ", ONLINE);
+        kp_log("Kernel: UROS KERNEL(uroskrnl.ubin/uroskrnl) ", ONLINE);
+        kp_log("Architecture: x86-64 Ring 0 Flat Architecture ", ONLINE);
+        kp_log("APIC Status: LAPIC/IOAPIC Online. ", ONLINE);
+        kp_log("Identity Map: 0 - 4GB (2MB Pages) ", ONLINE);
     } else if (strcmp(cmd, "vreboot") == 0){
         /* CPU reset through PS/2 controller */
         u8 good = 0x02;
         while (good & 0x02) good = inb(0x64);
         outb(0x64, 0xfe);
     } else {
-        kprint("Unknown Command: '", PURPLE);
+        kprint("Unknown Command: ", PURPLE);
+        kprint("'", WHITE);
         kprint(cmd, WHITE);
         kprint("'. Type 'help' for available commands. \n", WHITE);
     }

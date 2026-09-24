@@ -62,8 +62,10 @@ kp_log(const char *str, enum status s)
     if (s == 0)
     {
         kprint("done ", GREEN);
-    } else {
+    } else if (s == 1){
         kprint("fail ", PURPLE);
+    } else {
+        kprint("online ", GREEN);
     }
     kprint("] \n", WHITE);
 }

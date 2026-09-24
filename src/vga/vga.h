@@ -6,6 +6,7 @@ enum status
 {
     DONE,
     NOT_DONE,
+    ONLINE,
 };
 
 #define _VGA_ADDR 0xb8000 /* vga address */
