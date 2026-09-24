@@ -37,7 +37,6 @@ shell_init(void)
 {
     memset(cmd_buf, 0, CMD_MAX_LEN);
     cmd_idx = 0;
-    kprint("\nUSH (Unreastricted Shell) v0.1\n", GREEN);
     kprint("[Eden:/Uros64]# ", WHITE);
 }
 
