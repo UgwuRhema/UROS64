@@ -44,7 +44,13 @@ void
 clear_screen(void)
 {
     u16 blank = (WHITE << 8) | ' ';
-    memset((void *)_VGA_BUF, blank, _VGA_COLS * _VGA_ROWS);
+
+    for (int i = 0; i < _VGA_COLS * _VGA_ROWS; ++i)
+    {
+        _VGA_BUF[i] = blank;
+    }
+
+    cursor_pos = 0;
 }
 
 void
