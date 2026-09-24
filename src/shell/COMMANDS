@@ -1,0 +1,23 @@
+UNIX -> UROS
+------------
+ls -> dir
+cat -> cat
+echo -> puts
+cd -> cd
+mv -> move
+mv -r -> md(MoveDirectory)
+cp -> copy
+cp -r -> cpd(CopyDirectory)
+touch -> mkfile
+mkdir -> makedir
+find -> listtree
+tree -> tree
+rsync -> copytree(TempleOS Fork)
+mount -> mnt (Since we have different Volumes in Eden(our filesystem remember?), 'Eden' is the main/master
+volume while the mount volume would be 'mount' ie. [Mount:/]# instead of [Eden:/]# , cool right?)
+file -> typeof
+grep -> fsi (Find in Standard-In)
+exec -> run (This would be used to execute UROS Scripts(basically URSL but yet 'run' will call the 'urlsc' compiler, JIT Compile whatever file was
+passed as parameter, and run it immediately and when it's done is deletes the .ubin/.bin executable but still leaves the .urslc/.urc source code or "script" in that use case))
+
+[Note: The default editor is going to be open through the 'buffer' command]
