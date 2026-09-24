@@ -13,12 +13,19 @@ mkdir -> makedir
 find -> listtree
 tree -> tree
 rsync -> copytree(TempleOS Fork)
-mount -> mnt (Since we have different Volumes in Eden(our filesystem remember?), 'Eden' is the main/master
+mount -> mnt & volset (Since we have different Volumes in Eden(our filesystem remember?), 'Eden' is the main/master
 volume while the mount volume would be 'mount' ie. [Mount:/]# instead of [Eden:/]# , cool right?)
 file -> typeof
 grep -> fsi (Find in Standard-In)
 exec -> run (This would be used to execute UROS Scripts(basically URSL but yet 'run' will call the 'urlsc' compiler, JIT Compile whatever file was
 passed as parameter, and run it immediately and when it's done is deletes the .ubin/.bin executable but still leaves the .urslc/.urc source code or "script" in that use case))
+lsblk/df -> vols
+free -> memmap
+ps -> tasks
+kill -9/pkill -> killtask
+[no unix equiv] -> *_*_panic (this is to trigger kernel panics)
+ghex -> (No GUI) dumpsec
+hexdump/xxd -> peek
 
 
-[Note: The default editor is going to be open through the 'buffer' command]
+[Note: The default editor is going to be open through the 'buffer' command and also mnt and volset serve different purposes]
