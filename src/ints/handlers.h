@@ -26,4 +26,6 @@ extern __attribute__((interrupt)) void simd_error(void *); //19
 
 
 /* APIC IRQ handlers */
+extern void buffer_push(char);
+extern char buffer_pop();
 extern __attribute__((interrupt)) void keyboard_handler(void *);
