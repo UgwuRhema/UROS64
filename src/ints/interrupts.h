@@ -2,6 +2,7 @@
 #include <stdint.h>
 
 #define _IDT_ENTRIES 256
+#define COM1 0x3f8 /* this is the serial port */
 
 extern volatile uint64_t timer_ticks;
 
@@ -44,3 +45,4 @@ extern void enable_pit(uint32_t); /* enable the PIT(Programmable Interval Timer)
 extern void idt_set_entry(int, uint8_t, uint64_t, uint16_t, uint8_t); /* function to set 1 IDT Entry... */
 extern void idt_load(void);
 extern void idt_init(void);
+extern void serial_init(void);

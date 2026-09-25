@@ -419,3 +419,10 @@ timer_handler(void *frame)
 	lapic_eoi(); /* always send! */
 }
 
+__attribute__((interrupt)) void
+com1_handler(void *frame)
+{
+	struct interrupt_frame *int_frame = (struct interrupt_frame *)frame;
+	kprint("COM1 activity!\n", WHITE);
+	lapic_eoi();
+}

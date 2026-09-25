@@ -19,6 +19,25 @@ enable_pit(uint32_t freq)
 }
 
 void
+serial_init(void)
+{
+// 1. Disable all interrupts (we are doing polling for now)
+	outb(COM1 + 1, 0x00);
+// 2. Enable DLAB (set divisor mode)
+	outb(COM1 + 3, 0x80);
+// 3. Set divisor to 3 (38400 baud)
+	outb(COM1 + 0, 0x03);
+
+	outb(COM1 + 1, 0x00);
+
+	outb(COM1 + 3, 0x03);
+// 4. Enable FIFO, clear them, with 14-byte threshold
+	outb(COM1 + 2, 0xc7);
+// 5. IRQs enabled, RTS/DSR set
+	outb(COM1 + 4, 0x0b);
+}
+
+void
 idt_set_entry(int index, uint8_t ist,uint64_t hand_addr, uint16_t selector, uint8_t attr)
 {
    idt[index].offset_low = hand_addr & 0xffff; /* low 16 bits */
@@ -83,6 +102,7 @@ idt_init(void)
     /* hardware IRQs */
     idt_set_entry(0x20, 0, (uint64_t)timer_handler, 0x08, 0x8e);
 	idt_set_entry(0x21, 0, (uint64_t)keyboard_handler, 0x08, 0x8e);
+	/* COM1 serial port handler */idt_set_entry(0x24, 0, (uint64_t)com1_handler, 0x08, 0x8e);
 
     idt_load();
 
