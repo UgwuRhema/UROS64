@@ -5,7 +5,9 @@ __attribute__((interrupt)) void
 divide_by_zero(void *frame)
 {
     struct interrupt_frame *int_frame = (struct interrupt_frame *)frame;
-    clear_screen();
+	(void)int_frame;
+	(void)int_frame;
+	clear_screen();
     kprint("KERNEL PANIC!\n", WHITE);
     kprint("Fatal exception in interrupt!\n", WHITE);
     kprint("Interrupt #0: Divide by zero\n", YELLOW);
@@ -18,7 +20,8 @@ __attribute__((interrupt)) void
 debug(void *frame)
 {
     struct interrupt_frame *int_frame = (struct interrupt_frame *)frame;
-    clear_screen();
+	(void)int_frame;
+	(void)int_frame;clear_screen();
     kprint("KERNEL PANIC!\n", WHITE);
     kprint("Fatal exception in interrupt!\n", WHITE);
     kprint("Interrupt #1: Debug Interrupt\n", YELLOW);
@@ -32,6 +35,8 @@ non_maskable(void *frame)
 {
     
     struct interrupt_frame *int_frame = (struct interrupt_frame *)frame;
+	(void)int_frame;
+	(void)int_frame;
     clear_screen();
     kprint("KERNEL PANIC!\n", WHITE);
     kprint("Fatal exception in interrupt!\n", WHITE);
@@ -46,6 +51,8 @@ break_point(void *frame)
 {
     
     struct interrupt_frame *int_frame = (struct interrupt_frame *)frame;
+	(void)int_frame;
+	(void)int_frame;
     clear_screen();
     kprint("KERNEL PANIC!\n", WHITE);
     kprint("Fatal exception in interrupt!\n", WHITE);
@@ -60,6 +67,8 @@ overflow(void *frame)
 {
     
     struct interrupt_frame *int_frame = (struct interrupt_frame *)frame;
+	(void)int_frame;
+	(void)int_frame;
     clear_screen();
     kprint("KERNEL PANIC!\n", WHITE);
     kprint("Fatal exception in interrupt!\n", WHITE);
@@ -74,6 +83,8 @@ bound_range_exceeded(void *frame)
 {
     
     struct interrupt_frame *int_frame = (struct interrupt_frame *)frame;
+	(void)int_frame;
+	(void)int_frame;
     clear_screen();
     kprint("KERNEL PANIC!\n", WHITE);
     kprint("Fatal exception in interrupt!\n", WHITE);
@@ -88,6 +99,7 @@ invalid_opcode(void *frame)
 {
     
     struct interrupt_frame *int_frame = (struct interrupt_frame *)frame;
+	(void)int_frame;
     clear_screen();
     kprint("KERNEL PANIC!\n", WHITE);
     kprint("Fatal exception in interrupt!\n", WHITE);
@@ -102,6 +114,7 @@ device_not_available(void *frame)
 {
     
     struct interrupt_frame *int_frame = (struct interrupt_frame *)frame;
+	(void)int_frame;
     clear_screen();
     kprint("KERNEL PANIC!\n", WHITE);
     kprint("Fatal exception in interrupt!\n", WHITE);
@@ -116,6 +129,7 @@ double_fault(void *frame)
 {
     
     struct interrupt_frame *int_frame = (struct interrupt_frame *)frame;
+	(void)int_frame;
     clear_screen();
     kprint("KERNEL PANIC!\n", WHITE);
     kprint("Double Fault!\n", PURPLE);
@@ -131,6 +145,7 @@ invalid_tss(void *frame)
 {
     
     struct interrupt_frame *int_frame = (struct interrupt_frame *)frame;
+	(void)int_frame;
     clear_screen();
     kprint("KERNEL PANIC!\n", WHITE);
     kprint("Fatal exception in interrupt!\n", WHITE);
@@ -175,7 +190,6 @@ stack_segfault(void *frame)
 __attribute__((interrupt)) void
 general_protection(void *frame)
 {
-    
     struct interrupt_frame *int_frame = (struct interrupt_frame *)frame;
     clear_screen();
     uint64_t faulting_address;
@@ -216,6 +230,7 @@ x87_fpu_error(void *frame)
 {
     
     struct interrupt_frame *int_frame = (struct interrupt_frame *)frame;
+	(void)int_frame;
     clear_screen();
     kprint("KERNEL PANIC!\n", WHITE);
     kprint("x87 FPU Error\n", GREEN);
@@ -246,6 +261,7 @@ machine_check(void *frame)
 {
     
     struct interrupt_frame *int_frame = (struct interrupt_frame *)frame;
+	(void)int_frame;
     clear_screen();
     kprint("KERNEL PANIC!\n", WHITE);
     kprint("Fatal exception in interrupt!\n", WHITE);
@@ -260,6 +276,7 @@ simd_error(void *frame)
 {
     
     struct interrupt_frame *int_frame = (struct interrupt_frame *)frame;
+	(void)int_frame;
     clear_screen();
     kprint("KERNEL PANIC!\n", WHITE);
     kprint("Fatal exception in interrupt!\n", WHITE);
@@ -397,6 +414,7 @@ __attribute__((interrupt)) void
 timer_handler(void *frame)
 {
 	struct interrupt_frame *int_frame = (struct interrupt_frame *)frame;
+	(void)int_frame;
 	timer_ticks++;
 	lapic_eoi(); /* always send! */
 }

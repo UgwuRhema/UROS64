@@ -1,6 +1,10 @@
 #include "shell.h"
 
-static void execute_command(const char *cmd)
+char cmd_buf[CMD_MAX_LEN] = {0};
+size_t cmd_idx = 0;
+
+void
+execute_command(const char *cmd)
 {
     if (strlen(cmd) == 0) return;
 
