@@ -30,14 +30,23 @@ kmain()
 	/*kprint("\n", WHITE); */
 	kprint("Setting up... \n", WHITE);
 	kp_log("Enable 64-bit Paging. ", DONE);
+	sleep(100);
 	kp_log("Setup up VGA and VGA functions. ", DONE);
+	sleep(100);
 	kp_log("Set up Interrupt Descriptor Table and load CPU Exceptions. ", DONE);
+	sleep(100);
 	kp_log("Enable LAPIC and IOAPIC Hardware Interrupts. ", DONE);
+	sleep(100);
 	kp_log("Set up PS/2 Keyboard Driver and Model. ", DONE);
+	sleep(100);
 	kp_log("Initialized the PIT(Programmable Interval Timer). ", DONE);
+	sleep(100);
 	kp_log("Implement the Memory Management Unit. ", NOT_DONE);
+	sleep(100);
 	kp_log("Same as the last one; Implement PMM and VMM. ", NOT_DONE);
+	sleep(100);
 	kp_log("Starting shell...", DONE);
+	sleep(900);
 	shell_init();
 		
     /* infinte loop */

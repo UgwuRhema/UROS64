@@ -26,7 +26,9 @@ execute_command(const char *cmd)
         kp_log("APIC Status: LAPIC/IOAPIC Online. ", ONLINE);
         kp_log("Identity Map: 0 - 4GB (2MB Pages) ", ONLINE);
     } else if (strcmp(cmd, "vreboot") == 0){
-        /* CPU reset through PS/2 controller */
+        kprint("Rebooting...\n", WHITE);
+		sleep(1400);
+		/* CPU reset through PS/2 controller */
         u8 good = 0x02;
         while (good & 0x02) good = inb(0x64);
         outb(0x64, 0xfe);
@@ -35,7 +37,7 @@ execute_command(const char *cmd)
         *panic_ptr = 0x1234;
     } else if (strcmp(cmd, "powerdown") == 0){
 		kp_log("Deactivating all services and components", DONE);
-		kp_log("Clear interrupts and Halt CPU. You may now turn off the computer", DONE);
+		kp_log("Done...You may now turn off the computer", DONE);
 		kprint(" Halting...", WHITE);
 		sleep(2000); /* 2 seconds */
 		/* if on QEMU this shuts down the VM */

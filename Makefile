@@ -76,6 +76,10 @@ load:
 	dd if=$(S2) of=$(IMG) bs=512 seek=1 conv=notrunc
 	dd if=$(KERN) of=$(IMG) bs=512 seek=3 conv=notrunc
 
+k:
+	$(MAKE) -C . kernel
+	$(MAKE) -C . load
+
 max:
 	$(MAKE) kernel
 	$(MAKE) load
