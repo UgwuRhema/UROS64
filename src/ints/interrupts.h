@@ -3,7 +3,7 @@
 
 #define _IDT_ENTRIES 256
 
-extern uint64_t timer_ticks;
+extern volatile uint64_t timer_ticks;
 
 /* this is the interrupt descriptor table entry... */
 /* this is the table that tells the CPU where to jump when an interrupt fires */

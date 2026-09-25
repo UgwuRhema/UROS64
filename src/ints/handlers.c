@@ -391,7 +391,7 @@ keyboard_handler(void *frame)
     lapic_eoi(); /* always send! */
 }
 
-uint64_t timer_ticks = 0;
+volatile uint64_t timer_ticks = 0;
 
 __attribute__((interrupt)) void
 timer_handler(void *frame)

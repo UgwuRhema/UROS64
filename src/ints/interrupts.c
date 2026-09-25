@@ -94,7 +94,9 @@ idt_init(void)
 	enable_pit(1000);
 
 	/* route keyboard (IRQ 1) to  vector 33 or 0x21 */
-    ioapic_map_irq(0, 0x20, 0);
+    
+	/* for some reason the PIT on at IOAPIC Pin 2 */
+	ioapic_map_irq(2, 0x20, 0);
 	ioapic_map_irq(1, 0x21, 0);
 	/* finally unmask all interrupts */
     __asm__ volatile ("sti");
