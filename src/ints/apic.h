@@ -21,8 +21,8 @@ u32 lapic_read(u32 reg);
 void lapic_init(void);
 /* IOAPIC(I/O Advanced Programmable Interrupt Controller) */
 /* ioapic init functions */
-extern inline void ioapic_write(u8, u32);
-extern inline u32 ioapic_read(u8);
+extern void ioapic_write(u8, u32);
+extern u32 ioapic_read(u8);
 /* map an APIC IRQ just like normal PIC IRQs(eg. keyboard Handler on vector 0x21) */
 extern void ioapic_map_irq(u8, u8, u8);
 /* send an EOI(End Of Interrupt) to the CPU */

@@ -32,14 +32,14 @@ lapic_init()
     lapic_write(LAPIC_REG_SVR, 0x1ff);
 }
 
-inline void
+void
 ioapic_write(u8 reg, u32 val)
 {
     *(volatile u32 *)(IOAPIC_BASE + 0x00) = reg; /* set index */
     *(volatile u32 *)(IOAPIC_BASE + 0x10) = val; /* write data */
 }
 
-inline u32
+u32
 ioapic_read(u8 reg)
 {
     *(volatile u32 *)(IOAPIC_BASE + 0x00) = reg; /* set index */
