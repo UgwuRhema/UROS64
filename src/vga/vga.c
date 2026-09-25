@@ -58,14 +58,14 @@ kp_log(const char *str, enum status s)
 {
 	kprint(" ", WHITE);
     kprint(str, WHITE);
-    kprint(" [ ", WHITE);
+    kprint(" [", WHITE);
     if (s == 0)
     {
-        kprint("done ", GREEN);
+        kprint("d", GREEN);
     } else if (s == 1){
-        kprint("fail ", PURPLE);
+        kprint("f", PURPLE);
     } else {
-        kprint("online ", GREEN);
+        kprint("o", GREEN);
     }
     kprint("] \n", WHITE);
 }

@@ -45,7 +45,7 @@ kmain()
 	sleep(100);
 	kp_log("Same as the last one; Implement PMM and VMM. ", NOT_DONE);
 	sleep(100);
-	kp_log("Starting shell...", DONE);
+	kp_log("Starting shell...", ONLINE);
 	sleep(900);
 	shell_init();
 		
