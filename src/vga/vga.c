@@ -56,7 +56,7 @@ clear_screen(void)
 void
 kp_log(const char *str, enum status s)
 {
-    kprint("* ", BLUE);
+	kprint(" ", WHITE);
     kprint(str, WHITE);
     kprint(" [ ", WHITE);
     if (s == 0)
