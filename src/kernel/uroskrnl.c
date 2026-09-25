@@ -33,7 +33,8 @@ kmain()
 	kp_log("Setup up VGA and VGA functions. ", DONE);
 	kp_log("Set up Interrupt Descriptor Table and load CPU Exceptions. ", DONE);
 	kp_log("Enable LAPIC and IOAPIC Hardware Interrupts. ", DONE);
-	kp_log("Set up PS/2 Keyboard Driver and Model", DONE);
+	kp_log("Set up PS/2 Keyboard Driver and Model. ", DONE);
+	kp_log("Initialized the PIT(Programmable Interval Timer). ", DONE);
 	kp_log("Implement the Memory Management Unit. ", NOT_DONE);
 	kp_log("Same as the last one; Implement PMM and VMM. ", NOT_DONE);
 	kp_log("Starting shell...", DONE);
