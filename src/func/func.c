@@ -90,3 +90,33 @@ shutdown(void)
 	outw(0x604, 0x2000);
 	outw(0xb004, 0x2000);
 }
+
+int64_t string_to_int(const char* str)
+{
+	 int64_t result = 0;
+	 int64_t sign = 1; //numbers are positive by default
+
+	//skip whitespace
+	while (*str == ' ' || *str == '\t' || *str == '\n')
+	{
+		str++;
+	}
+
+	//handle sign
+	if (*str == '-')
+	{
+		sign = -1;
+		str++;
+	} else if (*str == '+'){
+		str++;
+	}
+
+	//main conversion
+	while (*str >= '0' && *str <= '9')
+	{
+		result = result * 10 + (*str - '0');
+		str++;
+	}
+
+	return result * sign;
+}

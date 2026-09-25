@@ -11,7 +11,7 @@ execute_command(const char *cmd)
     if (strcmp(cmd, "help") == 0)
     {
         kprint("UROS USH Available Commands:\n", WHITE);
-        kprint(" help\n clear\n sysinfo\n vreboot\n trigger_*_panic\n", GREEN);
+        kprint(" help\n clear\n sysinfo\n vreboot\n trigger_*_panic\n powerdown\n sleep <seconds>\n", GREEN);
     } else if (strcmp(cmd, "clear") == 0){
         clear_screen();
     } else if (strcmp(cmd, "sysinfo") == 0){
@@ -46,6 +46,10 @@ execute_command(const char *cmd)
 		__asm__ volatile ("cli");
 		while (1)
 			__asm__ volatile ("hlt");
+	} else if (strcmp(cmd, "sleep") == 0 && cmd[6] == ' '){
+		const char *value = &cmd[7]; /* store the number(in seconds as a string for now) */
+		uint64_t seconds = string_to_int(value);
+		sleep(seconds * 1000);
 	} else {
         kprint("Unknown Command: ", PURPLE);
         kprint("'", WHITE);

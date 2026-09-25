@@ -18,3 +18,4 @@ extern u64 rdmsr(u32);
 extern int strcmp(const char *, const char *);
 extern size_t strlen(const char *);
 extern void shutdown(void);
+extern int64_t string_to_int(const char *);
