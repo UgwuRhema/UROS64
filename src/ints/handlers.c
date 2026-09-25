@@ -419,6 +419,16 @@ timer_handler(void *frame)
 	lapic_eoi(); /* always send! */
 }
 
+void
+sleep(uint64_t milliseconds)
+{
+	uint64_t target_ticks = timer_ticks + milliseconds;
+	while (timer_ticks < target_ticks)
+	{
+		__asm__ volatile ("hlt");
+	}
+}
+
 __attribute__((interrupt)) void
 com1_handler(void *frame)
 {

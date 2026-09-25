@@ -118,6 +118,7 @@ idt_init(void)
 	/* for some reason the PIT on at IOAPIC Pin 2 */
 	ioapic_map_irq(2, 0x20, 0);
 	ioapic_map_irq(1, 0x21, 0);
+	ioapic_map_irq(4, 0x24, 0);
 	/* finally unmask all interrupts */
     __asm__ volatile ("sti");
 }
