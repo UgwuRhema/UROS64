@@ -82,3 +82,22 @@ kprint_hex(uint64_t num, u16 color)
         kprint_c(hex[digit], color);
     }
 }
+
+void
+kprint_num(uint64_t num, u16 attr)
+{
+	if (num == 0)
+	{
+		kprint_c('0', attr);
+		return;
+	}
+	char buf[12];
+	int i = 10;
+	buf[11] = '\0';
+	while (num > 0 && i >= 0)
+	{
+		buf[i--] = (num % 10) + '0';
+		num /= 10;
+	}
+	kprint(&buf[i + 1], attr);
+}
