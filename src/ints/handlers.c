@@ -423,6 +423,7 @@ __attribute__((interrupt)) void
 com1_handler(void *frame)
 {
 	struct interrupt_frame *int_frame = (struct interrupt_frame *)frame;
+	(void)int_frame;
 	kprint("COM1 activity!\n", WHITE);
 	lapic_eoi();
 }

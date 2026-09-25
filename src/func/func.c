@@ -16,6 +16,20 @@ inb(u16 port)
 	return val;
 }
 
+void
+outw(u16 port, u16 val)
+{
+	__asm__ volatile ("outw %0, %1" : : "a"(val), "Nd"(port));
+}
+
+u16
+inw(u16 port)
+{
+	u16 val;
+	__asm__ volatile("inw %1, %0" : "=a"(val) : "Nd"(port));
+	return val;
+}
+
 /* your typical memset */
 void
 memset(void *dest, u16 val, u32 len)
@@ -68,4 +82,11 @@ strlen(const char *str)
 	}
 
 	return count;
+}
+
+void
+shutdown(void)
+{
+	outw(0x604, 0x2000);
+	outw(0xb004, 0x2000);
 }
