@@ -33,7 +33,16 @@ execute_command(const char *cmd)
     } else if (strcmp(cmd, "trigger_pf_panic") == 0){
         volatile u64 *panic_ptr = (volatile u64 *)0x100000000ULL;
         *panic_ptr = 0x1234;
-    }else {
+    } else if (strcmp(cmd, "powerdown") == 0){
+		kp_log("Deactivating all services and components", DONE);
+		kplog("Clear interrupts and Halt. You may now turn off the computer", DONE);
+		/* if on QEMU this shuts down the VM */
+		shutdown();
+		/* For now: real hardware, clear interrupts and halt */
+		__asm__ volatile ("cli");
+		while (1)
+			__asm__ volatile ("hlt");
+	} else {
         kprint("Unknown Command: ", PURPLE);
         kprint("'", WHITE);
         kprint(cmd, WHITE);
