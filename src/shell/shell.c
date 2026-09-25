@@ -35,7 +35,9 @@ execute_command(const char *cmd)
         *panic_ptr = 0x1234;
     } else if (strcmp(cmd, "powerdown") == 0){
 		kp_log("Deactivating all services and components", DONE);
-		kp_log("Clear interrupts and Halt. You may now turn off the computer", DONE);
+		kp_log("Clear interrupts and Halt CPU. You may now turn off the computer", DONE);
+		kprint(" Halting...", WHITE);
+		sleep(2000); /* 2 seconds */
 		/* if on QEMU this shuts down the VM */
 		shutdown();
 		/* For now: real hardware, clear interrupts and halt */
