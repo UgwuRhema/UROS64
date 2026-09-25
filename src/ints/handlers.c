@@ -390,3 +390,14 @@ keyboard_handler(void *frame)
 
     lapic_eoi(); /* always send! */
 }
+
+uint64_t timer_ticks = 0;
+
+__attribute__((interrupt)) void
+timer_handler(void *frame)
+{
+	struct interrupt_frame *int_frame = (struct interrupt_frame *)frame;
+	timer_ticks++;
+	lapic_eoi(); /* always send! */
+}
+

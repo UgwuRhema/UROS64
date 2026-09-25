@@ -3,6 +3,8 @@
 
 #define _IDT_ENTRIES 256
 
+extern uint64_t timer_ticks;
+
 /* this is the interrupt descriptor table entry... */
 /* this is the table that tells the CPU where to jump when an interrupt fires */
 /* each entry is a like a function pointer split into two halves plus a segment selector(0x10 or 0x08(it's 0x08 we use though))*/
