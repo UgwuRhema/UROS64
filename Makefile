@@ -83,12 +83,13 @@ max:
 
 qemu:
 	qemu-system-x86_64 \
+		-boot menu=on,splash=splash.bmp,splash-time=3000 \
 		-drive format=raw,file=$(IMG),if=ide \
 		-m 1G \
 		-smp 2 \
 		-enable-kvm \
 		-cpu host \
-		-machine pc \
+		-machine q35 \
 		-display gtk
 
 gdb:
