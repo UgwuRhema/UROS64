@@ -4,3 +4,5 @@ uroskrnl
 *.o
 *.img
 gdb_tips.md
+*.wav
+*.bmp
