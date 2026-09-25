@@ -40,6 +40,7 @@ struct __attribute__((packed)) interrupt_frame
 	uint64_t ss; /* stack segment selector */
 };
 
+extern void enable_pit(uint32_t); /* enable the PIT(Programmable Interval Timer) */
 extern void idt_set_entry(int, uint8_t, uint64_t, uint16_t, uint8_t); /* function to set 1 IDT Entry... */
 extern void idt_load(void);
 extern void idt_init(void);

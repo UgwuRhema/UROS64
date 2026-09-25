@@ -4,6 +4,20 @@
 
 struct IDT_Entry idt[_IDT_ENTRIES];
 
+#define PIT_COMMAND 0x43
+#define PIT_CHANNEL0 0x40
+
+void 
+enable_pit(uint32_t freq)
+{
+	/* 1193182 Hz is the internal PIT Oscillator frequency */
+	uint32_t divisor = 1193182 / freq;
+
+	outb(PIT_COMMAND, 0x36);
+	outb(PIT_CHANNEL0, (uint8_t)(divisor & 0xff));
+	outb(PIT_CHANNEL0, (uint8_t)((divisor >> 8) & 0xff));
+}
+
 void
 idt_set_entry(int index, uint8_t ist,uint64_t hand_addr, uint16_t selector, uint8_t attr)
 {
