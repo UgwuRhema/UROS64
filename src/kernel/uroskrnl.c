@@ -8,6 +8,16 @@ typedef uint64_t u64;
 #include "../ints/interrupts.h"
 #include "../shell/shell.h"
 
+/*
+uint64_t get_uptime_in_minutes(uint64_t timer_ticks)
+{
+	uint64_t total_seconds =  timer_ticks / 1000;
+	uint64_t minutes = total_seconds / 60;
+	uint64_t seconds = total_seconds % 60;
+	return minutes;
+}
+*/
+
 void
 kmain()
 {

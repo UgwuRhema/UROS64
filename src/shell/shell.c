@@ -1,5 +1,14 @@
 #include "shell.h"
 
+uint64_t get_timer_ticks_in_minutes(uint64_t timerticks)
+{
+	uint64_t total_seconds = timerticks / 1000;
+	uint64_t minutes = total_seconds / 60;
+	uint64_t seconds = total_seconds % 60;
+	(void)seconds; /* almost pointless */
+	return minutes;
+}
+
 static void execute_command(const char *cmd)
 {
     if (strlen(cmd) == 0) return;
@@ -11,8 +20,10 @@ static void execute_command(const char *cmd)
     } else if (strcmp(cmd, "clear") == 0){
         clear_screen();
     } else if (strcmp(cmd, "sysinfo") == 0){
+		uint64_t uptime_m = get_timer_ticks_in_minutes(timer_ticks);
         kp_log("OS: UROS (Unrestricted Runtime Operating System) ", ONLINE);
         kp_log("Kernel: UROS KERNEL(uroskrnl.ubin/uroskrnl) ", ONLINE);
+		kprint("Uptime: ", WHITE); kprint_hex(uptime_m, GREEN); kprint("\n", WHITE);
         kp_log("Architecture: x86-64 Ring 0 Flat Architecture ", ONLINE);
         kp_log("APIC Status: LAPIC/IOAPIC Online. ", ONLINE);
         kp_log("Identity Map: 0 - 4GB (2MB Pages) ", ONLINE);
