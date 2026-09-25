@@ -100,4 +100,5 @@ gdb:
 		-d int,cpu_reset \
 		-no-reboot \
 		-display gtk
-
+clean:
+	rm -rf $(IMG) uros.ISO

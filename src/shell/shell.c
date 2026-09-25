@@ -10,8 +10,8 @@ execute_command(const char *cmd)
 
     if (strcmp(cmd, "help") == 0)
     {
-        kprint("USH(Unrestrcited SHell) Commands:\n", WHITE);
-        kprint("  help, clear, sysinfo, vreboot\n", GREEN);
+        kprint("UROS USH Available Commands:\n", WHITE);
+        kprint(" help\n clear\n sysinfo\n vreboot\n trigger_*_panic\n", GREEN);
     } else if (strcmp(cmd, "clear") == 0){
         clear_screen();
     } else if (strcmp(cmd, "sysinfo") == 0){
