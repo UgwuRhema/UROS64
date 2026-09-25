@@ -20,7 +20,7 @@ execute_command(const char *cmd)
 		uint64_t seconds = total_seconds % 60;
         kp_log("OS: UROS (Unrestricted Runtime Operating System) ", ONLINE);
         kp_log("Kernel: UROS KERNEL(uroskrnl.ubin/uroskrnl) ", ONLINE);
-		kprint("Uptime: ", WHITE); kprint_num(minutes, GREEN); kprint("m ", WHITE);
+		kprint(" Uptime: ", WHITE); kprint_num(minutes, GREEN); kprint("m ", WHITE);
 		kprint_num(seconds, GREEN); kprint("s\n", WHITE);
         kp_log("Architecture: x86-64 Ring 0 Flat Architecture ", ONLINE);
         kp_log("APIC Status: LAPIC/IOAPIC Online. ", ONLINE);
