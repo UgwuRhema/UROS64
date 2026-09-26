@@ -87,7 +87,7 @@ max:
 
 qemu:
 	qemu-system-x86_64 \
-		-boot menu=on,splash=splash.bmp,splash-time=3000 \
+		-boot order=a \
 		-drive format=raw,file=$(IMG),if=ide \
 		-m 1G \
 		-smp 2 \

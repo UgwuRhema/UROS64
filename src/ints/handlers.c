@@ -434,6 +434,9 @@ com1_handler(void *frame)
 {
 	struct interrupt_frame *int_frame = (struct interrupt_frame *)frame;
 	(void)int_frame;
+	
+	uint8_t serial_char = inb(COM1);
+	(void)serial_char;
 	kprint("COM1 activity!\n", WHITE);
 	lapic_eoi();
 }

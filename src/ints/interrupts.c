@@ -35,6 +35,7 @@ serial_init(void)
 	outb(COM1 + 2, 0xc7);
 // 5. IRQs enabled, RTS/DSR set
 	outb(COM1 + 4, 0x0b);
+	outb(COM1 + 1, 0x01);
 }
 
 void
@@ -113,6 +114,7 @@ idt_init(void)
     
 	enable_pit(1000);
 
+	serial_init();
 	/* route keyboard (IRQ 1) to  vector 33 or 0x21 */
     
 	/* for some reason the PIT on at IOAPIC Pin 2 */
