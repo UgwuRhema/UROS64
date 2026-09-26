@@ -8,7 +8,7 @@ divide_by_zero(void *frame)
 	(void)int_frame;
 	(void)int_frame;
 	clear_screen();
-    kprint("KERNEL PANIC!\n", WHITE);
+    kprint("Kernel Panic\n", WHITE);
     kprint("Fatal exception in interrupt!\n", WHITE);
     kprint("Interrupt #0: Divide by zero\n", WHITE);
     kprint("System Halted. Please reboot\n", WHITE);
@@ -22,7 +22,7 @@ debug(void *frame)
     struct interrupt_frame *int_frame = (struct interrupt_frame *)frame;
 	(void)int_frame;
 	(void)int_frame;clear_screen();
-    kprint("KERNEL PANIC!\n", WHITE);
+    kprint("Kernel Panic\n", WHITE);
     kprint("Fatal exception in interrupt!\n", WHITE);
     kprint("Interrupt #1: Debug Interrupt\n", WHITE);
     kprint("System Halted. Please reboot\n", WHITE);
@@ -38,7 +38,7 @@ non_maskable(void *frame)
 	(void)int_frame;
 	(void)int_frame;
     clear_screen();
-    kprint("KERNEL PANIC!\n", WHITE);
+    kprint("Kernel Panic\n", WHITE);
     kprint("Fatal exception in interrupt!\n", WHITE);
     kprint("Interrupt #2: Non maskable interrupt\n", WHITE);
     kprint("System Halted. Please reboot\n", WHITE);
@@ -54,7 +54,7 @@ break_point(void *frame)
 	(void)int_frame;
 	(void)int_frame;
     clear_screen();
-    kprint("KERNEL PANIC!\n", WHITE);
+    kprint("Kernel Panic\n", WHITE);
     kprint("Fatal exception in interrupt!\n", WHITE);
     kprint("Interrupt #3: Breakpoint interrupt\n", WHITE);
     kprint("System Halted. Please reboot\n", WHITE);
@@ -70,7 +70,7 @@ overflow(void *frame)
 	(void)int_frame;
 	(void)int_frame;
     clear_screen();
-    kprint("KERNEL PANIC!\n", WHITE);
+    kprint("Kernel Panic\n", WHITE);
     kprint("Fatal exception in interrupt!\n", WHITE);
     kprint("Interrupt #4: Stack Overflow\n", WHITE);
     kprint("System Halted. Please reboot\n", WHITE);
@@ -86,7 +86,7 @@ bound_range_exceeded(void *frame)
 	(void)int_frame;
 	(void)int_frame;
     clear_screen();
-    kprint("KERNEL PANIC!\n", WHITE);
+    kprint("Kernel Panic\n", WHITE);
     kprint("Fatal exception in interrupt!\n", WHITE);
     kprint("Interrupt #5: Bound Range Exceeded\n", WHITE);
     kprint("System Halted. Please reboot\n", WHITE);
@@ -101,7 +101,7 @@ invalid_opcode(void *frame)
     struct interrupt_frame *int_frame = (struct interrupt_frame *)frame;
 	(void)int_frame;
     clear_screen();
-    kprint("KERNEL PANIC!\n", WHITE);
+    kprint("Kernel Panic\n", WHITE);
     kprint("Fatal exception in interrupt!\n", WHITE);
     kprint("Interrupt #6: Invalid Opcode\n", WHITE);
     kprint("System Halted. Please reboot\n", WHITE);
@@ -116,7 +116,7 @@ device_not_available(void *frame)
     struct interrupt_frame *int_frame = (struct interrupt_frame *)frame;
 	(void)int_frame;
     clear_screen();
-    kprint("KERNEL PANIC!\n", WHITE);
+    kprint("Kernel Panic\n", WHITE);
     kprint("Fatal exception in interrupt!\n", WHITE);
     kprint("Interrupt #7: Device not available\n", WHITE);
     kprint("System Halted. Please reboot\n", WHITE);
@@ -131,7 +131,7 @@ double_fault(void *frame)
     struct interrupt_frame *int_frame = (struct interrupt_frame *)frame;
 	(void)int_frame;
     clear_screen();
-    kprint("KERNEL PANIC!\n", WHITE);
+    kprint("Kernel Panic\n", WHITE);
     kprint("Double Fault!\n", PURPLE);
     kprint("Interrupt #8 | Error Code: ", WHITE); kprint_hex(int_frame->error_code, PURPLE);
     kprint("\n", WHITE);
@@ -147,7 +147,7 @@ invalid_tss(void *frame)
     struct interrupt_frame *int_frame = (struct interrupt_frame *)frame;
 	(void)int_frame;
     clear_screen();
-    kprint("KERNEL PANIC!\n", WHITE);
+    kprint("Kernel Panic\n", WHITE);
     kprint("Fatal exception in interrupt!\n", WHITE);
     kprint("Interrupt #10: Invalid TSS | Error Code: ", WHITE); kprint_hex(int_frame->error_code, PURPLE);
     kprint("\n", WHITE);
@@ -162,7 +162,7 @@ segement_not_present(void *frame)
     
     struct interrupt_frame *int_frame = (struct interrupt_frame *)frame;
     clear_screen();
-    kprint("KERNEL PANIC!\n", WHITE);
+    kprint("Kernel Panic\n", WHITE);
     kprint("Fatal exception in interrupt!\n", WHITE);
     kprint("Interrupt #11: Segment not present\n", WHITE);
     kprint("Error Code: ", WHITE); kprint_hex(int_frame->error_code, PURPLE);
@@ -178,7 +178,7 @@ stack_segfault(void *frame)
     
     struct interrupt_frame *int_frame = (struct interrupt_frame *)frame;
     clear_screen();
-    kprint("KERNEL PANIC!\n", WHITE);
+    kprint("Kernel Panic\n", WHITE);
     kprint("Stack Segmentation Fault!\n", PURPLE);
     kprint("Interrupt #12 | Error Code: ", WHITE); kprint_hex(int_frame->error_code, PURPLE);
     kprint("\n", WHITE);
@@ -195,7 +195,7 @@ general_protection(void *frame)
     uint64_t faulting_address;
     /* get the faulting address from the cr2 register */
     __asm__ volatile ("mov %%cr2, %0" : "=r"(faulting_address));
-    kprint("KERNEL PANIC!\n", WHITE);
+    kprint("Kernel Panic\n", WHITE);
     kprint("General Protection Fault!\n", PURPLE);
     kprint("The faulting address was: ", WHITE); kprint_hex(faulting_address, PURPLE);
     kprint("\n", WHITE);
@@ -214,7 +214,7 @@ page_fault(void *frame)
     uint64_t faulting_address;
     /* get the faulting address from the cr2 register */
     __asm__ volatile ("mov %%cr2, %0" : "=r"(faulting_address));
-    kprint("KERNEL PANIC!\n", WHITE);
+    kprint("Kernel Panic\n", WHITE);
     kprint("Page Fault!\n", PURPLE);
     kprint("The faulting address was: ", WHITE); kprint_hex(faulting_address, PURPLE);
     kprint("\n", WHITE);
@@ -232,7 +232,7 @@ x87_fpu_error(void *frame)
     struct interrupt_frame *int_frame = (struct interrupt_frame *)frame;
 	(void)int_frame;
     clear_screen();
-    kprint("KERNEL PANIC!\n", WHITE);
+    kprint("Kernel Panic\n", WHITE);
     kprint("x87 FPU Error\n", GREEN);
     kprint("Interrupt #16\n", WHITE);
     kprint("System Halted. Please reboot\n", WHITE);
@@ -246,7 +246,7 @@ alignment_check(void *frame)
     
     struct interrupt_frame *int_frame = (struct interrupt_frame *)frame;
     clear_screen();
-    kprint("KERNEL PANIC!\n", WHITE);
+    kprint("Kernel Panic\n", WHITE);
     kprint("Fatal exception in interrupt!\n", WHITE);
     kprint("Interrupt #17: Alignment Check\n", WHITE);
     kprint("Error Code: ", WHITE); kprint_hex(int_frame->error_code, PURPLE);
@@ -263,7 +263,7 @@ machine_check(void *frame)
     struct interrupt_frame *int_frame = (struct interrupt_frame *)frame;
 	(void)int_frame;
     clear_screen();
-    kprint("KERNEL PANIC!\n", WHITE);
+    kprint("Kernel Panic\n", WHITE);
     kprint("Fatal exception in interrupt!\n", WHITE);
     kprint("Interrupt #18: Machine Check\n", WHITE);
     kprint("System Halted. Please reboot\n", WHITE);
@@ -278,7 +278,7 @@ simd_error(void *frame)
     struct interrupt_frame *int_frame = (struct interrupt_frame *)frame;
 	(void)int_frame;
     clear_screen();
-    kprint("KERNEL PANIC!\n", WHITE);
+    kprint("Kernel Panic\n", WHITE);
     kprint("Fatal exception in interrupt!\n", WHITE);
     kprint("Interrupt #19: SIMD Error\n", WHITE);
     kprint("System Halted. Please reboot\n", WHITE);
