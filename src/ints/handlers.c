@@ -38,16 +38,7 @@ panic_execption(const char *title, uint8_t vector, struct interrupt_frame *frame
 __attribute__((interrupt)) void
 divide_by_zero(void *frame)
 {
-    struct interrupt_frame *int_frame = (struct interrupt_frame *)frame;
-	(void)int_frame;
-	(void)int_frame;
-	clear_screen();
-    kprint("Kernel Panic\n", WHITE);
-    kprint("Fatal exception in interrupt!\n", WHITE);
-    kprint("Interrupt #0: Divide by zero\n", WHITE);
-    kprint("System Halted. Please reboot\n", WHITE);
-    while (1)
-        __asm__ volatile ("hlt");    
+    panic_execption("Divide by Zero", 0, (struct interrupt_frame *)frame, 0);  
 }
 
 __attribute__((interrupt)) void
