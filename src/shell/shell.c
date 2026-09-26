@@ -46,8 +46,8 @@ execute_command(const char *cmd)
 		__asm__ volatile ("cli");
 		while (1)
 			__asm__ volatile ("hlt");
-	} else if (strcmp(cmd, "sleep") == 0 && cmd[6] == ' '){
-		const char *value = &cmd[7]; /* store the number(in seconds as a string for now) */
+	} else if (strncmp(cmd, "sleep ", 6) == 0){
+		const char *value = &cmd[6]; /* store the number(in seconds as a string for now) */
 		uint64_t seconds = string_to_int(value);
 		sleep(seconds * 1000);
 	} else {
