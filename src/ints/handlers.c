@@ -10,8 +10,8 @@ divide_by_zero(void *frame)
 	clear_screen();
     kprint("KERNEL PANIC!\n", WHITE);
     kprint("Fatal exception in interrupt!\n", WHITE);
-    kprint("Interrupt #0: Divide by zero\n", YELLOW);
-    kprint("System Halted. Please reboot\n", BLUE);
+    kprint("Interrupt #0: Divide by zero\n", WHITE);
+    kprint("System Halted. Please reboot\n", WHITE);
     while (1)
         __asm__ volatile ("hlt");    
 }
@@ -24,8 +24,8 @@ debug(void *frame)
 	(void)int_frame;clear_screen();
     kprint("KERNEL PANIC!\n", WHITE);
     kprint("Fatal exception in interrupt!\n", WHITE);
-    kprint("Interrupt #1: Debug Interrupt\n", YELLOW);
-    kprint("System Halted. Please reboot\n", BLUE);
+    kprint("Interrupt #1: Debug Interrupt\n", WHITE);
+    kprint("System Halted. Please reboot\n", WHITE);
     while(1)
         __asm__ volatile ("hlt");
 };
@@ -40,8 +40,8 @@ non_maskable(void *frame)
     clear_screen();
     kprint("KERNEL PANIC!\n", WHITE);
     kprint("Fatal exception in interrupt!\n", WHITE);
-    kprint("Interrupt #2: Non maskable interrupt\n", YELLOW);
-    kprint("System Halted. Please reboot\n", BLUE);
+    kprint("Interrupt #2: Non maskable interrupt\n", WHITE);
+    kprint("System Halted. Please reboot\n", WHITE);
     while(1)
         __asm__ volatile ("hlt");
 };
@@ -56,8 +56,8 @@ break_point(void *frame)
     clear_screen();
     kprint("KERNEL PANIC!\n", WHITE);
     kprint("Fatal exception in interrupt!\n", WHITE);
-    kprint("Interrupt #3: Breakpoint interrupt\n", YELLOW);
-    kprint("System Halted. Please reboot\n", BLUE);
+    kprint("Interrupt #3: Breakpoint interrupt\n", WHITE);
+    kprint("System Halted. Please reboot\n", WHITE);
     while(1)
         __asm__ volatile ("hlt");
 };
@@ -72,8 +72,8 @@ overflow(void *frame)
     clear_screen();
     kprint("KERNEL PANIC!\n", WHITE);
     kprint("Fatal exception in interrupt!\n", WHITE);
-    kprint("Interrupt #4: Stack Overflow\n", YELLOW);
-    kprint("System Halted. Please reboot\n", BLUE);
+    kprint("Interrupt #4: Stack Overflow\n", WHITE);
+    kprint("System Halted. Please reboot\n", WHITE);
     while(1)
         __asm__ volatile ("hlt");
 };
@@ -88,8 +88,8 @@ bound_range_exceeded(void *frame)
     clear_screen();
     kprint("KERNEL PANIC!\n", WHITE);
     kprint("Fatal exception in interrupt!\n", WHITE);
-    kprint("Interrupt #5: Bound Range Exceeded\n", YELLOW);
-    kprint("System Halted. Please reboot\n", BLUE);
+    kprint("Interrupt #5: Bound Range Exceeded\n", WHITE);
+    kprint("System Halted. Please reboot\n", WHITE);
     while(1)
         __asm__ volatile ("hlt");
 };
@@ -103,8 +103,8 @@ invalid_opcode(void *frame)
     clear_screen();
     kprint("KERNEL PANIC!\n", WHITE);
     kprint("Fatal exception in interrupt!\n", WHITE);
-    kprint("Interrupt #6: Invalid Opcode\n", YELLOW);
-    kprint("System Halted. Please reboot\n", BLUE);
+    kprint("Interrupt #6: Invalid Opcode\n", WHITE);
+    kprint("System Halted. Please reboot\n", WHITE);
     while(1)
         __asm__ volatile ("hlt");
 };
@@ -118,8 +118,8 @@ device_not_available(void *frame)
     clear_screen();
     kprint("KERNEL PANIC!\n", WHITE);
     kprint("Fatal exception in interrupt!\n", WHITE);
-    kprint("Interrupt #7: Device not available\n", YELLOW);
-    kprint("System Halted. Please reboot\n", BLUE);
+    kprint("Interrupt #7: Device not available\n", WHITE);
+    kprint("System Halted. Please reboot\n", WHITE);
     while(1)
         __asm__ volatile ("hlt");
 };
@@ -133,9 +133,9 @@ double_fault(void *frame)
     clear_screen();
     kprint("KERNEL PANIC!\n", WHITE);
     kprint("Double Fault!\n", PURPLE);
-    kprint("Interrupt #8 | Error Code: ", YELLOW); kprint_hex(int_frame->error_code, PURPLE);
+    kprint("Interrupt #8 | Error Code: ", WHITE); kprint_hex(int_frame->error_code, PURPLE);
     kprint("\n", WHITE);
-    kprint("System Halted. Please reboot\n", BLUE);
+    kprint("System Halted. Please reboot\n", WHITE);
     while(1)
         __asm__ volatile ("hlt");
 };
@@ -149,9 +149,9 @@ invalid_tss(void *frame)
     clear_screen();
     kprint("KERNEL PANIC!\n", WHITE);
     kprint("Fatal exception in interrupt!\n", WHITE);
-    kprint("Interrupt #10: Invalid TSS | Error Code: ", YELLOW); kprint_hex(int_frame->error_code, PURPLE);
+    kprint("Interrupt #10: Invalid TSS | Error Code: ", WHITE); kprint_hex(int_frame->error_code, PURPLE);
     kprint("\n", WHITE);
-    kprint("System Halted. Please reboot\n", BLUE);
+    kprint("System Halted. Please reboot\n", WHITE);
     while(1)
         __asm__ volatile ("hlt");
 };
@@ -164,10 +164,10 @@ segement_not_present(void *frame)
     clear_screen();
     kprint("KERNEL PANIC!\n", WHITE);
     kprint("Fatal exception in interrupt!\n", WHITE);
-    kprint("Interrupt #11: Segment not present\n", YELLOW);
-    kprint("Error Code: ", YELLOW); kprint_hex(int_frame->error_code, PURPLE);
+    kprint("Interrupt #11: Segment not present\n", WHITE);
+    kprint("Error Code: ", WHITE); kprint_hex(int_frame->error_code, PURPLE);
     kprint("\n", WHITE);
-    kprint("System Halted. Please reboot\n", BLUE);
+    kprint("System Halted. Please reboot\n", WHITE);
     while(1)
         __asm__ volatile ("hlt");
 };
@@ -180,9 +180,9 @@ stack_segfault(void *frame)
     clear_screen();
     kprint("KERNEL PANIC!\n", WHITE);
     kprint("Stack Segmentation Fault!\n", PURPLE);
-    kprint("Interrupt #12 | Error Code: ", YELLOW); kprint_hex(int_frame->error_code, PURPLE);
+    kprint("Interrupt #12 | Error Code: ", WHITE); kprint_hex(int_frame->error_code, PURPLE);
     kprint("\n", WHITE);
-    kprint("System Halted. Please reboot\n", BLUE);
+    kprint("System Halted. Please reboot\n", WHITE);
     while(1)
         __asm__ volatile ("hlt");
 };
@@ -197,11 +197,11 @@ general_protection(void *frame)
     __asm__ volatile ("mov %%cr2, %0" : "=r"(faulting_address));
     kprint("KERNEL PANIC!\n", WHITE);
     kprint("General Protection Fault!\n", PURPLE);
-    kprint("The faulting address was: ", YELLOW); kprint_hex(faulting_address, PURPLE);
+    kprint("The faulting address was: ", WHITE); kprint_hex(faulting_address, PURPLE);
     kprint("\n", WHITE);
-    kprint("Interrupt #13 | Error Code: ", YELLOW); kprint_hex(int_frame->error_code, PURPLE);
+    kprint("Interrupt #13 | Error Code: ", WHITE); kprint_hex(int_frame->error_code, PURPLE);
     kprint("\n", WHITE);
-    kprint("System Halted. Please reboot\n", BLUE);
+    kprint("System Halted. Please reboot\n", WHITE);
     while(1)
         __asm__ volatile ("hlt");
 };
@@ -216,11 +216,11 @@ page_fault(void *frame)
     __asm__ volatile ("mov %%cr2, %0" : "=r"(faulting_address));
     kprint("KERNEL PANIC!\n", WHITE);
     kprint("Page Fault!\n", PURPLE);
-    kprint("The faulting address was: ", YELLOW); kprint_hex(faulting_address, PURPLE);
+    kprint("The faulting address was: ", WHITE); kprint_hex(faulting_address, PURPLE);
     kprint("\n", WHITE);
-    kprint("Interrupt #14 | Error Code: ", YELLOW); kprint_hex(int_frame->error_code, PURPLE);
+    kprint("Interrupt #14 | Error Code: ", WHITE); kprint_hex(int_frame->error_code, PURPLE);
     kprint("\n", WHITE);
-    kprint("System Halted. Please reboot\n", BLUE);
+    kprint("System Halted. Please reboot\n", WHITE);
     while(1)
         __asm__ volatile ("hlt");
 };
@@ -234,8 +234,8 @@ x87_fpu_error(void *frame)
     clear_screen();
     kprint("KERNEL PANIC!\n", WHITE);
     kprint("x87 FPU Error\n", GREEN);
-    kprint("Interrupt #16\n", YELLOW);
-    kprint("System Halted. Please reboot\n", BLUE);
+    kprint("Interrupt #16\n", WHITE);
+    kprint("System Halted. Please reboot\n", WHITE);
     while(1)
         __asm__ volatile ("hlt");
 };
@@ -248,10 +248,10 @@ alignment_check(void *frame)
     clear_screen();
     kprint("KERNEL PANIC!\n", WHITE);
     kprint("Fatal exception in interrupt!\n", WHITE);
-    kprint("Interrupt #17: Alignment Check\n", YELLOW);
-    kprint("Error Code: ", YELLOW); kprint_hex(int_frame->error_code, PURPLE);
+    kprint("Interrupt #17: Alignment Check\n", WHITE);
+    kprint("Error Code: ", WHITE); kprint_hex(int_frame->error_code, PURPLE);
     kprint("\n", WHITE);
-    kprint("System Halted. Please reboot\n", BLUE);
+    kprint("System Halted. Please reboot\n", WHITE);
     while(1)
         __asm__ volatile ("hlt");
 };
@@ -265,8 +265,8 @@ machine_check(void *frame)
     clear_screen();
     kprint("KERNEL PANIC!\n", WHITE);
     kprint("Fatal exception in interrupt!\n", WHITE);
-    kprint("Interrupt #18: Machine Check\n", YELLOW);
-    kprint("System Halted. Please reboot\n", BLUE);
+    kprint("Interrupt #18: Machine Check\n", WHITE);
+    kprint("System Halted. Please reboot\n", WHITE);
     while(1)
         __asm__ volatile ("hlt");
 };
@@ -280,8 +280,8 @@ simd_error(void *frame)
     clear_screen();
     kprint("KERNEL PANIC!\n", WHITE);
     kprint("Fatal exception in interrupt!\n", WHITE);
-    kprint("Interrupt #19: SIMD Error\n", YELLOW);
-    kprint("System Halted. Please reboot\n", BLUE);
+    kprint("Interrupt #19: SIMD Error\n", WHITE);
+    kprint("System Halted. Please reboot\n", WHITE);
     while(1)
         __asm__ volatile ("hlt");
 };
