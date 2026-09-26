@@ -3,7 +3,7 @@
 void
 mouse_wait(uint8_t type)
 {
-	uint32_t timout = 100000;
+	uint32_t timeout = 100000;
 	if (type == 0) /* wait for data to read */
 	{
 		while (--timeout && !(inb(0x64) & 1));
