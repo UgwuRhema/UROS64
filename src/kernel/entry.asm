@@ -3,7 +3,7 @@ bits 64
 section .text
 
 extern __bss_start, __bss_end
-extern kmain
+extern uroskrnl_main_entry_point
 
 global _begin
 _begin:
@@ -29,7 +29,7 @@ _begin:
 	rep     stosb ; store remaining bytes
 .bss_done:
 
-	call kmain
+	call uroskrnl_main_entry_point
 ;infinite loop!
 .hang:
 	cli

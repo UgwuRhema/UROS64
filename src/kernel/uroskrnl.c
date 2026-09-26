@@ -19,7 +19,7 @@ uint64_t get_uptime_in_minutes(uint64_t timer_ticks)
 */
 
 void
-kmain()
+uroskrnl_main_entry_point()
 {
 	/* enable_pit(1000); */
 	idt_init();
