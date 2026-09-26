@@ -3,6 +3,7 @@
 
 //extern uint64_t timer_ticks;
 
+extern void panic_execption(const char *, uint8_t, struct interrupt_frame *, uint64_t);
 extern __attribute__((interrupt)) void divide_by_zero(void *); /* note these interrupt handlers are in order */
 /* they are in order of their vector numbers starting from zero */
 extern __attribute__((interrupt)) void debug(void *); //1

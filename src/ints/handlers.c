@@ -1,6 +1,40 @@
 #include "handlers.h"
 #include "apic.h"
 
+void
+panic_execption(const char *title, uint8_t vector, struct interrupt_frame *frame, uint64_t additional_info)
+{
+	__asm__ volatile ("cli");
+	clear_screen();
+
+    kprint("Kernel Panic\n", PURPLE);
+    kprint("Exception=", WHITE); kprint(title, WHITE); kprint("\n", WHITE);
+    kprint("Vector=#", WHITE); kprint_num(vector, WHITE); kprint("\n", WHITE);
+    kprint("Error=", WHITE); kprint_hex(frame->error_code, PURPLE); kprint("\n", WHITE);
+
+    /* Page Fault specific breakdown */
+    if (vector == 14) {
+        kprint("Fault-Address=", WHITE); kprint_hex(additional_info, PURPLE); kprint("\n", WHITE);
+        kprint("Fault-Cause=", WHITE);
+        kprint((frame->error_code & 0x01) ? "[Page Present Protection Violation]" : "[Page Not Present]", WHITE);
+        kprint((frame->error_code & 0x02) ? "[Write Access]" : "[Read Access]", WHITE);
+        kprint("[Kernel]", WHITE);
+        kprint("\n", WHITE);
+    }
+
+    /* CPU Register Dump from ISR Frame */
+    kprint("Frame-Registers\n", WHITE);
+    kprint("rip=", WHITE); kprint_hex(frame->rip, PURPLE);
+    kprint("cs=", WHITE); kprint_hex(frame->cs, PURPLE); kprint("\n", WHITE);
+    kprint("rsp=", WHITE); kprint_hex(frame->rsp, PURPLE);
+    kprint("ss=", WHITE); kprint_hex(frame->ss, PURPLE); kprint("\n", WHITE);
+    kprint("rflags=", WHITE); kprint_hex(frame->rflags, PURPLE); kprint("\n\n", WHITE);
+
+    kprint("System Halted. Please reboot.\n", WHITE);
+    while (1)
+        __asm__ volatile ("hlt");
+}
+
 __attribute__((interrupt)) void
 divide_by_zero(void *frame)
 {
@@ -209,20 +243,9 @@ general_protection(void *frame)
 __attribute__((interrupt)) void
 page_fault(void *frame)
 {
-    struct interrupt_frame *int_frame = (struct interrupt_frame *)frame;
-    clear_screen();
-    uint64_t faulting_address;
-    /* get the faulting address from the cr2 register */
-    __asm__ volatile ("mov %%cr2, %0" : "=r"(faulting_address));
-    kprint("Kernel Panic\n", WHITE);
-    kprint("Page Fault!\n", PURPLE);
-    kprint("The faulting address was: ", WHITE); kprint_hex(faulting_address, PURPLE);
-    kprint("\n", WHITE);
-    kprint("Interrupt #14 | Error Code: ", WHITE); kprint_hex(int_frame->error_code, PURPLE);
-    kprint("\n", WHITE);
-    kprint("System Halted. Please reboot\n", WHITE);
-    while(1)
-        __asm__ volatile ("hlt");
+	uint64_t cr2;
+	__asm__ volatile ("mov %%cr2, %0" : "=r"(cr2));
+	panic_execption("Page Fault", 14, (struct interrupt_frame *)frame, 0);
 };
 
 __attribute__((interrupt)) void
