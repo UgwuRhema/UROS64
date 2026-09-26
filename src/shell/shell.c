@@ -35,7 +35,9 @@ execute_command(const char *cmd)
     } else if (strcmp(cmd, "trigger_pf_panic") == 0){
         volatile u64 *panic_ptr = (volatile u64 *)0x100000000ULL;
         *panic_ptr = 0x1234;
-    } else if (strcmp(cmd, "powerdown") == 0){
+    } else if (strcmp(cmd, "trigger_uo_panic") == 0){
+		__asm__ volatile ("ud2");
+	} else if (strcmp(cmd, "powerdown") == 0){
 		kp_log("Deactivating all services and components", DONE);
 		kp_log("Done...You may now turn off the computer", DONE);
 		kprint(" Halting...", WHITE);

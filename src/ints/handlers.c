@@ -13,8 +13,8 @@ panic_execption(const char *title, uint8_t vector, struct interrupt_frame *frame
     kprint("Error=", WHITE); kprint_hex(frame->error_code, PURPLE); kprint("\n", WHITE);
 
     /* Page Fault specific breakdown */
-    if (vector == 14) {
-        kprint("Fault-Address=", WHITE); kprint_hex(additional_info, PURPLE); kprint("\n", WHITE);
+		if (vector == 14 || vector == 13) {
+			kprint("Fault-Address=", WHITE); kprint_hex(additional_info, PURPLE); kprint("\n", WHITE);
         kprint("Fault-Cause=", WHITE);
         kprint((frame->error_code & 0x01) ? "[Page Present Protection Violation]" : "[Page Not Present]", WHITE);
         kprint((frame->error_code & 0x02) ? "[Write Access]" : "[Read Access]", WHITE);
@@ -23,12 +23,12 @@ panic_execption(const char *title, uint8_t vector, struct interrupt_frame *frame
     }
 
     /* CPU Register Dump from ISR Frame */
-    kprint("Frame-Registers\n", WHITE);
-    kprint("rip=", WHITE); kprint_hex(frame->rip, PURPLE);
-    kprint("cs=", WHITE); kprint_hex(frame->cs, PURPLE); kprint("\n", WHITE);
-    kprint("rsp=", WHITE); kprint_hex(frame->rsp, PURPLE);
-    kprint("ss=", WHITE); kprint_hex(frame->ss, PURPLE); kprint("\n", WHITE);
-    kprint("rflags=", WHITE); kprint_hex(frame->rflags, PURPLE); kprint("\n\n", WHITE);
+    kprint("  Frame-Registers=\n", WHITE);
+    kprint("  rip=", WHITE); kprint_hex(frame->rip, PURPLE);
+    kprint("  cs=", WHITE); kprint_hex(frame->cs, PURPLE); kprint("\n", WHITE);
+    kprint("  rsp=", WHITE); kprint_hex(frame->rsp, PURPLE);
+    kprint("  ss=", WHITE); kprint_hex(frame->ss, PURPLE); kprint("\n", WHITE);
+    kprint("  rflags=", WHITE); kprint_hex(frame->rflags, PURPLE); kprint("\n\n", WHITE);
 
     kprint("System Halted. Please reboot.\n", WHITE);
     while (1)
@@ -131,16 +131,7 @@ bound_range_exceeded(void *frame)
 __attribute__((interrupt)) void
 invalid_opcode(void *frame)
 {
-    
-    struct interrupt_frame *int_frame = (struct interrupt_frame *)frame;
-	(void)int_frame;
-    clear_screen();
-    kprint("Kernel Panic\n", WHITE);
-    kprint("Fatal exception in interrupt!\n", WHITE);
-    kprint("Interrupt #6: Invalid Opcode\n", WHITE);
-    kprint("System Halted. Please reboot\n", WHITE);
-    while(1)
-        __asm__ volatile ("hlt");
+	panic_execption("Invalid Opcode", 6, (struct interrupt_frame *)frame, 0);    
 };
 
 __attribute__((interrupt)) void
@@ -224,20 +215,9 @@ stack_segfault(void *frame)
 __attribute__((interrupt)) void
 general_protection(void *frame)
 {
-    struct interrupt_frame *int_frame = (struct interrupt_frame *)frame;
-    clear_screen();
-    uint64_t faulting_address;
-    /* get the faulting address from the cr2 register */
-    __asm__ volatile ("mov %%cr2, %0" : "=r"(faulting_address));
-    kprint("Kernel Panic\n", WHITE);
-    kprint("General Protection Fault!\n", PURPLE);
-    kprint("The faulting address was: ", WHITE); kprint_hex(faulting_address, PURPLE);
-    kprint("\n", WHITE);
-    kprint("Interrupt #13 | Error Code: ", WHITE); kprint_hex(int_frame->error_code, PURPLE);
-    kprint("\n", WHITE);
-    kprint("System Halted. Please reboot\n", WHITE);
-    while(1)
-        __asm__ volatile ("hlt");
+	uint64_t cr2;
+	__asm__ volatile ("mov %%cr2, %0" : "=r"(cr2));
+	panic_execption("General Protection Fault", 13, (struct interrupt_frame *)frame, 0);
 };
 
 __attribute__((interrupt)) void
