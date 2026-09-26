@@ -3,6 +3,9 @@
 
 //extern uint64_t timer_ticks;
 
+extern uint8_t mouse_packet[3];
+extern uint8_t mouse_cycle; 
+
 extern void panic_execption(const char *, uint8_t, struct interrupt_frame *, uint64_t);
 extern __attribute__((interrupt)) void divide_by_zero(void *); /* note these interrupt handlers are in order */
 /* they are in order of their vector numbers starting from zero */
@@ -35,3 +38,4 @@ extern char buffer_pop();
 extern __attribute__((interrupt)) void keyboard_handler(void *);
 extern __attribute__((interrupt)) void timer_handler(void *);
 extern __attribute__((interrupt)) void com1_handler(void *);
+extern __attribute__((interrupt)) void mouse_handler(void *);

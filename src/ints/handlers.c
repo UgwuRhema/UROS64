@@ -434,3 +434,37 @@ com1_handler(void *frame)
 	kprint("COM1 activity!\n", WHITE);
 	lapic_eoi();
 }
+
+uint8_t mouse_packet[3];
+uint8_t mouse_cycle = 0; /* a tracker */
+
+__attribute__((interrupt)) void
+mouse_handler(void * frame)
+{
+	struct interrupt_frame *int_frame = (struct interrupt_frame *)frame;
+	(void)int_frame;
+	uint8_t status = inb(0x64); /* read status register to ensure data is ready */
+
+	if (status & 0x01) /* if there is a data to read */
+	{
+		uint8_t data = inb(0x60);
+		switch (mouse_cycle)
+		{
+			case 0: /* byte 1 is the status */
+				mouse_packet[0] = data;
+				mouse_cycle = 1;
+				break;
+			case 1: /* byte 2 is the X axis movement */
+				mouse_packet[1] = data;
+				mouse_cycle = 2;
+				break;
+			case 2: /* byte 3 is the Y axis movement */
+				mouse_packet[2] = data;
+				mouse_cycle = 0; /* reset */
+				break;
+		}
+	}
+
+	lapic_eoi();
+}
+
