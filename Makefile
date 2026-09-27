@@ -97,7 +97,8 @@ qemu:
 		-enable-kvm \
 		-cpu host \
 		-machine q35 \
-		-display gtk
+		-display gtk \
+		-serial stdio
 
 gdb:
 	qemu-system-x86_64 \
