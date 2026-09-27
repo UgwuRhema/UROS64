@@ -461,7 +461,7 @@ mouse_handler(void * frame)
 			case 2: /* byte 3 is the Y axis movement */
 				mouse_packet[2] = data;
 				mouse_cycle = 0; /* reset */
-				kprint("Mouse Moved!", WHITE);
+				skprint("Mouse Moved!");
 				break;
 		}
 	}

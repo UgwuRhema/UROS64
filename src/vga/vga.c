@@ -1,6 +1,8 @@
 #include "vga.h"
 #include "../func/func.h"
 
+#define COM1 0x3f8
+
 uint64_t cursor_pos = 0;
 
 void 
@@ -100,4 +102,23 @@ kprint_num(uint64_t num, u16 attr)
 		num /= 10;
 	}
 	kprint(&buf[i + 1], attr);
+}
+
+int
+is_transmit_empty(void)
+{
+	return inb(COM1 + 5) & 0x20;
+}
+
+void s_c(char c)
+{
+	while (is_transmit_empty() == 0);
+	outb(COM1, c);
+}
+
+void
+skprint(const char * str)
+{
+	while (*str)
+		s_c(*str++);
 }

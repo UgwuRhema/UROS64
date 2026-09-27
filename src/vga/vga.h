@@ -32,3 +32,6 @@ extern void clear_screen(void);
 extern void kp_log(const char *, enum status);
 extern void kprint_hex(uint64_t, u16);
 extern void kprint_num(uint64_t, u16);
+extern int is_transmit_empty(void); /* check if the serial port is currently llistening or has noise */
+extern void s_c(char);
+extern void skprint(const char *);
