@@ -57,6 +57,9 @@ execute_command(const char *cmd)
 		const char *value = &cmd[6]; /* store the number(in seconds as a string for now) */
 		uint64_t seconds = string_to_int(value);
 		sleep(seconds * 1000);
+	} else if (strncmp(cmd, "puts ", 5) == 0){
+		const char *val = &cmd[5];
+		kprint(val, WHITE);
 	} else {
         kprint("Unknown Command: ", PURPLE);
         kprint("'", WHITE);
