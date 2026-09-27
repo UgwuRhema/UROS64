@@ -1,5 +1,6 @@
 #include "../vga/vga.h"
 #include "interrupts.h"
+#include "../devices/mouse/mouse.h"
 
 //extern uint64_t timer_ticks;
 

@@ -103,6 +103,7 @@ idt_init(void)
     /* hardware IRQs */
     idt_set_entry(0x20, 0, (uint64_t)timer_handler, 0x08, 0x8e);
 	idt_set_entry(0x21, 0, (uint64_t)keyboard_handler, 0x08, 0x8e);
+	idt_set_entry(0x2c, 0, (uint64_t)mouse_handler, 0x08, 0x8e);
 	/* COM1 serial port handler */idt_set_entry(0x24, 0, (uint64_t)com1_handler, 0x08, 0x8e);
 
     idt_load();
@@ -116,11 +117,14 @@ idt_init(void)
 
 	serial_init();
 	/* route keyboard (IRQ 1) to  vector 33 or 0x21 */
-    
+   
+	mouse_init();
+
 	/* for some reason the PIT on at IOAPIC Pin 2 */
 	ioapic_map_irq(2, 0x20, 0);
 	ioapic_map_irq(1, 0x21, 0);
 	ioapic_map_irq(4, 0x24, 0);
+	ioapic_map_irq(12, 0x2c, 0);
 	/* finally unmask all interrupts */
     __asm__ volatile ("sti");
 }
