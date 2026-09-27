@@ -60,6 +60,7 @@ execute_command(const char *cmd)
 	} else if (strncmp(cmd, "puts ", 5) == 0){
 		const char *val = &cmd[5];
 		kprint(val, WHITE);
+		kprint("\n", WHITE);
 	} else {
         kprint("Unknown Command: ", PURPLE);
         kprint("'", WHITE);
