@@ -118,7 +118,7 @@ idt_init(void)
 	serial_init();
 	/* route keyboard (IRQ 1) to  vector 33 or 0x21 */
    
-	mouse_init();
+	//mouse_init();
 
 	/* for some reason the PIT on at IOAPIC Pin 2 */
 	ioapic_map_irq(2, 0x20, 0);
