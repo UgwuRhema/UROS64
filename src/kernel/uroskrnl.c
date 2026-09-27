@@ -28,6 +28,7 @@ uroskrnl_main_entry_point()
 	kprint("v0.01\n", GREEN);
 	kprint("x86 Monolithic 64-bit Kernel written in URSL\n", WHITE);
 	/*kprint("\n", WHITE); */
+	skprint("Entering setup....");
 	kprint("Setting up... \n", WHITE);
 	kp_log("(MEM)Enable 64-bit Paging. ", DONE);
 	sleep(100);

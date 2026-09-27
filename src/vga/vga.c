@@ -104,6 +104,8 @@ kprint_num(uint64_t num, u16 attr)
 	kprint(&buf[i + 1], attr);
 }
 
+
+/* not really VGA functions though */
 int
 is_transmit_empty(void)
 {
