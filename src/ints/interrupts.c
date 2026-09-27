@@ -21,22 +21,21 @@ enable_pit(uint32_t freq)
 void
 serial_init(void)
 {
-// 1. Disable all interrupts (we are doing polling for now)
-	outb(COM1 + 1, 0x00);
-// 2. Enable DLAB (set divisor mode)
-	outb(COM1 + 3, 0x80);
-// 3. Set divisor to 3 (38400 baud)
-	outb(COM1 + 0, 0x03);
+    outb(COM1 + 1, 0x00); /* Disable interrupts */
+    outb(COM1 + 3, 0x80); /* Enable DLAB */
+    outb(COM1 + 0, 0x03); /* Set divisor to 3 (38400 baud) */
+    outb(COM1 + 1, 0x00);
+    outb(COM1 + 3, 0x03); /* 8 bits, no parity, 1 stop bit */
+    outb(COM1 + 2, 0xc7); /* Enable FIFO, clear RX/TX FIFOs */
+    outb(COM1 + 4, 0x0b); /* Enable IRQs ,OUT2 bit set */
+	/* */
+    /* FLUSH LINGERING STATUS & RX BUFFER BEFORE ENABLING IRQS */
+    inb(COM1 + 5); /* Read Line Status Register */
+    inb(COM1 + 0); /* Read Receive Buffer Register */
 
-	outb(COM1 + 1, 0x00);
-
-	outb(COM1 + 3, 0x03);
-// 4. Enable FIFO, clear them, with 14-byte threshold
-	outb(COM1 + 2, 0xc7);
-// 5. IRQs enabled, RTS/DSR set
-	outb(COM1 + 4, 0x0b);
-	outb(COM1 + 1, 0x01);
+    outb(COM1 + 1, 0x01); /* Enable Received Data Available Interrupt */
 }
+
 
 void
 idt_set_entry(int index, uint8_t ist,uint64_t hand_addr, uint16_t selector, uint8_t attr)
