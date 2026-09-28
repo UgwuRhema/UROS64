@@ -38,12 +38,13 @@ uroskrnl_main_entry_point()
 	sleep(100);
 	kp_log("(INT)Enable LAPIC and IOAPIC Hardware Interrupts. ", DONE);
 	sleep(100);
-	kp_log("(DRV)Set up PS/2 Keyboard Driver and Model. ", DONE);
+	kp_log("(DRVS)Set up PS/2 Keyboard Driver and Model. ", DONE);
 	sleep(100);
 	kp_log("(INT)Initialized IRQ 2 and the PIT(Programmable Interval Timer). ", DONE);
 	sleep(100);
-	kp_log("(DRV)Activated the COM1 and initialize the Serial Driver. ", DONE);
+	kp_log("(DRVS)Activated the COM1 and initialize the Serial Driver. ", DONE);
 	sleep(100);
+	kp_log("(DRVS)Initailized the PS/2 Mouse Interrupt and Handler and Driver. ", DONE);
 	kp_log("(MEM)Implement the Memory Management Unit. ", NOT_DONE);
 	sleep(100);
 	kp_log("(MEM)Same as the last one; Implement PMM and VMM. ", NOT_DONE);
