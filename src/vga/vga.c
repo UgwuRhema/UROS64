@@ -124,3 +124,26 @@ skprint(const char * str)
 	while (*str)
 		s_c(*str++);
 }
+
+void
+vga_scroll(void)
+{
+	u16 *vga = (u16*)_VGA_ADDR;
+
+	//physically shift rows 1 to 24 up by one row
+	for (int y = 0; y < _VGA_ROWS - 1; y++)
+	{
+		for (int x = 0; x < _VGA_COLS; x++)
+		{
+			vga[y * _VGA_COLS + x] = vga[(y + 1) * _VGA_COLS + x];
+		}
+	}
+
+	//clear out the very bottom row (row 24) to make it empty space
+	u16 blank_cell = (u16)' ' | (WHITE << 8);
+	for (int x = 0; x < _VGA_COLS; x++)
+	{
+		vga[(_VGA_ROWS - 1) * _VGA_COLS + x] = blank_cell;
+	}
+
+}

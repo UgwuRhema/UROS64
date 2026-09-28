@@ -28,7 +28,7 @@ uroskrnl_main_entry_point()
 	kprint("v0.01\n", GREEN);
 	kprint("x86 Monolithic 64-bit Kernel written in URSL\n", WHITE);
 	/*kprint("\n", WHITE); */
-	skprint("Entering setup....");
+	skprint("Entering setup....\n");
 	kprint("Setting up... \n", WHITE);
 	kp_log("(MEM)Enable 64-bit Paging. ", DONE);
 	sleep(100);
@@ -44,7 +44,8 @@ uroskrnl_main_entry_point()
 	sleep(100);
 	kp_log("(DRVS)Activated the COM1 and initialize the Serial Driver. ", DONE);
 	sleep(100);
-	kp_log("(DRVS)Initailized the PS/2 Mouse Interrupt and Handler and Driver. ", DONE);
+	kp_log("(DRVS)Initailized the PS/2 Mouse Interrupt Handler and Driver. ", DONE);
+	sleep(100);
 	kp_log("(MEM)Implement the Memory Management Unit. ", NOT_DONE);
 	sleep(100);
 	kp_log("(MEM)Same as the last one; Implement PMM and VMM. ", NOT_DONE);
