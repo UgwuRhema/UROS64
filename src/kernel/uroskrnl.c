@@ -7,6 +7,7 @@ typedef uint64_t u64;
 #include "../func/func.h"
 #include "../ints/interrupts.h"
 #include "../shell/shell.h"
+#include "../memory/pmm.h"
 
 /*
 uint64_t get_uptime_in_minutes(uint64_t timer_ticks)
@@ -19,7 +20,7 @@ uint64_t get_uptime_in_minutes(uint64_t timer_ticks)
 */
 
 void
-uroskrnl_main_entry_point()
+uroskrnl_main_entry_point(uint32_t memory_entries_count, struct MemoryMapEntry *mmap_entries)
 {
 	/* enable_pit(1000); */
 	idt_init();
