@@ -13,8 +13,8 @@ mkdir -> makedir
 find -> listtree
 tree -> tree
 rsync -> copytree(TempleOS Fork)
-mount -> mnt & volset (Since we have different Volumes in Eden(our filesystem remember?), 'Eden' is the main/master
-volume while the mount volume would be 'mount' ie. [Mount:/]# instead of [Eden:/]# , cool right?)
+mount -> mnt & volset (Since we have different Volumes in Nothing(our filesystem remember?), 'Nothing' is the main/master
+volume while the mount volume would be 'mount' ie. [Mount:/]# instead of [Nothing:/]# , cool right?)
 file -> typeof
 grep -> fsi (Find in Standard-In)
 exec -> run (This would be used to execute UROS Scripts(basically URSL but yet 'run' will call the 'urlsc' compiler, JIT Compile whatever file was

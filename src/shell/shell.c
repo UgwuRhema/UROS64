@@ -12,6 +12,7 @@ execute_command(const char *cmd)
     {
         kprint("UROS USH Available Commands:\n", WHITE);
         kprint(" help\n clear\n sysinfo\n vreboot\n trigger_*_panic\n powerdown\n sleep <seconds>\n", GREEN);
+		kprint(" puts <text>\n sleep <seconds>\n", GREEN);
     } else if (strcmp(cmd, "clear") == 0){
         clear_screen();
     } else if (strcmp(cmd, "sysinfo") == 0){
@@ -74,7 +75,7 @@ shell_init(void)
 {
     memset(cmd_buf, 0, CMD_MAX_LEN);
     cmd_idx = 0;
-    kprint("[Eden:/Uros64]# ", WHITE);
+    kprint("[Nothing:/Uros64]# ", WHITE);
 }
 
 void
@@ -92,7 +93,7 @@ shell_update(void)
         /* reset command line */
         cmd_idx = 0;
         memset(cmd_buf, 0, CMD_MAX_LEN);
-        kprint("[Eden:/Uros64]# ", WHITE);
+        kprint("[Nothing:/Uros64]# ", WHITE);
     } else if (c == '\b'){
         if (cmd_idx > 0)
         {
