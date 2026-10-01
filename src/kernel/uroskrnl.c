@@ -58,6 +58,7 @@ uroskrnl_main_entry_point(uint32_t memory_entries_count, struct MemoryMapEntry *
 	}
 	pmm_init(memory_entries_count, mmap_entries); /* this might fail, we hope it won't */
 	kp_log("(MEM)Implemt Physical Memory Manager. Active. ", DONE);
+	kp_log("(MEM)PMM Dump Stats. Online. ", ONLINE);
 	pmm_dump_stats();
 	/* we will not dump stats for now, let's verify it doesn't cause a triple fault... */
 	sleep(100);
