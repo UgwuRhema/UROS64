@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <stddef.h>
 
-struct __attirbute__((packed)) MemoryMapEntry;
+struct __attribute__((packed)) MemoryMapEntry;
 void pmm_init(uint32_t, struct MemoryMapEntry *);
 void *pmm_alloc(void);
 void pmm_free(void *);
