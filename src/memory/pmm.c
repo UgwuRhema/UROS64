@@ -91,9 +91,9 @@ void
 pmm_dump_stats(void)
 {
 	kprint("PMM: total pages = ", WHITE);
-	kprint_hex(TOTAL_PAGES);
+	kprint_hex(TOTAL_PAGES, PURPLE);
 	kprint("\nPMM: free pages = ", WHITE);
-	kprint_hex(free_pages);
+	kprint_hex(free_pages, PURPLE);
 	kprint("\n", WHITE);
 
 	/* let's try some tests here */
@@ -102,9 +102,9 @@ pmm_dump_stats(void)
 	pmm_free(a);
 	void *c = pmm_alloc();
 
-	kprint("PMM: alloc a = ", WHITE); kprint_hex((uint64_t)a);
-	kprint("  b = ", WHITE); kprint_hex((uint64_t)b);
-	kprint("  c = ", WHITE); kprint_hex((uint64_t)c);
+	kprint("PMM: alloc a = ", WHITE); kprint_hex((uint64_t)a, PURPLE);
+	kprint("  b = ", WHITE); kprint_hex((uint64_t)b, PURPLE);
+	kprint("  c = ", WHITE); kprint_hex((uint64_t)c, PURPLE);
 	kprint("\n", WHITE);
 
 	if (a == c && a != b) kprint("PMM: self-test OK\n", GREEN);
