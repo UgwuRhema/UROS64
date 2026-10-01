@@ -24,8 +24,8 @@ pmm_init(uint32_t count, struct MemoryMapEntry *entries)
 	for (uint32_t i = 0; i < count; ++i)
 	{
 		if (entries[i].type != 1) continue; /* type 1 means available RAM per E820/BIOS memory map*/
-		uint64_t start = *(entries + i).base;
-		uint64_t end = (*(entries + i))->base + (*(entries + i))->length;
+		uint64_t start = (*(entries + i)).base_address;
+		uint64_t end = (*(entries + i)).base_address + (*(entries + i)).length;
 
 		if (start >= MAX_PHYS_ADDR) continue;
 		if (end > MAX_PHYS_ADDR) end = MAX_PHYS_ADDR;
@@ -34,7 +34,7 @@ pmm_init(uint32_t count, struct MemoryMapEntry *entries)
 		start = (start + PAGE_SIZE - 1) & ~(PAGE_SIZE - 1);
 		end = end & ~(PAGE_SIZE - 1);
 
-		for (uint64_t a = start; a < end; a += PAGE_SZIE)
+		for (uint64_t a = start; a < end; a += PAGE_SIZE)
 		{
 			bitmap_clear(a / PAGE_SIZE);
 			free_pages++;
@@ -45,7 +45,7 @@ pmm_init(uint32_t count, struct MemoryMapEntry *entries)
 	/* first 1mb, BIOS, VGA, IVT, BDA, and also uboot(out bootloader), page tables... */
 	for (uint64_t a = 0; a < 0x100000; a += PAGE_SIZE)
 	{
-		if (!bitmap_test(a / PAGE_SIZE)) { bitmap_set(a /PAGE_SIZE); free_page--; }
+		if (!bitmap_test(a / PAGE_SIZE)) { bitmap_set(a /PAGE_SIZE); free_pages--; }
 	}
 
 	/* kernel image itself */
