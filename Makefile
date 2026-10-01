@@ -33,7 +33,8 @@ SHELL_SRC := ./src/shell/shell.c
 SHELL_O := ./src/shell/shell.o
 MOUSE := ./src/devices/mouse/mouse.c
 MOUSE_O := ./src/devices/mouse/mouse.o
-
+PMM := ./src/memory/pmm.c
+PMM_O := ./src/memory/pmm.h
 
 IMG := uros.img
 
@@ -55,8 +56,9 @@ kernel:
 	$(CC) $(CFLAGS) -o $(APIC_O) $(APIC)
 	$(CC) $(CFLAGS) -o $(SHELL_O) $(SHELL_SRC)
 	$(CC) $(CFLAGS) -o $(MOUSE_O) $(MOUSE)
+	$(CC) $(CFLAGS) -o $(PMM_O) $(PMM)
 	$(LD) $(LDFLAGS) -T $(LINK) -o $(KER) $(KE_O) $(K_O) $(VGA_O) $(FUNC_O) $(INT_O) $(HAND_O) \
-	$(APIC_O) $(SHELL_O) $(MOUSE_O)
+	$(APIC_O) $(SHELL_O) $(MOUSE_O) $(PMM_O)
 	objcopy -O binary $(KER) $(KERN)
 	rm -rf $(KER)
 img:

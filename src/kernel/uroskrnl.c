@@ -56,9 +56,9 @@ uroskrnl_main_entry_point(uint32_t memory_entries_count, struct MemoryMapEntry *
 		kprint("\n", WHITE);
 		sleep(100); /* just for realism */
 	}
-	kp_log("(MEM)Implement the Memory Management Unit. ", NOT_DONE);
-	sleep(100);
-	kp_log("(MEM)Same as the last one; Implement PMM and VMM. ", NOT_DONE);
+	pmm_init(memory_entries_count, mmap_entries); /* this might fail, we hope it won't */
+	kp_log("(MEM)Implemt Physical Memory Manager. Active. ", NOT_DONE);
+	/* we will not dump stats for now, let's verify it doesn't cause a triple fault... */
 	sleep(100);
 	kp_log("Starting shell...", ONLINE);
 	sleep(900);
