@@ -25,7 +25,7 @@ pmm_init(uint32_t count, struct MemoryMapEntry *entries)
 	{
 		if (entries[i].type != 1) continue; /* type 1 means available RAM per E820/BIOS memory map*/
 		uint64_t start = *(entries + i).base;
-		uint64_t end = *(entries + i).base + *(entries + i).length;
+		uint64_t end = (*(entries + i))->base + (*(entries + i))->length;
 
 		if (start >= MAX_PHYS_ADDR) continue;
 		if (end > MAX_PHYS_ADDR) end = MAX_PHYS_ADDR;
