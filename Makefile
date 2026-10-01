@@ -34,7 +34,7 @@ SHELL_O := ./src/shell/shell.o
 MOUSE := ./src/devices/mouse/mouse.c
 MOUSE_O := ./src/devices/mouse/mouse.o
 PMM := ./src/memory/pmm.c
-PMM_O := ./src/memory/pmm.h
+PMM_O := ./src/memory/pmm.o
 
 IMG := uros.img
 
