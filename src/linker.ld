@@ -1,7 +1,9 @@
 SECTIONS
 {
     . = 0x10000;
-    
+
+	__kernel_start = .;
+
     .text : ALIGN(4) {
         *(.text.boot)
         *(.text)
@@ -16,5 +18,7 @@ SECTIONS
         *(.bss)
         __bss_end = .;
     }
+
+	__kernel_end = .;
 }
 
