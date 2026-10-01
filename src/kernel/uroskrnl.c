@@ -47,17 +47,19 @@ uroskrnl_main_entry_point(uint32_t memory_entries_count, struct MemoryMapEntry *
 	sleep(100);
 	kp_log("(DRVS)Initailized the PS/2 Mouse Interrupt Handler and Driver. ", DONE);
 	sleep(100);
+	kp_log("(MEM)Memory Map Entries Online. ", ONLINE);
+	kprint("SMAP count = ", WHITE); kprint_hex(memory_entries_count, PURPLE); kprint("\n", WHITE);
+	for (uint32_t i = 0; i < memory_entries_count; i++) {
+		kprint("  base_address=", WHITE); kprint_hex(mmap_entries[i].base_address, PURPLE);
+		kprint(" len=",  WHITE); kprint_hex(mmap_entries[i].length, PURPLE);
+		kprint(" type=", WHITE); kprint_hex(mmap_entries[i].type, PURPLE);
+		kprint("\n", WHITE);
+		sleep(100); /* just for realism */
+	}
 	kp_log("(MEM)Implement the Memory Management Unit. ", NOT_DONE);
 	sleep(100);
 	kp_log("(MEM)Same as the last one; Implement PMM and VMM. ", NOT_DONE);
 	sleep(100);
-	kprint("SMAP count = ", WHITE); kprint_hex(memory_entries_count, PURPLE); kprint("\n", WHITE);
-	for (uint32_t i = 0; i < memory_entries_count; i++) {
-		kprint("  base=", WHITE); kprint_hex(mmap_entries[i].base_address, PURPLE);
-		kprint(" len=",  WHITE); kprint_hex(mmap_entries[i].length, PURPLE);
-		kprint(" type=", WHITE); kprint_hex(mmap_entries[i].type, PURPLE);
-		kprint("\n", WHITE);
-	}
 	kp_log("Starting shell...", ONLINE);
 	sleep(900);
 	shell_init();
