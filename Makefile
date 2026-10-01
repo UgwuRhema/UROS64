@@ -112,4 +112,5 @@ gdb:
 		-no-reboot \
 		-display gtk
 clean:
-	rm -rf $(IMG) uros.ISO
+	rm -rf $(IMG)
+	rm -f $(KE_O) $(K_O) $(VGA_O) $(FUNC_O) $(INT_O) $(HAND_O) $(APIC_O) $(SHELL_O) $(MOUSE_O) $(PMM_O)
