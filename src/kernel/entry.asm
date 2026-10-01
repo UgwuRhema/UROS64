@@ -29,6 +29,9 @@ _begin:
 	rep     stosb ; store remaining bytes
 .bss_done:
 
+	;we forgot to pass the arguments that the kernel_main function takes...
+	mov edi, [0x1000]
+	mov rsi, 0x1004
 	call uroskrnl_main_entry_point
 ;infinite loop!
 .hang:
