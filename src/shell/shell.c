@@ -13,16 +13,19 @@ execute_command(const char *cmd)
     {
         kprint("UROS USH Available Commands:\n", WHITE);
         kprint(" help\n clear\n sysinfo\n vreboot\n trigger_*_panic\n powerdown\n sleep <seconds>\n", GREEN);
-		kprint(" puts <text>\n sleep <seconds>\n", GREEN);
+		kprint(" puts <text>\n sleep <seconds>\n memmap\n", GREEN);
     } else if (strcmp(cmd, "clear") == 0){
         clear_screen();
     } else if (strcmp(cmd, "sysinfo") == 0){
 		uint64_t total_seconds = timer_ticks / 1000;
 		uint64_t minutes = total_seconds / 60;
+		uint64_t hours = minutes / 60;
 		uint64_t seconds = total_seconds % 60;
         kp_log("OS: UROS (Unrestricted Runtime Operating System) ", ONLINE);
         kp_log("Kernel: UROS KERNEL(uroskrnl.ubin/uroskrnl) ", ONLINE);
-		kprint(" Uptime: ", WHITE); kprint_num(minutes, GREEN); kprint("m ", WHITE);
+		kprint(" Uptime: ", WHITE); 
+		kprint_num(hours, GREEN); kprint("h ", WHITE);
+		kprint_num(minutes, GREEN); kprint("m ", WHITE);
 		kprint_num(seconds, GREEN); kprint("s\n", WHITE);
         kp_log("Architecture: x86-64 Ring 0 Flat Architecture ", ONLINE);
         kp_log("APIC Status: LAPIC/IOAPIC Online. ", ONLINE);
@@ -67,9 +70,9 @@ execute_command(const char *cmd)
 		pmm_dump_map();
 	} else {
         kprint("Unknown Command: ", PURPLE);
-        kprint("'", WHITE);
-        kprint(cmd, WHITE);
-        kprint("'. Type 'help' for available commands. \n", WHITE);
+        kprint("'", PURPLE);
+        kprint(cmd, PURPLE);
+        kprint("'. Type 'help' for available commands. \n", PURPLE);
     }
 }
 
