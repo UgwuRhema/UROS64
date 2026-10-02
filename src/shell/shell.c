@@ -76,11 +76,10 @@ execute_command(const char *cmd)
 void
 shell_init(void)
 {
-	void shell_init(void) {
-    kprint("shell_init: saved=", WHITE); kprint_hex((uint64_t)smap_saved, WHITE);
-    kprint(" count=", WHITE); kprint_num(smap_saved_count, WHITE);
-    kprint(" free=", WHITE); kprint_num(free_pages, WHITE);
-    kprint("\n", WHITE);
+    //kprint("shell_init: saved=", WHITE); kprint_hex((uint64_t)smap_saved, WHITE);
+    //kprint(" count=", WHITE); kprint_num(smap_saved_count, WHITE);
+    //kprint(" free=", WHITE); kprint_num(free_pages, WHITE);
+    //kprint("\n", WHITE);
     memset(cmd_buf, 0, CMD_MAX_LEN);
     cmd_idx = 0;
     kprint("[Nothing:/Uros64]# ", WHITE);
