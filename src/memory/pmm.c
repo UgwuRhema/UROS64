@@ -203,3 +203,15 @@ pmm_dump_map(void)
         kprint("\n", WHITE);
     }
 }
+
+/*  i need this debug function... */
+void
+pmm_debug_state(const char *tag)
+{
+    kprint("[", WHITE); kprint(tag, WHITE); kprint("] ", WHITE);
+    kprint("saved=", WHITE); kprint_hex((uint64_t)smap_saved, WHITE);
+    kprint(" count=", WHITE); kprint_num(smap_saved_count, WHITE);
+    kprint(" free=", WHITE); kprint_num(free_pages, WHITE);
+    kprint(" canary=", WHITE); kprint_hex(pmm_canary, WHITE);
+    kprint("\n", WHITE);
+}

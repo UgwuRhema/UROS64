@@ -21,5 +21,6 @@ void *pmm_alloc(void);
 void pmm_free(void *);
 void pmm_dump_stats(void);
 void pmm_dump_map(void);
+void pmm_debug_state(const char *);
 
 #endif
