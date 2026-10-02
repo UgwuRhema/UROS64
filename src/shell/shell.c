@@ -37,7 +37,11 @@ execute_command(const char *cmd)
         u8 good = 0x02;
         while (good & 0x02) good = inb(0x64);
         outb(0x64, 0xfe);
-    } else if (strcmp(cmd, "trigger_pf_panic") == 0){
+    } else if (strcmp(cmd, "linux") == 0 || strcmp(cmd, "linux?") == 0){
+		kprint("Nope buddy...this is not Linux...This is UROS\n", WHITE);
+		kprint("The Unrestricted Runtime Operating System. \n", GREEN);
+		kprint("\"They might be Open Source but we're Unrestricted\"\n", BLUE);
+	} else if (strcmp(cmd, "trigger_pf_panic") == 0){
         volatile u64 *panic_ptr = (volatile u64 *)0x100000000ULL;
         *panic_ptr = 0x1234;
     } else if (strcmp(cmd, "trigger_dz_panic") == 0){
