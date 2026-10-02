@@ -12,7 +12,7 @@ execute_command(const char *cmd)
     if (strcmp(cmd, "help") == 0)
     {
         kprint("UROS USH Available Commands:\n", WHITE);
-        kprint(" help\n clear\n sysinfo\n vreboot\n trigger_*_panic\n powerdown\n sleep <seconds>\n", GREEN);
+        kprint(" help      smap_info\n clear\n sysinfo\n vreboot\n trigger_*_panic\n powerdown\n sleep <seconds>\n", GREEN);
 		kprint(" puts <text>\n sleep <seconds>\n memmap\n", GREEN);
     } else if (strcmp(cmd, "clear") == 0){
         clear_screen();
@@ -68,7 +68,9 @@ execute_command(const char *cmd)
 		kprint("\n", WHITE);
 	} else if (strcmp(cmd, "memmap") == 0){
 		pmm_dump_map();
-	} else {
+	} else if (strcmp(cmd, "smap_info") == 0){
+		smap_info();
+	}else {
         kprint("Unknown Command: ", PURPLE);
         kprint("'", PURPLE);
         kprint(cmd, PURPLE);
