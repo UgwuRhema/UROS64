@@ -14,8 +14,9 @@ extern char __kernel_start[];
 extern char __kernel_end[];
 
 static uint64_t free_pages = 0;
-struct MemoryMapEntry *smap_saved = NULL;
-uint32_t smap_saved_count = 0;
+static struct MemoryMapEntry *smap_saved = NULL;
+static uint32_t smap_saved_count = 0;
+static uint64_t pmm_canary = 0xdeadbeef;
 
 void
 pmm_init(uint32_t count, struct MemoryMapEntry *entries)

@@ -32,12 +32,12 @@ inw(u16 port)
 
 /* your typical memset */
 void
-memset(void *dest, u16 val, u32 len)
+memset(void *dest, u8 val, u32 len)
 {
-	u16 *ptr = (u16 *)dest;
+	u8 *ptr = (u8 *)dest;
 	while (len--)
 	{
-		*ptr++ = val;
+		*ptr++ = (u8)val;
 	}
 }
 

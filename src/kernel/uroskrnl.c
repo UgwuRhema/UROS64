@@ -63,12 +63,11 @@ uroskrnl_main_entry_point(uint32_t memory_entries_count, struct MemoryMapEntry *
 	pmm_dump_stats();
 	/* we will not dump stats for now, let's verify it doesn't cause a triple fault... */
 	pmm_debug_state("after stats"); //dbg B
+	pmm_dump_map();
 	sleep(100);
 	kp_log("Starting shell...", ONLINE);
 	sleep(900);
-	pmm_debug_state("before shell init"); //dbg C
 	shell_init();
-	pmm_debug_state("after shell init"); //dbg D
 		
     /* infinte loop */
 	while (1)

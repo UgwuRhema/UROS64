@@ -80,7 +80,7 @@ shell_init(void)
     //kprint(" count=", WHITE); kprint_num(smap_saved_count, WHITE);
     //kprint(" free=", WHITE); kprint_num(free_pages, WHITE);
     //kprint("\n", WHITE);
-    memset(cmd_buf, 0, CMD_MAX_LEN);
+	memset(cmd_buf, 0, CMD_MAX_LEN);
     cmd_idx = 0;
     kprint("[Nothing:/Uros64]# ", WHITE);
 }
