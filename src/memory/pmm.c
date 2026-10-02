@@ -14,10 +14,19 @@ extern char __kernel_start[];
 extern char __kernel_end[];
 
 static uint64_t free_pages = 0;
+static struct MemoryMapEntry *smap_saved = NULL;
+static uint32_t smap_saved_count = 0;
 
 void
 pmm_init(uint32_t count, struct MemoryMapEntry *entries)
 {
+	kprint("pmm_init: count=", WHITE); kprint_num(count, WHITE);
+	kprint(" entries=", WHITE); kprint_hex((uint64_t)entries, WHITE);
+	kprint("\n", WHITE);
+	/* save entries state, not for anything in particular */
+	smap_saved = entries;
+	smap_saved_count = count;
+
 	/* everything is used by default */
 	for (uint64_t i = 0; i < BITMAP_SIZE; ++i) *(pmm_bitmap + i) = 0xff;
 
@@ -57,6 +66,12 @@ pmm_init(uint32_t count, struct MemoryMapEntry *entries)
 	{
 		if (!bitmap_test(a / PAGE_SIZE)) { bitmap_set(a / PAGE_SIZE); free_pages--; }
 	}
+
+	/* at the very end of pmm_init, after the kernel reservation loop */
+    kprint("pmm_init END: saved=", WHITE); kprint_hex((uint64_t)smap_saved, WHITE);
+    kprint(" count=", WHITE); kprint_num(smap_saved_count, WHITE);
+    kprint(" free=", WHITE); kprint_num(free_pages, WHITE);
+    kprint("\n", WHITE);
 }
 
 void *
@@ -109,4 +124,82 @@ pmm_dump_stats(void)
 
 	if (a == c && a != b) kprint("PMM: self-test OK\n", GREEN);
 	else kprint("PMM: self-test FAILED\n", GREEN);
+}
+
+static void
+kprint_size(uint64_t bytes)
+{
+    if (bytes >= (1ULL << 30)) {
+        kprint_num(bytes >> 30, WHITE);
+        kprint(".", WHITE);
+        kprint_num((bytes >> 20) % 1024 / 100, WHITE);
+        kprint(" GB", WHITE);
+    } else if (bytes >= (1ULL << 20)) {
+        kprint_num(bytes >> 20, WHITE);
+        kprint(" MB", WHITE);
+    } else if (bytes >= (1ULL << 10)) {
+        kprint_num(bytes >> 10, WHITE);
+        kprint(" KB", WHITE);
+    } else {
+        kprint_num(bytes, WHITE);
+        kprint(" B", WHITE);
+    }
+}
+
+void
+pmm_dump_map(void)
+{
+	kprint("dump_map: ptr=", WHITE); kprint_hex((uint64_t)smap_saved, WHITE);
+	kprint(" count=", WHITE); kprint_num(smap_saved_count, WHITE);
+	kprint(" free=", WHITE); kprint_num(free_pages, WHITE);
+	kprint("\n", WHITE);
+    kprint("Memory Map\n", GREEN);
+
+    /* Compute installed usable RAM from SMAP */
+    uint64_t usable_bytes = 0;
+    uint32_t usable_regions = 0;
+    for (uint32_t i = 0; i < smap_saved_count; ++i) {
+        if (smap_saved[i].type == 1) {
+            usable_bytes += smap_saved[i].length;
+            usable_regions++;
+        }
+    }
+
+    /* Summary */
+    kprint("Bitmap covers:  ", WHITE);
+    kprint_size(TOTAL_PAGES * PAGE_SIZE);
+    kprint(" (", WHITE); kprint_num(TOTAL_PAGES, WHITE); kprint(" pages)\n", WHITE);
+
+    kprint("Installed RAM:  ", WHITE);
+    kprint_size(usable_bytes);
+    kprint(" (", WHITE); kprint_num(usable_bytes / PAGE_SIZE, WHITE); kprint(" pages)\n", WHITE);
+
+    kprint("Free:           ", WHITE);
+    kprint_size(free_pages * PAGE_SIZE);
+    kprint(" (", WHITE); kprint_num(free_pages, WHITE); kprint(" pages)\n", WHITE);
+
+    kprint("Used/Reserved:  ", WHITE);
+    kprint_size((TOTAL_PAGES - free_pages) * PAGE_SIZE);
+    kprint(" (", WHITE); kprint_num(TOTAL_PAGES - free_pages, WHITE); kprint(" pages)\n", WHITE);
+
+    /* Per-region dump */
+    kprint("\nSMAP regions (", WHITE);
+    kprint_num(smap_saved_count, WHITE);
+    kprint(" total, ", WHITE);
+    kprint_num(usable_regions, WHITE);
+    kprint(" usable):\n", WHITE);
+
+    for (uint32_t i = 0; i < smap_saved_count; ++i) {
+        struct MemoryMapEntry *e = &smap_saved[i];
+
+        if (e->type == 1) kprint("  [usable]   ", GREEN);
+        else              kprint("  [reserved] ", WHITE);
+
+        kprint_hex(e->base_address, WHITE);
+        kprint(" - ", WHITE);
+        kprint_hex(e->base_address + e->length, WHITE);
+        kprint("  ", WHITE);
+        kprint_size(e->length);
+        kprint("\n", WHITE);
+    }
 }

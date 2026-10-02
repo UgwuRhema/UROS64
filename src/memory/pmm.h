@@ -18,7 +18,8 @@ struct MemoryMapEntry {
 
 void pmm_init(uint32_t, struct MemoryMapEntry *);
 void *pmm_alloc(void);
-void  pmm_free(void *);
-void  pmm_dump_stats(void);
+void pmm_free(void *);
+void pmm_dump_stats(void);
+void pmm_dump_map(void);
 
 #endif
