@@ -19,9 +19,9 @@ execute_command(const char *cmd)
     } else if (strcmp(cmd, "sysinfo") == 0){
 		uint64_t total_seconds = timer_ticks / 1000;
 		uint64_t minutes = total_seconds / 60;
-		if (minutes >= 60) minutes = 0;
 		uint64_t hours = minutes / 60;
 		uint64_t seconds = total_seconds % 60;
+		if (minutes >= 60) { minutes = 0; hours++; }
         kp_log("OS: UROS (Unrestricted Runtime Operating System) ", ONLINE);
         kp_log("Kernel: UROS KERNEL(uroskrnl.ubin/uroskrnl) ", ONLINE);
 		kprint(" Uptime: ", WHITE); 

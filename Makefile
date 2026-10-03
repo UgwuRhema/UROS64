@@ -94,7 +94,7 @@ qemu:
 	qemu-system-x86_64 \
 		-boot order=a \
 		-drive format=raw,file=$(IMG),if=ide \
-		-m 512M \
+		-m 1G \
 		-smp 2 \
 		-enable-kvm \
 		-cpu host \
