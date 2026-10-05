@@ -104,9 +104,8 @@ qemu:
 		-smp 2 \
 		-enable-kvm \
 		-cpu host \
-		-machine q35 \
+		-machine q35,pcspk-audiodev=snd0 \
 		-audiodev alsa,id=snd0 \
-		-device ac97,audiodev=snd0 \
 		-display gtk \
 		-vga std \
 		-serial stdio
