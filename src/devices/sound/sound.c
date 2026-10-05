@@ -20,3 +20,20 @@ play_sound(u32 nFrequency)
         outb(0x61, tmp | 3);
     }
 }
+
+/* stop the sound */
+static void 
+nosound()
+{
+	u8 tmp = inb(0x61) & 0xfc;
+	outb(0x61, tmp);
+}
+
+/* make a beep */
+void
+beep()
+{
+	play_sound(1000);
+	nosound();
+	enable_pit(1000);
+}

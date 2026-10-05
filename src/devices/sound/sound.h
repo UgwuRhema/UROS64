@@ -1,3 +1,4 @@
 #include "../../func/func.h"
+#include "../../ints/interrupts.h"
 
-void beep(void);
+extern void beep(void);
