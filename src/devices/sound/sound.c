@@ -34,6 +34,7 @@ void
 beep()
 {
 	play_sound(1000);
+	sleep(200);
 	nosound();
 	enable_pit(1000);
 }
