@@ -49,6 +49,8 @@ bloader: ./boot/boot.asm
 	truncate -s 1024 $(S2)
 	chmod +x $(S2)
 
+#successful compile
+
 kernel:
 	$(AS) $(ASF2) -o $(KE_O) $(KE_SRC)
 	$(CC) $(CFLAGS)	-o $(K_O) $(K)
