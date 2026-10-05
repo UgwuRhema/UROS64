@@ -28,8 +28,6 @@ serial_init(void)
     outb(COM1 + 3, 0x03); /* 8 bits, no parity, 1 stop bit */
     outb(COM1 + 2, 0xc7); /* Enable FIFO, clear RX/TX FIFOs */
     outb(COM1 + 4, 0x0b); /* Enable IRQs ,OUT2 bit set */
-	/* */
-    /* FLUSH LINGERING STATUS & RX BUFFER BEFORE ENABLING IRQS */
     inb(COM1 + 5); /* Read Line Status Register */
     inb(COM1 + 0); /* Read Receive Buffer Register */
 

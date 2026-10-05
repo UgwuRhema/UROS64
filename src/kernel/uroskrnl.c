@@ -8,6 +8,7 @@ typedef uint64_t u64;
 #include "../ints/interrupts.h"
 #include "../shell/shell.h"
 #include "../memory/pmm.h"
+#include "../devices/sound/sound.h"
 
 /*
 uint64_t get_uptime_in_minutes(uint64_t timer_ticks)
@@ -25,6 +26,7 @@ uroskrnl_main_entry_point(uint32_t memory_entries_count, struct MemoryMapEntry *
 	/* enable_pit(1000); */
 	idt_init();
 	kprint("Kernel loading...\n" , WHITE);
+	beep();
 	kprint("UROS(Unrestricted Runtime Operating System) KERNEL ", WHITE);
 	kprint("v0.01\n", GREEN);
 	kprint("x86 Monolithic 64-bit Kernel written in URSL\n", WHITE);
