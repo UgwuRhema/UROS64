@@ -1,3 +1,6 @@
+#ifndef APIC_H
+#define APIC_H
+
 #include <stdint.h>
 #include "../func/func.h"
 
@@ -27,3 +30,5 @@ extern u32 ioapic_read(u8);
 extern void ioapic_map_irq(u8, u8, u8);
 /* send an EOI(End Of Interrupt) to the CPU */
 extern void lapic_eoi(void);
+
+#endif

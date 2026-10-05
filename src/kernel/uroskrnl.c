@@ -5,10 +5,9 @@ typedef uint64_t u64;
 
 //#include "../vga/vga.h"
 #include "../func/func.h"
-#include "../ints/interrupts.h"
-#include "../shell/shell.h"
 #include "../memory/pmm.h"
 #include "../devices/sound/sound.h"
+#include "../shell/shell.h"
 
 /*
 uint64_t get_uptime_in_minutes(uint64_t timer_ticks)

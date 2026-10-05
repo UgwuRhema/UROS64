@@ -1,3 +1,6 @@
+#ifndef HANDLERS_H
+#define HANDLERS_H
+
 #include "../vga/vga.h"
 #include "interrupts.h"
 #include "../devices/mouse/mouse.h"
@@ -40,3 +43,5 @@ extern __attribute__((interrupt)) void keyboard_handler(void *);
 extern __attribute__((interrupt)) void timer_handler(void *);
 extern __attribute__((interrupt)) void com1_handler(void *);
 extern __attribute__((interrupt)) void mouse_handler(void *);
+
+#endif

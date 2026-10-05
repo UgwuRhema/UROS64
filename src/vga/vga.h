@@ -1,3 +1,6 @@
+#ifndef VGA_H
+#define VGA_H
+
 #include <stdint.h>
 
 typedef uint16_t u16;
@@ -36,3 +39,5 @@ extern void vga_scroll(void);
 extern int is_transmit_empty(void); /* check if the serial port is currently llistening or has noise */
 extern void s_c(char);
 extern void skprint(const char *);
+
+#endif

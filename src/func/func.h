@@ -1,3 +1,6 @@
+#ifndef FUNC_H
+#define FUNC_H
+
 #include <stdint.h>
 #include <stddef.h>
 
@@ -20,3 +23,5 @@ extern size_t strlen(const char *);
 extern void shutdown(void);
 extern int64_t string_to_int(const char *);
 extern int strncmp(const char *, const char *, size_t);
+
+#endif

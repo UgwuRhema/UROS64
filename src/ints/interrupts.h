@@ -1,3 +1,6 @@
+#ifndef INTERRUPTS_H
+#define INTERRUPTS_H
+
 #include <stddef.h>
 #include <stdint.h>
 
@@ -46,3 +49,5 @@ extern void idt_set_entry(int, uint8_t, uint64_t, uint16_t, uint8_t); /* functio
 extern void idt_load(void);
 extern void idt_init(void);
 extern void serial_init(void);
+
+#endif

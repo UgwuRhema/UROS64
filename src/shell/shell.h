@@ -1,3 +1,6 @@
+#ifndef SHELL_H
+#define SHELL_H
+
 //#include "../vga/vga.h"
 #include "../ints/handlers.h"
 #include "../func/func.h"
@@ -10,5 +13,7 @@ extern size_t cmd_idx;
 extern void execute_command(const char *);
 extern void shell_init(void);
 extern void shell_update(void);
+
+#endif
 
 //extern uint64_t get_timer_ticks_in_minutes(uint64_t);
