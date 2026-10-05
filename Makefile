@@ -36,6 +36,9 @@ MOUSE_O := ./src/devices/mouse/mouse.o
 PMM := ./src/memory/pmm.c
 PMM_O := ./src/memory/pmm.o
 
+SOUND := ./src/devices/sound/sound.c
+SOUND_O := ./src/devices/sound/sound.o
+
 IMG := uros.img
 
 .PHONY: bloader
@@ -57,8 +60,9 @@ kernel:
 	$(CC) $(CFLAGS) -o $(SHELL_O) $(SHELL_SRC)
 	$(CC) $(CFLAGS) -o $(MOUSE_O) $(MOUSE)
 	$(CC) $(CFLAGS) -o $(PMM_O) $(PMM)
+	$(CC) $(CFLAGS) -o $(SOUND_O) $(SOUND)
 	$(LD) $(LDFLAGS) -T $(LINK) -o $(KER) $(KE_O) $(K_O) $(VGA_O) $(FUNC_O) $(INT_O) $(HAND_O) \
-	$(APIC_O) $(SHELL_O) $(MOUSE_O) $(PMM_O)
+	$(APIC_O) $(SHELL_O) $(MOUSE_O) $(PMM_O) $(SOUND_O)
 	objcopy -O binary $(KER) $(KERN)
 	rm -rf $(KER)
 img:
