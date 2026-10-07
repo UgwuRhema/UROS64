@@ -21,6 +21,8 @@ execute_command(const char *cmd)
 		uint64_t minutes = total_seconds / 60;
 		uint64_t hours = minutes / 60;
 		uint64_t seconds = total_seconds % 60;
+		char cpu_vendor_name[12] = {0}; /* array for the CPU Vendor name */
+		get_cpu_vendor_name(cpu_vendor_name); /* the new function we just made to get the name */
 		if (minutes >= 60) { minutes = 0; hours++; }
         kp_log("OS: UROS (Unrestricted Runtime Operating System) ", ONLINE);
         kp_log("Kernel: UROS KERNEL(uroskrnl.ubin/uroskrnl) ", ONLINE);
@@ -29,6 +31,8 @@ execute_command(const char *cmd)
 		kprint_num(minutes, GREEN); kprint("m ", WHITE);
 		kprint_num(seconds, GREEN); kprint("s\n", WHITE);
         kp_log("Architecture: x86-64 Ring 0 Flat Architecture ", ONLINE);
+		kprint(" CPU Vendor Name: ", WHITE);
+		kprint(cpu_vendor_name, GREEN); kprint("\n", WHITE);
         kp_log("APIC Status: LAPIC/IOAPIC Online. ", ONLINE);
         kp_log("Identity Map: 0 - 4GB (2MB Pages) ", ONLINE);
     } else if (strcmp(cmd, "vreboot") == 0){
