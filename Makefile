@@ -104,7 +104,7 @@ qemu:
 		-m 1G \
 		-smp 2 \
 		-enable-kvm \
-		-cpu Broadwell \
+		-cpu qemu64 \
 		-machine q35,pcspk-audiodev=snd0 \
 		-audiodev alsa,id=snd0 \
 		-display gtk \
