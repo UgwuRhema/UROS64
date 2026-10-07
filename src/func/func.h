@@ -24,5 +24,6 @@ extern void shutdown(void);
 extern int64_t string_to_int(const char *);
 extern int strncmp(const char *, const char *, size_t);
 extern void get_cpu_vendor_name(char *);
+extern void get_cpu_brand_string(char *);
 
 #endif

@@ -148,3 +148,9 @@ get_cpu_vendor_name(char *vendor)
 	*((u32 *)&vendor[8]) = ecx;
 	vendor[12] = '\0'; /* null terminate the string...some of these strings might be more than 12 characters */
 }
+
+void
+get_cpu_brand_string(char *brand)
+{
+
+}
