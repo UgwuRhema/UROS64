@@ -140,11 +140,11 @@ int64_t string_to_int(const char* str)
 void
 get_cpu_vendor_name(char *vendor)
 {
-	u64 eax, ebx, ecx, edx; /* the 32bit registers */
+	u32 eax, ebx, ecx, edx; /* the 32bit registers */
 	/* ebx, ecx and edx store the string, while eax call the function 0x0 */
 	__asm__ volatile ("cpuid" : "=b"(ebx), "=d"(edx), "=c"(ecx), "=a"(eax) : "a"(0)); /* call CPUID with eax=0x0 */
-	*((u64 *)&vendor[0]) = ebx;
-	*((u64 *)&vendor[4]) = edx;
-	*((u64 *)&vendor[8]) = ecx;
+	*((u32 *)&vendor[0]) = ebx;
+	*((u32 *)&vendor[4]) = edx;
+	*((u32 *)&vendor[8]) = ecx;
 	vendor[12] = '\0'; /* null terminate the string...some of these strings might be more than 12 characters */
 }
