@@ -63,7 +63,7 @@ kernel:
 	$(CC) $(CFLAGS) -o $(MOUSE_O) $(MOUSE)
 	$(CC) $(CFLAGS) -o $(PMM_O) $(PMM)
 	$(CC) $(CFLAGS) -o $(SOUND_O) $(SOUND)
-	$(LD) $(LDFLAGS) -T $(LINK) -g -o $(KER) $(KE_O) $(K_O) $(VGA_O) $(FUNC_O) $(INT_O) $(HAND_O) \
+	$(LD) $(LDFLAGS) -T $(LINK) -o $(KER) $(KE_O) $(K_O) $(VGA_O) $(FUNC_O) $(INT_O) $(HAND_O) \
 	$(APIC_O) $(SHELL_O) $(MOUSE_O) $(PMM_O) $(SOUND_O)
 	objcopy -O binary $(KER) $(KERN)
 	cp $(KER) ./debug
@@ -122,5 +122,5 @@ gdb:
 		-display gtk \
 		-monitor stdio
 clean:
-	rm -rf $(IMG)
+	rm -rf $(IMG) $(BOOT) $(S2) $(KERN)
 	rm -f $(KE_O) $(K_O) $(VGA_O) $(FUNC_O) $(INT_O) $(HAND_O) $(APIC_O) $(SHELL_O) $(MOUSE_O) $(PMM_O)
