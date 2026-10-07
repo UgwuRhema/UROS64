@@ -103,7 +103,7 @@ qemu:
 		-drive format=raw,file=$(IMG),if=ide \
 		-m 1G \
 		-smp 2 \
-		-cpu YongFeng-v3 \
+		-cpu Opteron_G2 \
 		-machine q35,pcspk-audiodev=snd0 \
 		-audiodev alsa,id=snd0 \
 		-display gtk \
