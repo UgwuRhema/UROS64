@@ -66,6 +66,7 @@ kernel:
 	$(LD) $(LDFLAGS) -T $(LINK) -o $(KER) $(KE_O) $(K_O) $(VGA_O) $(FUNC_O) $(INT_O) $(HAND_O) \
 	$(APIC_O) $(SHELL_O) $(MOUSE_O) $(PMM_O) $(SOUND_O)
 	objcopy -O binary $(KER) $(KERN)
+	cp $(KER) ./debug
 	rm -rf $(KER)
 img:
 	qemu-img create -f raw $(IMG) 10M
@@ -116,9 +117,10 @@ gdb:
 		-S \
 		-hda $(IMG) \
 		-m 512 \
-		-d int,cpu_reset \
-		-no-reboot \
-		-display gtk
+		-d int,cpu_reset,guest_errors -D qemu.log \
+		-no-reboot -no-shutdown \
+		-display gtk \
+		-monitor stdio
 clean:
 	rm -rf $(IMG)
 	rm -f $(KE_O) $(K_O) $(VGA_O) $(FUNC_O) $(INT_O) $(HAND_O) $(APIC_O) $(SHELL_O) $(MOUSE_O) $(PMM_O)
