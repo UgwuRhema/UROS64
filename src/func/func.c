@@ -136,3 +136,13 @@ int64_t string_to_int(const char* str)
 
 	return result * sign;
 }
+
+char *
+get_cpu_vendor_name()
+{
+	char vendor[12];
+	uint64_t eax, ebx, ecx, edx; /* the 32bit registers */
+	/* ebx, ecx and edx store the string, while eax call the function 0x0 */
+	__asm__ volatile ("cpuid" : "=b"(ebx), "=d"(edx), "=c"(ecx), "=a"(eax) : "a"(0)); /* call CPUID with eax=0x0 */
+	return vendor;
+}
