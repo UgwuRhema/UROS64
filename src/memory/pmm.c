@@ -228,11 +228,11 @@ pmm_debug_state(const char *tag)
 void
 smap_info(void)
 {
-	kprint("SMAP count = ", WHITE); kprint_hex(smap_saved_count, PURPLE); kprint("\n", WHITE);
+	kprint("SMAP count= ", WHITE); kprint_hex(smap_saved_count, PURPLE); kprint("\n", WHITE);
 	for (uint32_t i = 0; i < smap_saved_count; i++) {
-		kprint("  base_address=", WHITE); kprint_hex(smap_saved[i].base_address, PURPLE);
-		kprint(" len=",  WHITE); kprint_hex(smap_saved[i].length, PURPLE);
-		kprint(" type=", WHITE); kprint_hex(smap_saved[i].type, PURPLE);
+		kprint("base_address=", WHITE); kprint_hex(smap_saved[i].base_address, PURPLE);
+		kprint("len=",  WHITE); kprint_hex(smap_saved[i].length, PURPLE);
+		kprint("type=", WHITE); kprint_hex(smap_saved[i].type, PURPLE);
 		kprint("\n", WHITE);
 	}
 }
