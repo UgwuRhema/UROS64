@@ -152,5 +152,27 @@ get_cpu_vendor_name(char *vendor)
 void
 get_cpu_brand_string(char *brand)
 {
+	u32 eax, ebx, ecx, edx;
+	/* first we have to check if extended CPUID is available/supported */
+	eax = 0x80000000;
+	__asm__ volatile ("cpuid" : "=a"(eax), "=b"(ebx), "=c"(ecx), "=d"(edx) : "a"(eax));
+	/* eax now holds the max extended leaf */
+	if (eax < 0x80000004)
+	{
+		brand[0] = '\0'; /* not supported*/
+		return;
+	}
 
+	/* three leaves, 16 bytes each = 48 bytes */
+	for (u32 leaf = 0x80000002; leaf <= 0x80000004; ++leaf)
+	{
+		u32 a = leaf;
+		__asm__ volatile ("cpuid" : "=a"(eax), "=b"(ebx), "=c"(ecx), "=d"(edx) : "a"(a));
+	        u32 offset = (leaf - 0x80000002) * 16;
+        *((u32 *)&brand[offset +  0]) = eax;
+        *((u32 *)&brand[offset +  4]) = ebx;
+        *((u32 *)&brand[offset +  8]) = ecx;
+        *((u32 *)&brand[offset + 12]) = edx;	
+	}
+	brand[48] = '\0';
 }
