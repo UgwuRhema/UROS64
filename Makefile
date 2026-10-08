@@ -101,7 +101,7 @@ qemu:
 	qemu-system-x86_64 \
 		-boot order=a \
 		-drive format=raw,file=$(IMG),if=ide \
-		-m 8G \
+		-m 1G \
 		-smp 2 \
 		-cpu Conroe \
 		-machine q35,pcspk-audiodev=snd0 \
