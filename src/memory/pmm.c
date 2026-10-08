@@ -160,10 +160,15 @@ pmm_dump_map(void)
     uint64_t usable_bytes = 0;
     uint32_t usable_regions = 0;
     for (uint32_t i = 0; i < smap_saved_count; ++i) {
-        if (smap_saved[i].type == 1) {
-            usable_bytes += smap_saved[i].length;
-            usable_regions++;
-        }
+		if (smap_svaed[i].type != 1) continue;
+
+		uint64_t start = smap_saved[i].base_address;
+		uint64_t end = smap_saved[i].base_address + smap_saved[i].length;
+		if (end > MAX_PHYS_ADDR) end = MAX_PHYS_ADDR;
+		if (start >= end) continue;
+
+		usable_bytes += end - start;
+		usable_regions++;
     }
 
     /* Summary */
