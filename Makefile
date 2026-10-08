@@ -103,7 +103,7 @@ qemu:
 		-drive format=raw,file=$(IMG),if=ide \
 		-m 1G \
 		-smp 2 \
-		-cpu core2duo \
+		-cpu Conroe \
 		-machine q35,pcspk-audiodev=snd0 \
 		-audiodev alsa,id=snd0 \
 		-display gtk \
