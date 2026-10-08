@@ -131,9 +131,12 @@ static void
 kprint_size(uint64_t bytes)
 {
     if (bytes >= (1ULL << 30)) {
-        kprint_num(bytes >> 30, WHITE);
+        uint64_t gb_whole = bytes >> 30;
+        uint64_t gb_frac  = (bytes >> 20) & 0x3FF;   /* 0..1023 */
+        uint64_t tenths   = (gb_frac * 10) / 1024;   /* 0..9 */
+        kprint_num(gb_whole, WHITE);
         kprint(".", WHITE);
-        kprint_num((bytes >> 20) % 1024 / 100, WHITE);
+        kprint_num(tenths, WHITE);
         kprint(" GB", WHITE);
     } else if (bytes >= (1ULL << 20)) {
         kprint_num(bytes >> 20, WHITE);
