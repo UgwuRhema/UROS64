@@ -83,7 +83,17 @@ execute_command(const char *cmd)
 		pmm_dump_map();
 	} else if (strcmp(cmd, "smap_info") == 0){
 		smap_info();
-	}else {
+	} else if (strcmp(cmd,"cpuinfo") == 0){
+		char vendor[12];
+		char brand[49];
+		get_cpu_vendor_name(vendor);
+		get_cpu_brand_string(brand);
+
+		kprint(" CPU Vendor Name: ", WHITE);
+		kprint(vendor, GREEN); kprint("\n", WHITE);
+		kprint(" CPU Brand Name: ", WHITE);
+		kprint(brand, GREEN); kprint("\n", WHITE);
+	} else {
         kprint("Unknown Command: ", PURPLE);
         kprint("'", PURPLE);
         kprint(cmd, PURPLE);
