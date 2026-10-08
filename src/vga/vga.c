@@ -84,7 +84,7 @@ kprint_hex(uint64_t num, u16 color)
     const char *hex = "0123456789ABCDEF"; /* valid hexadecimal values */
     kprint("0x", color);
     /* let's print all hex digit */
-    for (int i = 7; i >= 0; i--)
+    for (int i = 15; i >= 0; i--)
     {
         u8 digit = (num >> (i * 4)) & 0xf;
         kprint_c(hex[digit], color);
