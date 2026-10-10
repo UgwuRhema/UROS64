@@ -61,3 +61,21 @@ walk_to_pt(u64 virt, int create)
 
 	return pt;
 }
+
+void
+vmm_map(u64 virt, u64 phys, u64 flags)
+{
+	/* TODO */
+}
+
+void
+vmm_unmap(u64 virt)
+{
+	/* TODO: I will do stuff here, i gotta go read! */
+}
+
+u64 
+vmm_translate(u64 virt)
+{
+	/* stuff */
+}
