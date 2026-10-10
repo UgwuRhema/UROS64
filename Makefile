@@ -114,6 +114,20 @@ qemu:
 		-vga std \
 		-serial stdio
 
+qemu-f:
+	qemu-system-x86_64 \
+		-boot order=a \
+		-drive format=raw,file=$(IMG),if=ide \
+		-m 512M \
+		-smp 2 \
+		-cpu Conroe \
+		-machine q35,pcspk-audiodev=snd0 \
+		-audiodev alsa,id=snd0 \
+		-display gtk \
+		-vga std \
+		-serial stdio \
+		-fullscreen
+
 gdb:
 	qemu-system-x86_64 \
 		-s \
