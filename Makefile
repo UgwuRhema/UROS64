@@ -110,7 +110,7 @@ qemu:
 		-cpu Conroe \
 		-machine q35,pcspk-audiodev=snd0 \
 		-audiodev alsa,id=snd0 \
-		-display gtk \
+		-display gtk,gl=on \
 		-vga std \
 		-serial stdio
 
@@ -123,10 +123,9 @@ qemu-f:
 		-cpu Conroe \
 		-machine q35,pcspk-audiodev=snd0 \
 		-audiodev alsa,id=snd0 \
-		-display gtk \
+		-display gtk,fullscreen=on,gl=on \
 		-vga std \
 		-serial stdio \
-		-fullscreen
 
 gdb:
 	qemu-system-x86_64 \
