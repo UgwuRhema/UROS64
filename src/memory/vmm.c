@@ -74,7 +74,12 @@ vmm_map(u64 virt, u64 phys, u64 flags)
 void
 vmm_unmap(u64 virt)
 {
-	/* TODO: I will do stuff here, i gotta go read! */
+	u64 *pt = walk_to_pt(virt, 0);
+	if (pt)
+	{
+		pt[PT_IDX(virt)] = 0;
+	}
+	__asm__ volatile ("invlpg (%0)" :: "r"(virt));
 }
 
 u64 
