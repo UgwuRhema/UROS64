@@ -48,7 +48,7 @@ walk_to_pt(u64 virt, int create)
 	/* Page Directory */
 	pd = (u64 *)(pdpt[i3] & ~0xfffULL);
 
-	if (!pd[i2] & PTE_PRESENT)
+	if (!(pd[i2] & PTE_PRESENT))
 	{
 		if (!create) return NULL;
 		u64 *new = pmm_alloc();
