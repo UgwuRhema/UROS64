@@ -86,4 +86,9 @@ u64
 vmm_translate(u64 virt)
 {
 	/* stuff */
+	u64 *pt = walk_to_pt(virt, 0);
+	if (pt)
+		return (pt[PT_IDX(virt)] & ~0xfffULL);
+	
+	return 0;
 }
