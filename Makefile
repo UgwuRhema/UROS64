@@ -123,7 +123,7 @@ qemu-f:
 		-cpu Conroe \
 		-machine q35,pcspk-audiodev=snd0 \
 		-audiodev alsa,id=snd0 \
-		-display gtk,full-screen=on,gl=on \
+		-display gtk,full-screen=on \
 		-vga std \
 		-serial stdio \
 
