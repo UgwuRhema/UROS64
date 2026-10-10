@@ -12,7 +12,7 @@ execute_command(const char *cmd)
     if (strcmp(cmd, "help") == 0)
     {
         kprint("UROS USH Available Commands:\n", WHITE);
-        kprint(" help      smap_info\n clear\n sysinfo\n vreboot\n trigger_*_panic\n powerdown\n sleep <seconds>\n", GREEN);
+        kprint(" help            smap_info\n clear           cpuinfo\n sysinfo         off->powerdown\n vreboot\n trigger_*_panic\n powerdown\n sleep <seconds>\n", GREEN);
 		kprint(" puts <text>\n sleep <seconds>\n memmap\n", GREEN);
     } else if (strcmp(cmd, "clear") == 0){
         clear_screen();
