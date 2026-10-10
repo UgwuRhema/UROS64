@@ -29,6 +29,7 @@ walk_to_pt(u64 virt, int create)
 	{
 		if (!create) return NULL;
 		u64 *new = pmm_alloc();
+		if (!new) return NULL;
 		for (int j = 0; j < 512; ++j) new[j] = 0;
 		pml4[i4] = (u64)new | PTE_PRESENT | PTE_WRITABLE;
 	}
@@ -41,6 +42,7 @@ walk_to_pt(u64 virt, int create)
 	{
 		if (!create) return NULL;
 		u64 *new = pmm_alloc();
+		if (!new) return NULL;
 		for (int j = 0; j < 512; ++j) new[j] = 0;
 		pdpt[i3] = (u64)new | PTE_PRESENT | PTE_WRITABLE;
 	}
@@ -48,10 +50,17 @@ walk_to_pt(u64 virt, int create)
 	/* Page Directory */
 	pd = (u64 *)(pdpt[i3] & ~0xfffULL);
 
+	if (pd[i2] & PTE_HUGE)
+	{
+		/* this VA is covered by a huge page */
+		return NULL;
+	}
+
 	if (!(pd[i2] & PTE_PRESENT))
 	{
 		if (!create) return NULL;
 		u64 *new = pmm_alloc();
+		if (!new) return NULL;
 		for (int j = 0; j < 512; ++j) new[j] = 0;
 		pd[i2] = (u64)new | PTE_PRESENT | PTE_WRITABLE;
 	}
