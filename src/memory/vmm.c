@@ -101,3 +101,31 @@ vmm_translate(u64 virt)
 	
 	return 0;
 }
+
+void
+vmm_test(void)
+{
+	void *phys = pmm_alloc(); /* a physical address */
+	u64 virt = VMM_BASE + 0x1000;
+
+	kprint("phys=", WHITE); kprint_hex((u64)phys, GREEN); kprint("\n", WHITE);
+	kprint("virt=", WHITE); kprint_hex(virt, PURPLE); kprint("\n", WHITE);
+	
+	vmm_map(virt, (u64)phys, PTE_WRITABLE);
+	kprint("translated=", WHITE); kprint_hex(vmm_translate(virt), GREEN);
+	kprint("\n", WHITE);
+
+	*(volatile u64 *)virt = 0xCAFEBABE12345678ULL;
+	kprint("readback=", WHITE);
+	kprint_hex(*(volatile u64 *)virt, PURPLE); kprint("\n", WHITE);
+
+	if (*(volatile u64 *)virt == 0xCAFEBABE12345678ULL)
+	{
+		kprint("VMM: pass\n", GREEN);
+	} else {
+		kprint("VMM: fail\n", PURPLE);
+	}
+
+	vmm_unmap(virt);
+	pmm_free(phys);
+}

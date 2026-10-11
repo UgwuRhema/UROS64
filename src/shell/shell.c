@@ -1,5 +1,6 @@
 #include "shell.h"
 #include "../memory/pmm.h"
+#include "../memory/vmm.h"
 
 char cmd_buf[CMD_MAX_LEN] = {0};
 size_t cmd_idx = 0;

@@ -27,4 +27,6 @@ extern void vmm_map(u64, u64, u64);
 extern void vmm_unmap(u64);
 extern u64 vmm_translate(u64); /* returns 0 if unmapped */
 
+extern void vmm_test(void);
+
 #endif
