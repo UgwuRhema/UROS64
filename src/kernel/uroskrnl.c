@@ -6,6 +6,7 @@ typedef uint64_t u64;
 //#include "../vga/vga.h"
 #include "../func/func.h"
 #include "../memory/pmm.h"
+#include "../memory/vmm.h"
 #include "../devices/sound/sound.h"
 #include "../shell/shell.h"
 
@@ -31,6 +32,7 @@ uroskrnl_main_entry_point(uint32_t memory_entries_count, struct MemoryMapEntry *
 	kprint("x86 Monolithic 64-bit Kernel written in URSL\n", WHITE);
 	/*kprint("\n", WHITE); */
 	skprint("Entering setup....\n");
+	kp_log("(HARD)Enabled PC Speaker. ", DONE);
 	kprint("Setting up... \n", WHITE);
 	kp_log("(MEM)Enable 64-bit Paging. ", DONE);
 	sleep(100);
@@ -66,6 +68,10 @@ uroskrnl_main_entry_point(uint32_t memory_entries_count, struct MemoryMapEntry *
 	pmm_debug_state("after stats"); //dbg B
 	pmm_dump_map();
 	sleep(100);
+	vmm_init();
+	kp_log("(MEM)Implement Virtual Memory Manager. Active. ", DONE);
+	kp_log("(MEM)VMM Dump Test. ", ONLINE);
+	vmm_test();
 	kp_log("Starting shell...", ONLINE);
 	sleep(900);
 	shell_init();
