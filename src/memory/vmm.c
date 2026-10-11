@@ -105,6 +105,7 @@ vmm_translate(u64 virt)
 void
 vmm_test(void)
 {
+	kprint("Starting the VMM TEST!\n", PURPLE);
 	void *phys = pmm_alloc(); /* a physical address */
 	u64 virt = VMM_BASE + 0x1000;
 
