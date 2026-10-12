@@ -1,4 +1,5 @@
 #include "func.h"
+#include "../vga/vga.h"
 
 //send commands to port...
 void 
