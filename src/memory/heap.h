@@ -12,6 +12,6 @@ struct header_t
 	struct header_t *next;
 };
 
-extern void khead_init(uint64_t);
+extern void kheap_init(uint64_t);
 extern void *kmalloc(uint64_t);
 extern void kfree(void *);
