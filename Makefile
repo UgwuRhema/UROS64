@@ -37,10 +37,10 @@ PMM := ./src/memory/pmm.c
 PMM_O := ./src/memory/pmm.o
 VMM := ./src/memory/vmm.c
 VMM_O := ./src/memory/vmm.o
-
-
 SOUND := ./src/devices/sound/sound.c
 SOUND_O := ./src/devices/sound/sound.o
+HEAP := ./src/memory/heap.c
+HEAP_O := ./src/memory/heap.o
 
 IMG := uros.img
 
@@ -68,7 +68,7 @@ kernel:
 	$(CC) $(CFLAGS) -o $(SOUND_O) $(SOUND)
 	$(CC) $(CFLAGS) -o $(VMM_O) $(VMM)
 	$(LD) $(LDFLAGS) -T $(LINK) -o $(KER) $(KE_O) $(K_O) $(VGA_O) $(FUNC_O) $(INT_O) $(HAND_O) \
-	$(APIC_O) $(SHELL_O) $(MOUSE_O) $(PMM_O) $(SOUND_O) $(VMM_O)
+	$(APIC_O) $(SHELL_O) $(MOUSE_O) $(PMM_O) $(SOUND_O) $(VMM_O) $(HEAP_O)
 	objcopy -O binary $(KER) $(KERN)
 	cp $(KER) ./debug
 	rm -rf $(KER)
