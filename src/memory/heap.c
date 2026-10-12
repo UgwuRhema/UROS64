@@ -11,7 +11,8 @@ kheap_init(uint64_t initial_pages)
 		void *phys = pmm_alloc();
 		if (!phys)
 		{
-			panic();
+			/* memory allocation failure */
+			panic(); /* this functions just clears interrupts and halts the CPU */
 		}
 		vmm_map((uint64_t)phys, virt, PTE_WRITABLE);
 	}
