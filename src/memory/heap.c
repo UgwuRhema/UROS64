@@ -14,7 +14,7 @@ kheap_init(uint64_t initial_pages)
 			/* memory allocation failure */
 			panic(); /* this functions just clears interrupts and halts the CPU */
 		}
-		vmm_map((uint64_t)phys, virt, PTE_WRITABLE);
+		vmm_map(virt, (uint64_t)phys, PTE_WRITABLE);
 	}
 
 	heap_start = (struct header_t *)HEAP_START_ADDR;
