@@ -20,5 +20,5 @@ kheap_init(uint64_t initial_pages)
 	heap_start = (struct header_t *)HEAP_START_ADDR;
 	heap_start->size = initial_pages * PAGE_SIZE - sizeof(struct header_t);
 	heap_start->is_free = 1;
-	head_start->next = NULL;
+	heap_start->next = NULL;
 }
