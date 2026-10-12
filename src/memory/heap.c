@@ -17,8 +17,8 @@ kheap_init(uint64_t initial_pages)
 		vmm_map((uint64_t)phys, virt, PTE_WRITABLE);
 	}
 
-	heap_start = (header_t *)HEAP_START_ADDR;
-	heap_start->size = inittial_pages * PAGE_SIZE - sizeof(header_t);
+	heap_start = (struct header_t *)HEAP_START_ADDR;
+	heap_start->size = initial_pages * PAGE_SIZE - sizeof(struct header_t);
 	heap_start->is_free = 1;
 	head_start->next = NULL;
 }
