@@ -26,4 +26,6 @@ extern int strncmp(const char *, const char *, size_t);
 extern void get_cpu_vendor_name(char *);
 extern void get_cpu_brand_string(char *);
 
+extern void panic(void);
+
 #endif

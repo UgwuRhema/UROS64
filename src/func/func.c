@@ -176,3 +176,14 @@ get_cpu_brand_string(char *brand)
 	}
 	brand[48] = '\0';
 }
+
+/* just a generic default panic trigger */
+void
+panic(void)
+{
+	clear_screen();
+	kprint("The Kernel has gone into a Panic!\n", PURPLE);
+	__asm__ volatile ("cli");
+	while (1)
+		__asm__ volatile ("hlt");
+}
