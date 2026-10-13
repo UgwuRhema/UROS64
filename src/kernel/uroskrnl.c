@@ -75,6 +75,7 @@ uroskrnl_main_entry_point(uint32_t memory_entries_count, struct MemoryMapEntry *
 	vmm_test();
 	kheap_init(32); /* Initialization of the kernel heap, 32 Pages for now! */
 	kp_log("(MEM)Kernel Heap Initialized and Online. ", DONE);
+	kp_log("(MEM)Kernel Heap Allocator and De-Allocator Online. (kmalloc & kfree)", ONLINE);
 	kp_log("(UTILS)Starting shell...", ONLINE);
 	sleep(900);
 	shell_init();
