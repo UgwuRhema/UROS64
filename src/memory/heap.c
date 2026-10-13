@@ -33,6 +33,7 @@ kmalloc(uint64_t size)
 
 	/* let's walk the list now... */
 	struct header_t *curr = heap_start;
+	curr->magic = 0xDEADBEEF;
 	while (curr)
 	{
 		if (curr->is_free && curr->size >= size)
