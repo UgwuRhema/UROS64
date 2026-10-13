@@ -2,7 +2,7 @@
 #include "pmm.h"
 #include "../func/func.h"
 
-#define HEAP_START_ADDR (VMM_BASE + 0x10000000)
+#define HEAP_START_ADDR (VMM_BASE + 0x10000000ULL) /* 256MB above base */
 
 /* the header struct */
 struct header_t
