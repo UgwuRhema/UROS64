@@ -58,3 +58,11 @@ kmalloc(uint64_t size)
 	return NULL; /* when heap is exhausted! */
 	/* this is temporary and we will implement a way to grow our heap later */
 }
+
+void
+kfree(void *ptr)
+{
+	if (!ptr) return;
+	struct header_t *header = (struct header_t *)((char *)ptr - sizeof(struct header_t));
+	header->
+}
