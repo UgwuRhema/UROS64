@@ -65,8 +65,8 @@ kfree(void *ptr)
 {
 	if (!ptr) return;
 	struct header_t *header = (struct header_t *)((char *)ptr - sizeof(struct header_t));
-	//if (header->magic != 0xdeadbeef) /* cehcking for corruption */
-	//	panic();
+	if (header->magic != 0xdeadbeef) /* cehcking for corruption */
+		panic();
 	header->is_free = 1;
 	struct header_t *curr = heap_start;
 	while (curr)
