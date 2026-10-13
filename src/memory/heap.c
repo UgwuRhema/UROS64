@@ -24,7 +24,7 @@ kheap_init(uint64_t initial_pages)
 	heap_start->next = NULL;
 }
 
-#define MIN_SPLIT 4
+#define MIN_SPLIT 32 /* bumped UP! */
 
 void *
 kmalloc(uint64_t size)
