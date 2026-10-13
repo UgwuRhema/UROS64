@@ -22,3 +22,9 @@ kheap_init(uint64_t initial_pages)
 	heap_start->is_free = 1;
 	heap_start->next = NULL;
 }
+
+void *
+kmalloc(uint64_t size)
+{
+	if (size == 0) return NULL;
+}
