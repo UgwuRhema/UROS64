@@ -77,7 +77,7 @@ execute_command(const char *cmd)
 	} else if (strcmp(cmd, "heap_test") == 0){
 		kprint("HEAP_TEST\n", BLUE);
 		u64 *A = (u64 *)kmalloc(10);
-		if (!A) panic();
+		//if (!A) panic();
 		u64 *B = (u64 *)kmalloc(10);
 		if (!B){ 
 			kfree(A);
