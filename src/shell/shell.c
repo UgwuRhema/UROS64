@@ -1,6 +1,8 @@
 #include "shell.h"
 #include "../memory/pmm.h"
 #include "../memory/vmm.h"
+#include "../memory/heap.h"
+
 
 char cmd_buf[CMD_MAX_LEN] = {0};
 size_t cmd_idx = 0;
@@ -72,6 +74,20 @@ execute_command(const char *cmd)
 		__asm__ volatile ("cli");
 		while (1)
 			__asm__ volatile ("hlt");
+	} else if (strcmp(cmd, "heap_test") == 0){
+		kprint("HEAP_TEST\n", BLUE);
+		u64 *A = (u64 *)kmalloc(10);
+		if (!A) panic();
+		u64 *B = (u64 *)kmalloc(10);
+		if (!B){ 
+			kfree(A);
+			panic();
+		}
+		kprint("Memory Allocated\n", BLUE);
+		kprint("A := ", WHITE); kprint_hex((u64)A, BLUE); kprint("\n", WHITE);
+		kprint("B := ", WHITE); kprint_hex((u64)B, BLUE); kprint("\n", WHITE);
+		kfree(A); kfree(B);
+		kprint("Memory Freed!\n", GREEN);
 	} else if (strncmp(cmd, "sleep ", 6) == 0){
 		const char *value = &cmd[6]; /* store the number(in seconds as a string for now) */
 		uint64_t seconds = string_to_int(value);
