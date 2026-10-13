@@ -20,6 +20,7 @@ kheap_init(uint64_t initial_pages)
 	heap_start = (struct header_t *)HEAP_START_ADDR;
 	heap_start->size = initial_pages * PAGE_SIZE - sizeof(struct header_t);
 	heap_start->is_free = 1;
+	heap_start->magic = 0xDEADBEEF;
 	heap_start->next = NULL;
 }
 
@@ -33,7 +34,6 @@ kmalloc(uint64_t size)
 
 	/* let's walk the list now... */
 	struct header_t *curr = heap_start;
-	curr->magic = 0xDEADBEEF;
 	while (curr)
 	{
 		if (curr->is_free && curr->size >= size)
