@@ -20,7 +20,7 @@ kheap_init(uint64_t initial_pages)
 	heap_start = (struct header_t *)HEAP_START_ADDR;
 	heap_start->size = initial_pages * PAGE_SIZE - sizeof(struct header_t);
 	heap_start->is_free = 1;
-	heap_start->magic = 0xDEADBEEF;
+	heap_start->magic = HEAP_MAGIC;
 	heap_start->next = NULL;
 }
 
@@ -45,6 +45,7 @@ kmalloc(uint64_t size)
 				tail->next = curr->next;
 				tail->size = curr->size - size - sizeof(struct header_t);
 				tail->is_free = 1;
+				tail->magic = HEAP_MAGIC;
 				curr->next = tail;
 				curr->size = size;
 			}
@@ -65,7 +66,7 @@ kfree(void *ptr)
 {
 	if (!ptr) return;
 	struct header_t *header = (struct header_t *)((char *)ptr - sizeof(struct header_t));
-	if (header->magic != 0xdeadbeef) /* cehcking for corruption */
+	if (header->magic != HEAP_MAGIC) /* cehcking for corruption */
 		panic();
 	header->is_free = 1;
 	struct header_t *curr = heap_start;
