@@ -52,7 +52,7 @@ execute_command(const char *cmd)
     } else if (strcmp(cmd, "linux") == 0 || strcmp(cmd, "linux?") == 0){
 		kprint("Nope buddy...this is not Linux...This is UROS\n", WHITE);
 		kprint("The Unrestricted Runtime Operating System. \n", GREEN);
-		kprint("\"They might be Open Source but we're Unrestricted\"\n", BLUE);
+		kprint("\"They might be Open Source but we're Unrestricted\"\n", PURPLE);
 	} else if (strcmp(cmd, "trigger_pf_panic") == 0){
         volatile u64 *panic_ptr = (volatile u64 *)0x100000000ULL;
         *panic_ptr = 0x1234;
@@ -75,7 +75,7 @@ execute_command(const char *cmd)
 		while (1)
 			__asm__ volatile ("hlt");
 	} else if (strcmp(cmd, "heap_test") == 0){
-		kprint("HEAP_TEST\n", BLUE);
+		kprint("HEAP_TEST\n", PURPLE);
 		u64 *A = (u64 *)kmalloc(10);
 		if (!A) panic();
 		u64 *B = (u64 *)kmalloc(10);
@@ -83,9 +83,9 @@ execute_command(const char *cmd)
 			kfree(A);
 			panic();
 		}
-		kprint("Memory Allocated\n", BLUE);
-		kprint("A := ", WHITE); kprint_hex((u64)A, BLUE); kprint("\n", WHITE);
-		kprint("B := ", WHITE); kprint_hex((u64)B, BLUE); kprint("\n", WHITE);
+		kprint("Memory Allocated\n", PURPLE);
+		kprint("A := ", WHITE); kprint_hex((u64)A, PURPLE); kprint("\n", WHITE);
+		kprint("B := ", WHITE); kprint_hex((u64)B, PURPLE); kprint("\n", WHITE);
 		kfree(A); kfree(B);
 		kprint("Memory Freed!\n", GREEN);
 	} else if (strncmp(cmd, "sleep ", 6) == 0){
