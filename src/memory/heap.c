@@ -32,25 +32,25 @@ kmalloc(uint64_t size)
 	size = (size + (8 - 1)) & ~(8 - 1); /* rounding size up to alignment */
 
 	/* let's walk the list now... */
-	header_t *curr = heap_start;
+	struct header_t *curr = heap_start;
 	while (curr)
 	{
 		if (curr->is_free && curr->size >= size)
 		{
 			/* if the block is much bigger than neede, split it... */
-			if (curr->size >= size + sizeof(header_t) + MIN_SPLIT)
+			if (curr->size >= size + sizeof(struct header_t) + MIN_SPLIT)
 			{
-				header_t *tail = (header_t *)((char *)curr + sizeof(header_t) + size);
+				struct header_t *tail = (struct header_t *)((char *)curr + sizeof(struct header_t) + size);
 				tail->next = curr->next;
-				tail->size = curr->size - size - sizeof(header_t);
+				tail->size = curr->size - size - sizeof(struct header_t);
 				tail->is_free = 1;
 				curr->next = tail;
-				curr->next = size;
+				curr->size = size;
 			}
 
 			curr->is_free = 0;
 			/* hand back the pointer! */
-			return (void *)((char *)curr + sizeof(header_t));
+			return (void *)((char *)curr + sizeof(struct header_t));
 		}
 		curr = curr->next;
 	}
