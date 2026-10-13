@@ -23,8 +23,38 @@ kheap_init(uint64_t initial_pages)
 	heap_start->next = NULL;
 }
 
+#define MIN_SPLIT 4
+
 void *
 kmalloc(uint64_t size)
 {
 	if (size == 0) return NULL;
+	size = (size + (8 - 1)) & ~(8 - 1); /* rounding size up to alignment */
+
+	/* let's walk the list now... */
+	header_t *curr = heap_start;
+	while (curr)
+	{
+		if (curr->is_free && curr->size >= size)
+		{
+			/* if the block is much bigger than neede, split it... */
+			if (curr->size >= size + sizeof(header_t) + MIN_SPLIT)
+			{
+				header_t *tail = (header_t *)((char *)curr + sizeof(header_t) + size);
+				tail->next = curr->next;
+				tail->size = curr->size - size - sizeof(header_t);
+				tail->is_free = 1;
+				curr->next = tail;
+				curr->next = size;
+			}
+
+			curr->is_free = 0;
+			/* hand back the pointer! */
+			return (void *)((char *)curr + sizeof(header_t));
+		}
+		curr = curr->next;
+	}
+
+	return NULL; /* when heap is exhausted! */
+	/* this is temporary and we will implement a way to grow our heap later */
 }
