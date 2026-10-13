@@ -64,5 +64,20 @@ kfree(void *ptr)
 {
 	if (!ptr) return;
 	struct header_t *header = (struct header_t *)((char *)ptr - sizeof(struct header_t));
-	header->
+	if (header->magic != 0xdeadbeef) /* cehcking for corruption */
+		panic();
+	header->is_free = 1;
+	struct header_t *curr = heap_start;
+	while (curr)
+	{
+		if (curr->is_free && curr->next && curr->next->is_free)
+		{
+			/* merge next block into current block */
+			/* this supposedly prevents external fragmentation */
+			curr->size += sizeof(struct header_t) + curr->next->size;
+			curr->next = curr->next->next;
+		} else {
+			curr = curr->next;
+		}
+	}
 }
