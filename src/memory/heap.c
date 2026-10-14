@@ -1,4 +1,5 @@
 #include "heap.h"
+#include "../vga/vga.h"
 
 static struct header_t *heap_start = NULL;
 
@@ -70,6 +71,7 @@ kfree(void *ptr)
 		panic();
 	header->is_free = 1;
 	struct header_t *curr = heap_start;
+	/* coalescing, to prevent external fragmentation */
 	while (curr)
 	{
 		if (curr->is_free && curr->next && curr->next->is_free)
@@ -90,6 +92,13 @@ heap_walk(void)
 	struct header_t *curr = heap_start;
 	while (curr)
 	{
+		if (curr->next)
+		{
+			kprint("is_free=", WHITE); kprint_num((uint64_t)curr->is_free,PURPLE);
+			kprint("size=", WHITE); kprint_num((uint64_t)curr->size, PURPLE);
+			kprint("\n", WHITE);
+		}
 
+		curr = curr->next;
 	}
 }
