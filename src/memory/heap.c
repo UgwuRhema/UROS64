@@ -101,8 +101,11 @@ heap_walk(void)
 	while (curr)
 	{
 		kprint("is_free= ", WHITE); kprint_num((uint64_t)curr->is_free,GREEN);
-		uint64_t size_of_heap = (uint64_t)curr->size / 1024;
-		kprint(" size= ", WHITE); kprint_num(size_of_heap, GREEN); kprint(" KiB", WHITE);
+		if (curr->size < 1024){
+			kprint(" size= ", WHITE); kprint_num((uint64_t)curr->size, GREEN); kprint(" B", WHITE);} else {
+			kprint(" size= ", WHITE); kprint_num(((uint64_t)curr->size / 1024), GREEN);
+			kprint(" KiB", WHITE);
+		}
 		kprint(" address= ", WHITE); kprint_hex((uint64_t)curr, GREEN);
 		kprint(" m= ", WHITE); kprint_hex((uint64_t)curr->magic, GREEN);
 		kprint("\n", WHITE);
