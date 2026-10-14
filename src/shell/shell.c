@@ -115,13 +115,19 @@ execute_command(const char *cmd)
 			kprint(" bytes of unsigned 64 bit integers\n", WHITE);
 			kprint("Warning: This Pointer will not be freed so it will cause memory leaks. \n", PURPLE);
 			kprint("Address: ", WHITE); kprint_hex((uint64_t)temp_pointer
-					, PURPLE); kprint("\n", WHITE);
+					, BLUE); kprint("\n", WHITE);
+			kprint("Address_Id: ", WHITE); kprint_num((uint64_t)temp_pointer, BLUE);
+			kprint("\n", WHITE);
 		}
 	} else if (strncmp(cmd, "tmp_free ", 9) == 0){
-		const char *val = &cmd[9]; /* argument */
+		uint64_t addr = string_to_int(&cmd[9]);
 		/* so currently that's a string and we need to convert it to a void *, so that kfree can de-allocate it */
-		uint64_t *value = (uint64_t *)val;
-		kfree(value);
+		if (addr == 0)
+			kprint("Usage: tmp_free <address>\nNote: tmp_alloc returns the address_id which is just the address in decimal, pass it as the argument to tmp_free.\n", BLUE);
+		else {
+			kfree((void *)addr);
+			kprint("Memory region ", WHITE); kprint_hex(addr, WHITE); kprint(" freed\n", WHITE);
+		}
 	} else if (strcmp(cmd,"cpuinfo") == 0){
 		char vendor[12];
 		char brand[49];
