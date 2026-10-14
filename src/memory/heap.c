@@ -92,9 +92,9 @@ heap_walk(void)
 	struct header_t *curr = heap_start;
 	while (curr)
 	{
-		kprint("is_free=", WHITE); kprint_num((uint64_t)curr->is_free,PURPLE);
+		kprint("is_free= ", WHITE); kprint_num((uint64_t)curr->is_free,GREEN);
 		uint64_t size_of_heap = (uint64_t)curr->size / 1024;
-		kprint("size=", WHITE); kprint_num(size_of_heap, PURPLE); kprint(" KiB", WHITE);
+		kprint(" size= ", WHITE); kprint_num(size_of_heap, GREEN); kprint(" KiB", WHITE);
 		kprint("\n", WHITE);
 		if (!curr->next)
 			break;
