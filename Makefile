@@ -102,7 +102,7 @@ max:
 	$(MAKE) load
 	$(MAKE) qemu
 
-qemu:
+q:
 	qemu-system-x86_64 \
 		-boot order=a \
 		-drive format=raw,file=$(IMG),if=ide \
