@@ -96,6 +96,7 @@ heap_walk(void)
 		uint64_t size_of_heap = (uint64_t)curr->size / 1024;
 		kprint(" size= ", WHITE); kprint_num(size_of_heap, GREEN); kprint(" KiB", WHITE);
 		kprint(" address= ", WHITE); kprint_hex((uint64_t)curr, GREEN);
+		kprint(" m= ", WHITE); kprint_hex((uint64_t)curr->magic, GREEN);
 		kprint("\n", WHITE);
 		if (!curr->next)
 			break;
