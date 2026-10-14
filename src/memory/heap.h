@@ -17,3 +17,4 @@ struct header_t
 extern void kheap_init(uint64_t);
 extern void *kmalloc(uint64_t);
 extern void kfree(void *);
+extern void heap_walk(void);

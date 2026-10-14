@@ -83,3 +83,13 @@ kfree(void *ptr)
 		}
 	}
 }
+
+void
+heap_walk(void)
+{
+	struct header_t *curr = heap_start;
+	while (curr)
+	{
+
+	}
+}
