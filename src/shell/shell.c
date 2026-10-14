@@ -86,6 +86,9 @@ execute_command(const char *cmd)
 		kprint("Memory Allocated\n", PURPLE);
 		kprint("A := ", WHITE); kprint_hex((u64)A, PURPLE); kprint("\n", WHITE);
 		kprint("B := ", WHITE); kprint_hex((u64)B, PURPLE); kprint("\n", WHITE);
+		kprint("Current Heap State: \n", WHITE);
+		heap_walk();
+		kprint("\n", WHITE);
 		kfree(A); kfree(B);
 		kprint("Memory Freed!\n", GREEN);
 	} else if (strncmp(cmd, "sleep ", 6) == 0){
