@@ -104,6 +104,19 @@ execute_command(const char *cmd)
 		smap_info();
 	} else if (strcmp(cmd, "heap") == 0){
 		heap_walk();
+	} else if (strncmp(cmd, "tmp_alloc ", 10) == 0){
+		if (&cmd[10])
+		{
+			kprint("Usage: tmp_alloc <bytes>\n", PURPLE);
+		}
+		const char *val = &cmd[8];
+		uint64_t bytes = string_to_int(val);
+		uint64_t *temp_pointer = (uint64_t *)kmalloc(bytes);
+		kprint("Allocated temporary memory for ", WHITE); kprint_num(bytes, WHITE);
+		kprint(" bytes of unsigned 64 bit integers\n", WHITE);
+		kprint("Warning: This Pointer will not be freed so it will cause memory leaks. \n", PURPLE);
+		kprint("Address: ", WHITE); kprint_hex((uint64_t)temp_pointer
+				, PURPLE); kprint("\n", WHITE);
 	} else if (strcmp(cmd,"cpuinfo") == 0){
 		char vendor[12];
 		char brand[49];
