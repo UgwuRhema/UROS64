@@ -28,7 +28,7 @@ execute_command(const char *cmd)
 		char cpu_brand_name[49] = {0};
 		get_cpu_vendor_name(cpu_vendor_name); /* the new function we just made to get the name */
 		get_cpu_brand_string(cpu_brand_name);
-		if (minutes >= 60) { minutes = 0; hours++; }
+		if (minutes >= 60) { minutes = 0; hours = hours + 1; }
         kp_log("OS: UROS (Unrestricted Runtime Operating System) ", ONLINE);
         kp_log("Kernel: UROS KERNEL(uroskrnl.ubin/uroskrnl) ", ONLINE);
 		kprint(" Uptime: ", WHITE); 
