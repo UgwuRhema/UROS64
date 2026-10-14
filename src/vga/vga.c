@@ -101,15 +101,15 @@ kprint_num(uint64_t num, u16 attr)
 		kprint_c('0', attr);
 		return;
 	}
-	char buf[12];
-	int i = 10;
-	buf[11] = '\0';
-	while (num > 0 && i >= 0)
+	char buf[21];
+	int i = 20;
+	buf[i] = '\0';
+	while (num > 0 && i > 0)
 	{
-		buf[i--] = (num % 10) + '0';
+		buf[--i] = (num % 10) + '0';
 		num /= 10;
 	}
-	kprint(&buf[i + 1], attr);
+	kprint(&buf[i], attr);
 }
 
 
