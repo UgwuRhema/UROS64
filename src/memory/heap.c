@@ -93,8 +93,8 @@ heap_walk(void)
 	while (curr)
 	{
 		kprint("is_free=", WHITE); kprint_num((uint64_t)curr->is_free,PURPLE);
-		kprint("size=", WHITE); kprint_num((uint64_t)curr->size, PURPLE);
+		uint64_t size_of_heap = (uint64_t)curr->size / 1024;
+		kprint("size=", WHITE); kprint_num(size_of_heap, PURPLE); kprint(" KiB", WHITE);
 		kprint("\n", WHITE);
-		curr = curr->next;
 	}
 }
