@@ -120,8 +120,8 @@ execute_command(const char *cmd)
 	} else if (strncmp(cmd, "tmp_free ", 9) == 0){
 		const char *val = &cmd[9]; /* argument */
 		/* so currently that's a string and we need to convert it to a void *, so that kfree can de-allocate it */
-		uint64_t conv = string_to_int(val);
-		kprint_hex(conv, GREEN);
+		uint64_t *value = (uint64_t *)val;
+		kfree(value);
 	} else if (strcmp(cmd,"cpuinfo") == 0){
 		char vendor[12];
 		char brand[49];
