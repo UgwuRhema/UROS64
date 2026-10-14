@@ -5,6 +5,8 @@
 
 uint64_t cursor_pos = 0;
 
+/* page fault */
+
 void 
 kprint_c(char c, u16 attr)
 {
