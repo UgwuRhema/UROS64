@@ -92,13 +92,9 @@ heap_walk(void)
 	struct header_t *curr = heap_start;
 	while (curr)
 	{
-		if (curr->next)
-		{
-			kprint("is_free=", WHITE); kprint_num((uint64_t)curr->is_free,PURPLE);
-			kprint("size=", WHITE); kprint_num((uint64_t)curr->size, PURPLE);
-			kprint("\n", WHITE);
-		}
-
+		kprint("is_free=", WHITE); kprint_num((uint64_t)curr->is_free,PURPLE);
+		kprint("size=", WHITE); kprint_num((uint64_t)curr->size, PURPLE);
+		kprint("\n", WHITE);
 		curr = curr->next;
 	}
 }
