@@ -68,6 +68,13 @@ kfree(void *ptr)
 {
 	if (!ptr) return;
 	struct header_t *header = (struct header_t *)((char *)ptr - sizeof(struct header_t));
+	if (!header)
+	{
+		kprint("KFREE failed because the hader is NULL\n", BLUE);
+		__asm__ volatile ("cli");
+		while (1)
+			__asm__ volatile ("hlt");
+	}
 	if (header->magic != HEAP_MAGIC) /* cehcking for corruption */
 		panic();
 	header->is_free = 1;
