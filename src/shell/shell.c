@@ -102,6 +102,8 @@ execute_command(const char *cmd)
 		vmm_test();
 	} else if (strcmp(cmd, "smap_info") == 0){
 		smap_info();
+	} else if (strcmp(cmd, "heap") == 0){
+		heap_walk();
 	} else if (strcmp(cmd,"cpuinfo") == 0){
 		char vendor[12];
 		char brand[49];
