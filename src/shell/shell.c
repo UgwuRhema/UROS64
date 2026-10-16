@@ -158,7 +158,7 @@ shell_init(void)
     //kprint("\n", WHITE);
 	memset(cmd_buf, 0, CMD_MAX_LEN);
     cmd_idx = 0;
-    kprint("[Nothing:/Uros64]# ", WHITE);
+    kprint("[Noth:/Uros64]# ", WHITE);
 }
 
 void
@@ -176,7 +176,7 @@ shell_update(void)
         /* reset command line */
         cmd_idx = 0;
         memset(cmd_buf, 0, CMD_MAX_LEN);
-        kprint("[Nothing:/Uros64]# ", WHITE);
+        kprint("[Noth:/Uros64]# ", WHITE);
     } else if (c == '\b'){
         if (cmd_idx > 0)
         {
