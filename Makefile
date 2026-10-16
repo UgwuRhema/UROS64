@@ -108,7 +108,7 @@ q:
 		-drive format=raw,file=$(IMG),if=ide \
 		-m 512M \
 		-smp 2 \
-		-cpu Conroe \
+		-cpu Opteron_G2 \
 		-machine q35,pcspk-audiodev=snd0 \
 		-audiodev alsa,id=snd0 \
 		-display gtk,gl=on \
@@ -121,7 +121,7 @@ qemu-f:
 		-drive format=raw,file=$(IMG),if=ide \
 		-m 512M \
 		-smp 2 \
-		-cpu Conroe \
+		-cpu Opteron_G2 \
 		-machine q35,pcspk-audiodev=snd0 \
 		-audiodev alsa,id=snd0 \
 		-display gtk,full-screen=on \
