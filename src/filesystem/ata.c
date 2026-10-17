@@ -7,5 +7,5 @@ ata_io_delay(void)
 	inb(0x3f6);
 	inb(0x3f6);
 	inb(0x3f6);
-	inb(0x3f6);
+	inb(0x3f6); /* 100ns each */
 }
