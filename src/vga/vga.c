@@ -73,7 +73,7 @@ kp_log(const char *str, enum status s)
     {
         kprint("d", GREEN);
     } else if (s == 1){
-        kprint("f", PURPLE);
+        kprint("fail", PURPLE);
     } else {
         kprint("o", GREEN);
     }

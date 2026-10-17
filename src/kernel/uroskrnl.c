@@ -10,6 +10,7 @@ typedef uint64_t u64;
 #include "../devices/sound/sound.h"
 #include "../shell/shell.h"
 #include "../memory/heap.h"
+#include "../filesystem/ata.h"
 
 /*
 uint64_t get_uptime_in_minutes(uint64_t timer_ticks)
@@ -77,6 +78,9 @@ uroskrnl_main_entry_point(uint32_t memory_entries_count, struct MemoryMapEntry *
 	kp_log("(MEM)Kernel Heap Initialized and Online. ", DONE);
 	kp_log("(MEM)Kernel Heap Allocator and De-Allocator Online. (kmalloc & kfree)", ONLINE);
 	kp_log("(DRV)Initialize ATA PIO Driver. ATA_READ_SECTOR ACTIVE. ", DONE);
+	kprint(" ***TESTING ATA_READ_SECTOR*** \n", GREEN);
+	uint8_t buffer[512];
+	ata_read_sector(0, buffer); /* this reads LBA 0, which is our Boot Sector and where our bootloader lives */
 	kp_log("(UTILS)Starting shell...", ONLINE);
 	sleep(900);
 	shell_init();
