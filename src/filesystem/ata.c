@@ -12,7 +12,7 @@ ata_io_delay(void)
 
 static uint8_t ata_drive_select = ATA_DRIVE_MASTER;
 
-void
+int
 ata_read_sector(uint32_t lba, uint8_t *buffer)
 {
 	/* send bits 24-27 of lba along with drive identifier */
@@ -46,11 +46,19 @@ ata_read_sector(uint32_t lba, uint8_t *buffer)
 		return;
 	}
 
-	while (!(status & ATA_STATUS_DRQ))
+	uint32_t timeout2 = 1000000;
+	while ((!(status & ATA_STATUS_DRQ)) && --timeout)
 		status = inb(ATA_PRIMARY_STATUS);
+	if (!timeout)
+	{
+		kp_log(" (DRV)ATA PIO timeout waiting for !DRQ. ", NOT_DONE);
+		return;
+	}
 
 	/* pull 256 word (512 bytes) out of the data channel port */
 	uint16_t *ptr = (uint16_t *)buffer;
 	for (int i = 0; i < 256; ++i)
 		ptr[i] = inw(ATA_PRIMARY_DATA);
+
+	return 0; /* success! */
 }
