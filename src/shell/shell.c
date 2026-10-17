@@ -118,6 +118,10 @@ execute_command(const char *cmd)
 			kp_log("ATA PIO Driver LBA sector read fail. ", NOT_DONE);
 		else {
 			kp_log("ATA PIO Driver LBA sector read success. ", DONE);
+			kprint("Contents: \n", PURPLE);
+			kprint((char *)buffer, GREEN);
+			kfree((void *)buffer);
+			kprint("Buffer freed\n", WHITE);
 		}
 	} else if (strncmp(cmd, "tmp_alloc ", 10) == 0){
 		const char *val = &cmd[10];
