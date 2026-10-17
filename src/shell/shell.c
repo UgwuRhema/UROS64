@@ -119,7 +119,8 @@ execute_command(const char *cmd)
 		else {
 			kp_log("ATA PIO Driver LBA sector read success. ", DONE);
 			kprint("Contents: \n", PURPLE);
-			kprint((char *)buffer, GREEN);
+			kprint(buffer, GREEN); /* okay this didn't work */
+			kprint("\n", WHITE); 
 			kfree((void *)buffer);
 			kprint("Buffer freed\n", WHITE);
 		}
