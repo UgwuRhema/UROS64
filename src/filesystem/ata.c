@@ -29,14 +29,20 @@ ata_read_sector(uint32_t lba, uint8_t *buffer)
 	ata_io_delay();
 
 	/* poll the status register */
+	uint32_t timeout = 1000000;
 	uint8_t status = inb(ATA_PRIMARY_STATUS);
-	while (status & ATA_STATUS_BSY)
+	while ((status & ATA_STATUS_BSY) && --timeout)
 		status = inb(ATA_PRIMARY_STATUS);
+	if (!timeout)
+	{
+		kp_log(" (DRV)ATA PIO timeout waiting for BSY. ", NOT_DONE);
+		return;
+	}
 
 	/* check error bit */
 	if (status & 0x01)
 	{
-		kp_log("(DRV)Drive Rejected Read Command. ", NOT_DONE);
+		kp_log(" (DRV)Drive Rejected Read Command. ", NOT_DONE);
 		return;
 	}
 
