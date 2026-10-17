@@ -16,8 +16,8 @@
 #define ATA_STATUS_BSY 0x80
 #define ATA_STATUS_DRQ 0x08
 
-#define ATA_DRIVE_SLAVE 0xb0
-#define ATA_DRIVE_MASTER 0xf0
+#define ATA_DRIVE_SLAVE 0xf0
+#define ATA_DRIVE_MASTER 0xe0
 
 extern void ata_read_sector(uint32_t, uint8_t *); /* first arg is LBA Sector, second is buffer */
 extern void ata_write_sector(uint32_t, uint8_t *);
