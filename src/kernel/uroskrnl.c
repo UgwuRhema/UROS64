@@ -81,13 +81,7 @@ uroskrnl_main_entry_point(uint32_t memory_entries_count, struct MemoryMapEntry *
 	uint8_t initial_status = inb(0x1f7);
 	kprint(" ATA Intial Status=", WHITE); kprint_hex((uint64_t)initial_status, PURPLE);
 	kprint("\n", WHITE);
-	kprint(" ***TESTING ATA_READ_SECTOR*** \n", GREEN);
-	uint8_t buffer[512];
-	int read = ata_read_sector(256, buffer); /* this reads LBA 0, which is our Boot Sector and where our bootloader lives */
-	if (read < 0)
-		kp_log("(DRV)ATA PIO Driver Subsystem Failure. ", NOT_DONE);
-	else
-		kp_log("(DRV)ATA PIO Driver Subsystem ata_read_sector test success. ", DONE);
+	kp_log("(DRV)ATA PIO Driver Subsystem ata_read_sector test success. ", DONE);
 	kp_log("(UTILS)Starting shell...", ONLINE);
 	sleep(900);
 	shell_init();

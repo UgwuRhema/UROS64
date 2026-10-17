@@ -2,6 +2,7 @@
 #include "../memory/pmm.h"
 #include "../memory/vmm.h"
 #include "../memory/heap.h"
+#include "../filesystem/ata.h"
 
 
 char cmd_buf[CMD_MAX_LEN] = {0};
@@ -107,6 +108,10 @@ execute_command(const char *cmd)
 		smap_info();
 	} else if (strcmp(cmd, "heap") == 0){
 		heap_walk();
+	} else if (strncmp(cmd, "ata_read ", 9) == 0){
+		const char *val = &cmd[9]; /* get the LBA we would like to read */
+		uint32_t lba = (uint32_t)string_to_int(val);
+		kprint("Reading LBA ", WHITE); kprint_num(lba, GREEN); kprint("\n", WHITE);
 	} else if (strncmp(cmd, "tmp_alloc ", 10) == 0){
 		const char *val = &cmd[10];
 		if (!val || *val == ' ')
