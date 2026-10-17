@@ -1,4 +1,6 @@
 #include "../func/func.h"
+#include "../vga/vga.h"
+#include <stdint.h>
 
 #define ATA_PRIMARY_DATA 0x1f0
 #define ATA_PRIMARY_ERR 0x1f1
@@ -17,5 +19,5 @@
 #define ATA_DRIVE_SLAVE 0xb0
 #define ATA_DRIVE_MASTER 0xf0
 
-extern void ata_read_sector(uint64_t, uint8_t *); /* first arg is LBA Sector, second is buffer */
-extern void ata_write_sector(uint64_t, uint8_t *);
+extern void ata_read_sector(uint32_t, uint8_t *); /* first arg is LBA Sector, second is buffer */
+extern void ata_write_sector(uint32_t, uint8_t *);
