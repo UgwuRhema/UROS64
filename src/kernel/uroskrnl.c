@@ -78,6 +78,9 @@ uroskrnl_main_entry_point(uint32_t memory_entries_count, struct MemoryMapEntry *
 	kp_log("(MEM)Kernel Heap Initialized and Online. ", DONE);
 	kp_log("(MEM)Kernel Heap Allocator and De-Allocator Online. (kmalloc & kfree)", ONLINE);
 	kp_log("(DRV)Initialize ATA PIO Driver. ATA_READ_SECTOR ACTIVE. ", DONE);
+	uint8_t initial_status = inb(0x1f7);
+	kprint(" ATA Intial Status=", WHITE); kprint_hex((uint64_t)initial_status, PURPLE);
+	kprint("\n", WHITE);
 	kprint(" ***TESTING ATA_READ_SECTOR*** \n", GREEN);
 	uint8_t buffer[512];
 	int read = ata_read_sector(256, buffer); /* this reads LBA 0, which is our Boot Sector and where our bootloader lives */
