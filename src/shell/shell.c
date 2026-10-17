@@ -112,14 +112,16 @@ execute_command(const char *cmd)
 		const char *val = &cmd[9]; /* get the LBA we would like to read */
 		uint32_t lba = (uint32_t)string_to_int(val);
 		kprint("Reading LBA ", WHITE); kprint_num(lba, GREEN); kprint("\n", WHITE);
-		uint8_t *buffer = (uint8_t *)kmalloc(512 * sizeof(*buffer)); /* allocate memory for the buffer */
+		uint8_t *buffer = (uint8_t *)kmalloc(512); /* allocate memory for the buffer */
 		int read = ata_read_sector(lba, buffer);
 		if (read < 0)
 			kp_log("ATA PIO Driver LBA sector read fail. ", NOT_DONE);
 		else {
 			kp_log("ATA PIO Driver LBA sector read success. ", DONE);
 			kprint("Contents: \n", PURPLE);
-			kprint(buffer, GREEN); /* okay this didn't work */
+			/* let's try showing each character by character */
+			for (int i = 0; i < 512; ++i)
+				kprint_c(buffer[i], GREEN);
 			kprint("\n", WHITE); 
 			kfree((void *)buffer);
 			kprint("Buffer freed\n", WHITE);
