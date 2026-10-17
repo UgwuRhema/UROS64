@@ -121,7 +121,7 @@ execute_command(const char *cmd)
 			kprint("Contents: \n", PURPLE);
 			/* let's try showing each character by character */
 			for (int i = 0; i < 512; ++i)
-				kprint_c(buffer[i], GREEN);
+				kprint_hex((uint64_t)buffer[i], GREEN);
 			kprint("\n", WHITE); 
 			kfree((void *)buffer);
 			kprint("Buffer freed\n", WHITE);
