@@ -80,7 +80,7 @@ uroskrnl_main_entry_point(uint32_t memory_entries_count, struct MemoryMapEntry *
 	kp_log("(DRV)Initialize ATA PIO Driver. ATA_READ_SECTOR ACTIVE. ", DONE);
 	kprint(" ***TESTING ATA_READ_SECTOR*** \n", GREEN);
 	uint8_t buffer[512];
-	ata_read_sector(0, buffer); /* this reads LBA 0, which is our Boot Sector and where our bootloader lives */
+	ata_read_sector(256, buffer); /* this reads LBA 0, which is our Boot Sector and where our bootloader lives */
 	kp_log("(UTILS)Starting shell...", ONLINE);
 	sleep(900);
 	shell_init();
