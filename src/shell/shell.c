@@ -112,6 +112,13 @@ execute_command(const char *cmd)
 		const char *val = &cmd[9]; /* get the LBA we would like to read */
 		uint32_t lba = (uint32_t)string_to_int(val);
 		kprint("Reading LBA ", WHITE); kprint_num(lba, GREEN); kprint("\n", WHITE);
+		uint8_t *buffer = (uint8_t *)kmalloc(512 * sizeof(*buffer)); /* allocate memory for the buffer */
+		int read = ata_read_sector(lba, buffer);
+		if (read < 0)
+			kp_log("ATA PIO Driver LBA sector read fail. ", NOT_DONE);
+		else {
+			kp_log("ATA PIO Driver LBA sector read success. ", DONE);
+		}
 	} else if (strncmp(cmd, "tmp_alloc ", 10) == 0){
 		const char *val = &cmd[10];
 		if (!val || *val == ' ')
