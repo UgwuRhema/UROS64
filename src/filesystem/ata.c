@@ -36,23 +36,23 @@ ata_read_sector(uint32_t lba, uint8_t *buffer)
 	if (!timeout)
 	{
 		kp_log(" (DRV)ATA PIO timeout waiting for BSY. ", NOT_DONE);
-		return;
+		return -1;
 	}
 
 	/* check error bit */
 	if (status & 0x01)
 	{
 		kp_log(" (DRV)Drive Rejected Read Command. ", NOT_DONE);
-		return;
+		return -1;
 	}
 
 	uint32_t timeout2 = 1000000;
-	while ((!(status & ATA_STATUS_DRQ)) && --timeout)
+	while ((!(status & ATA_STATUS_DRQ)) && --timeout2)
 		status = inb(ATA_PRIMARY_STATUS);
-	if (!timeout)
+	if (!timeout2)
 	{
 		kp_log(" (DRV)ATA PIO timeout waiting for !DRQ. ", NOT_DONE);
-		return;
+		return -1;
 	}
 
 	/* pull 256 word (512 bytes) out of the data channel port */
