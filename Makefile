@@ -103,7 +103,7 @@ k:
 max:
 	$(MAKE) kernel
 	$(MAKE) load
-	$(MAKE) qemu
+	$(MAKE) q
 
 q:
 	qemu-system-x86_64 \
