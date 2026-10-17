@@ -112,7 +112,7 @@ q:
 		-m 512M \
 		-smp 2 \
 		-cpu Opteron_G2 \
-		-machine q35,pcspk-audiodev=snd0 \
+		-machine pc,pcspk-audiodev=snd0 \
 		-audiodev alsa,id=snd0 \
 		-display gtk,gl=on \
 		-vga std \
@@ -125,7 +125,7 @@ qemu-f:
 		-m 512M \
 		-smp 2 \
 		-cpu Opteron_G2 \
-		-machine q35,pcspk-audiodev=snd0 \
+		-machine pc,pcspk-audiodev=snd0 \
 		-audiodev alsa,id=snd0 \
 		-display gtk,full-screen=on \
 		-vga std \
