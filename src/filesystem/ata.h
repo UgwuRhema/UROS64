@@ -1,0 +1,3 @@
+#include "../func/func.h"
+
+
