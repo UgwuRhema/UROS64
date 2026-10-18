@@ -101,8 +101,7 @@ kstrcpy(char *dest, const char *src)
         return 1;
     int i = 0;
     while (*src++)
-        dest[i++] = *src;
-
+        dest[i++] = *(src - 1);
     return 0;
 }
 
