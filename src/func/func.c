@@ -97,7 +97,13 @@ strlen(const char *str)
 int
 kstrcpy(char *dest, const char *src)
 {
-    
+   if (!src || !dest)
+        return 1;
+    int i = 0;
+    while (*src++)
+        dest[i++] = *src;
+
+    return 0;
 }
 
 void
