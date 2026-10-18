@@ -82,10 +82,12 @@ uroskrnl_main_entry_point(uint32_t memory_entries_count, struct MemoryMapEntry *
 	kprint(" ATA Intial Status=", WHITE); kprint_hex((uint64_t)initial_status, PURPLE);
 	kprint("\n", WHITE);
 	kp_log("(DRV)ATA PIO Driver Subsystem ata_read_sector test success. ", DONE);
+    char *str = kmalloc(13);/*testing the kstrcpy*/
+    kstrcpy(str, "Hello World");
+    kprint(str, WHITE);
 	kp_log("(UTILS)Starting shell...", ONLINE);
 	sleep(900);
 	shell_init();
-		
     /* infinte loop */
 	while (1)
 	{
