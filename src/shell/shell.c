@@ -4,7 +4,6 @@
 #include "../memory/heap.h"
 #include "../filesystem/ata.h"
 
-
 char cmd_buf[CMD_MAX_LEN] = {0};
 size_t cmd_idx = 0;
 
@@ -12,7 +11,6 @@ void
 execute_command(const char *cmd)
 {
     if (strlen(cmd) == 0) return;
-
     if (strcmp(cmd, "help") == 0)
     {
         kprint("UROS USH Available Commands:\n", WHITE);
@@ -115,9 +113,9 @@ execute_command(const char *cmd)
 		uint8_t *buffer = (uint8_t *)kmalloc(512); /* allocate memory for the buffer */
 		int read = ata_read_sector(lba, buffer);
 		if (read < 0)
-			kp_log("ATA PIO Driver LBA sector read fail. ", NOT_DONE);
+			kp_log("(DRV)ATA PIO Driver LBA sector read fail. ", NOT_DONE);
 		else {
-			kp_log("ATA PIO Driver LBA sector read success. ", DONE);
+			kp_log("(DRV)ATA PIO Driver LBA sector read success. ", DONE);
 			kprint("Contents: \n", PURPLE);
 			/* let's try showing each character by character */
 			for (int i = 0; i < 512; ++i)
@@ -126,7 +124,20 @@ execute_command(const char *cmd)
 			kfree((void *)buffer);
 			kprint("Buffer freed\n", WHITE);
 		}
-	} else if (strncmp(cmd, "tmp_alloc ", 10) == 0){
+	} else if (strncmp(cmd, "ata_write ", 10) == 0){
+        const char *val = &cmd[10];
+        uint32_t lba = (uint32_t)string_to_int(val);
+        uint8_t *buffer = (uint8_t *)kmalloc(512);/*this is the buffer that will be written at the give lba*/
+        int write = ata_write_sector(lba, buffer);
+        if (write < 0)
+            kp_log("(DRV)ATA PIO Driver LBA Sector write fail. ", NOT_DONE);
+        else if (write > 0)
+            kp_log("(DRV)ATA PIO Driver timeout during Status polling. ", NOT_DONE);
+        else {
+            kp_log("(DRV)ATA PIO Driver LBA Sector write success. ", DONE);
+            kfree((void *)buffer);
+        }
+    } else if (strncmp(cmd, "tmp_alloc ", 10) == 0){
 		const char *val = &cmd[10];
 		if (!val || *val == ' ')
 			kprint("Usage: tmp_alloc <bytes>\n", BLUE);
@@ -155,7 +166,6 @@ execute_command(const char *cmd)
 		char brand[49];
 		get_cpu_vendor_name(vendor);
 		get_cpu_brand_string(brand);
-
 		kprint(" CPU Vendor Name: ", WHITE);
 		kprint(vendor, GREEN); kprint("\n", WHITE);
 		kprint(" CPU Brand Name: ", WHITE);
@@ -185,13 +195,11 @@ shell_update(void)
 {
     char c= buffer_pop();
     if (!c) return; /* buffer empty */
-
     if (c == '\n')
     {
         kprint("\n", WHITE);
         cmd_buf[cmd_idx] = '\0';
         execute_command(cmd_buf);
-
         /* reset command line */
         cmd_idx = 0;
         memset(cmd_buf, 0, CMD_MAX_LEN);
@@ -207,7 +215,6 @@ shell_update(void)
         if (cmd_idx < CMD_MAX_LEN - 1)
         {
             cmd_buf[cmd_idx++] = c;
-
             /* print key to terminal */
             char str[2] = {c, '\0'};
             kprint(str, WHITE);
