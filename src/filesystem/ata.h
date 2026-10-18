@@ -20,4 +20,4 @@
 #define ATA_DRIVE_MASTER 0xe0
 
 extern int ata_read_sector(uint32_t, uint8_t *); /* first arg is LBA Sector, second is buffer */
-extern void ata_write_sector(uint32_t, uint8_t *);
+extern int ata_write_sector(uint32_t, uint8_t *);
