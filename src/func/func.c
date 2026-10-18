@@ -68,7 +68,6 @@ strcmp(const char *str1, const char *str2)
 		str1++;
 		str2++;
 	}
-
 	return *(const unsigned char *)str1 - *(const unsigned char *)str2;
 }
 
@@ -81,10 +80,8 @@ strncmp(const char *s1, const char *s2, size_t n)
 		s2++;
 		n--;
 	}
-
 	if (n == 0)
 		return 0;
-
 	return *(const unsigned char *)s1 - *(const unsigned char *)s2;
 }
 
@@ -92,13 +89,15 @@ size_t
 strlen(const char *str)
 {
 	size_t count = 0;
-	while (*str)
-	{
-		count++;
-		str++;
-	}
-
+	while (*str++)
+	    count++;
 	return count;
+}
+
+int
+kstrcpy(char *dest, const char *src)
+{
+    
 }
 
 void
@@ -112,13 +111,11 @@ int64_t string_to_int(const char* str)
 {
 	 int64_t result = 0;
 	 int64_t sign = 1; //numbers are positive by default
-
 	//skip whitespace
 	while (*str == ' ' || *str == '\t' || *str == '\n')
 	{
 		str++;
 	}
-
 	//handle sign
 	if (*str == '-')
 	{
@@ -127,14 +124,12 @@ int64_t string_to_int(const char* str)
 	} else if (*str == '+'){
 		str++;
 	}
-
 	//main conversion
 	while (*str >= '0' && *str <= '9')
 	{
 		result = result * 10 + (*str - '0');
 		str++;
 	}
-
 	return result * sign;
 }
 
@@ -163,7 +158,6 @@ get_cpu_brand_string(char *brand)
 		brand[0] = '\0'; /* not supported*/
 		return;
 	}
-
 	/* three leaves, 16 bytes each = 48 bytes */
 	for (u32 leaf = 0x80000002; leaf <= 0x80000004; ++leaf)
 	{

@@ -55,7 +55,6 @@ ata_read_sector(uint32_t lba, uint8_t *buffer)
 	uint16_t *ptr = (uint16_t *)buffer;
 	for (int i = 0; i < 256; ++i)
 		ptr[i] = inw(ATA_PRIMARY_DATA);
-
 	return 0; /* success! */
 }
 
