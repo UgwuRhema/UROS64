@@ -118,6 +118,32 @@ q:
 		-vga std \
 		-serial stdio
 
+q2:
+	qemu-system-x86_64 \
+		-boot order=a \
+		-drive format=raw,file=$(IMG),if=ide \
+		-m 512M \
+		-smp 2 \
+		-cpu Opteron_G2 \
+		-machine pc,pcspk-audiodev=snd0 \
+		-audiodev alsa,id=snd0 \
+		-display gtk,gl=on \
+		-vga std \
+		-monitor stdio
+
+qng:
+	qemu-system-x86_64 \
+		-boot order=a \
+		-drive format=raw,file=$(IMG),if=ide \
+		-m 512M \
+		-smp 2 \
+		-cpu Opteron_G2 \
+		-machine pc,pcspk-audiodev=snd0 \
+		-audiodev alsa,id=snd0 \
+		-nographic \
+		-vga none \
+
+
 qemu-f:
 	qemu-system-x86_64 \
 		-boot order=a \
