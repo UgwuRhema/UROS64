@@ -17,17 +17,26 @@ execute_command(const char *cmd)
         kprint(" help            smap_info\n clear           cpuinfo\n sysinfo         off->powerdown\n vreboot         vmm_test\n trigger_*_panic\n powerdown\n sleep <seconds>\n", GREEN);
 		kprint(" puts <text>\n sleep <seconds>\n memmap\n", GREEN);
     } else if (strcmp(cmd, "info registers") == 0) {
-		uint64_t rax, rdi, rsi, rdx, rsp, rbp; /* some x86-64 bit registers */
+		uint64_t rax, rdi, rsi, rdx, rsp, rbp, rbx, rcx;/* some x86-64 bit registers */
+		uint64_t cr0, cr1, cr2, cr3; /* control registers */
 		__asm__ volatile ("mov %%rax, %0" : "=r"(rax));
 		__asm__ volatile ("mov %%rdi, %0" : "=r"(rdi));
 		__asm__ volatile ("mov %%rsi, %0" : "=r"(rsi));
 		__asm__ volatile ("mov %%rdx, %0" : "=r"(rdx));
 		__asm__ volatile ("mov %%rsp, %0" : "=r"(rsp));
 		__asm__ volatile ("mov %%rbp, %0" : "=r"(rbp));
+		__asm__ volatile ("mov %%rbx, %0" : "=r"(rbx));
+		__asm__ volatile ("mov %%rcx, %0" : "=r"(rcx));
 		kprint("Registers: \n", WHITE);
-		kprint("rax=", WHITE); kprint_hex(rax, PURPLE); kprint("\n", WHITE);
-		kprint("rdi=", WHITE); kprint_hex(rdi, PURPLE); kprint("\n", WHITE);
-		kprint("rsi=", WHITE); kprint_hex(rsi, PURPLE); kprint("\n", WHITE);
+		kprint("rax=", WHITE); kprint_hex(rax, PURPLE); 
+		kprint(" rbx=", WHITE); kprint_hex(rbx, PURPLE);
+		kprint("\n", WHITE);
+		kprint("rdi=", WHITE); kprint_hex(rdi, PURPLE); 
+		kprint(" rcx=", WHITE); kprint_hex(rcx, PURPLE);
+		kprint("\n", WHITE);
+		kprint("rsi=", WHITE); kprint_hex(rsi, PURPLE); 
+		//kprint(" rip=", WHITE); kprint_hex(rip, PURPLE);
+		kprint("\n", WHITE);
 		kprint("rdx=", WHITE); kprint_hex(rdx, PURPLE); kprint("\n", WHITE);
 		kprint("rsp=", WHITE); kprint_hex(rsp, PURPLE); kprint("\n", WHITE);
 		kprint("rbp=", WHITE); kprint_hex(rbp, PURPLE); kprint("\n", WHITE);
