@@ -27,7 +27,12 @@ execute_command(const char *cmd)
 		__asm__ volatile ("mov %%rbp, %0" : "=r"(rbp));
 		__asm__ volatile ("mov %%rbx, %0" : "=r"(rbx));
 		__asm__ volatile ("mov %%rcx, %0" : "=r"(rcx));
-		kprint("Registers: \n", WHITE);
+		/* compute for control reisters */
+		__asm__ volatile ("mov %%cr0, %0" : "=r"(cr0));
+		__asm__ volatile ("mov %%cr1, %0" : "=r"(cr1));
+		__asm__ volatile ("mov %%cr2, %0" : "=r"(cr2));
+		__asm__ volatile ("mov %%cr3, %0" : "=r"(cr3));
+		kprint("General Registers: \n", WHITE);
 		kprint("rax=", WHITE); kprint_hex(rax, PURPLE); 
 		kprint(" rbx=", WHITE); kprint_hex(rbx, PURPLE);
 		kprint("\n", WHITE);
@@ -40,6 +45,11 @@ execute_command(const char *cmd)
 		kprint("rdx=", WHITE); kprint_hex(rdx, PURPLE); kprint("\n", WHITE);
 		kprint("rsp=", WHITE); kprint_hex(rsp, PURPLE); kprint("\n", WHITE);
 		kprint("rbp=", WHITE); kprint_hex(rbp, PURPLE); kprint("\n", WHITE);
+		kprint("Control Registers: \n", WHITE);
+		kprint("cr0=", WHITE); kprint_hex(cr0, PURPLE); kprint("\n", WHITE);
+		kprint("cr1=", WHITE); kprint_hex(cr1, PURPLE); kprint("\n", WHITE);
+		kprint("cr2=", WHITE); kprint_hex(cr2, PURPLE); kprint("\n", WHITE);
+		kprint("cr3=", WHITE); kprint_hex(cr3, PURPLE); kprint("\n", WHITE);
 	} else if (strcmp(cmd, "clear") == 0){
         clear_screen();
     } else if (strcmp(cmd, "sysinfo") == 0){
