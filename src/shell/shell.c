@@ -28,10 +28,10 @@ execute_command(const char *cmd)
 		__asm__ volatile ("mov %%rbx, %0" : "=r"(rbx));
 		__asm__ volatile ("mov %%rcx, %0" : "=r"(rcx));
 		/* compute for control reisters */
-		__asm__ volatile ("mov %%cr0, %0" : "=r"(cr0));
-		__asm__ volatile ("mov %%cr1, %0" : "=r"(cr1));
+		//__asm__ volatile ("mov %%cr0, %0" : "=r"(cr0));
+		//__asm__ volatile ("mov %%cr1, %0" : "=r"(cr1));
 		__asm__ volatile ("mov %%cr2, %0" : "=r"(cr2));
-		__asm__ volatile ("mov %%cr3, %0" : "=r"(cr3));
+		//__asm__ volatile ("mov %%cr3, %0" : "=r"(cr3));
 		kprint("General Registers: \n", WHITE);
 		kprint("rax=", WHITE); kprint_hex(rax, PURPLE); 
 		kprint(" rbx=", WHITE); kprint_hex(rbx, PURPLE);
