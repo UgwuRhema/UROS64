@@ -17,7 +17,20 @@ execute_command(const char *cmd)
         kprint(" help            smap_info\n clear           cpuinfo\n sysinfo         off->powerdown\n vreboot         vmm_test\n trigger_*_panic\n powerdown\n sleep <seconds>\n", GREEN);
 		kprint(" puts <text>\n sleep <seconds>\n memmap\n", GREEN);
     } else if (strcmp(cmd, "info registers") == 0) {
+		uint64_t rax, rdi, rsi, rdx, rsp, rbp; /* some x86-64 bit registers */
+		__asm__ volatile ("mov %%rax, %0" : "=r"(rax));
+		__asm__ volatile ("mov %%rdi, %0" : "=r"(rdi));
+		__asm__ volatile ("mov %%rsi, %0" : "=r"(rsi));
+		__asm__ volatile ("mov %%rdx, %0" : "=r"(rdx));
+		__asm__ volatile ("mov %%rsp, %0" : "=r"(rsp));
+		__asm__ volatile ("mov %%rbp, %0" : "=r"(rbp));
 		kprint("Registers: \n", WHITE);
+		kprint("rax=", WHITE); kprint_hex(rax, PURPLE); kprint("\n", WHITE);
+		kprint("rdi=", WHITE); kprint_hex(rdi, PURPLE); kprint("\n", WHITE);
+		kprint("rsi=", WHITE); kprint_hex(rsi, PURPLE); kprint("\n", WHITE);
+		kprint("rdx=", WHITE); kprint_hex(rdx, PURPLE); kprint("\n", WHITE);
+		kprint("rsp=", WHITE); kprint_hex(rsp, PURPLE); kprint("\n", WHITE);
+		kprint("rbp=", WHITE); kprint_hex(rbp, PURPLE); kprint("\n", WHITE);
 	} else if (strcmp(cmd, "clear") == 0){
         clear_screen();
     } else if (strcmp(cmd, "sysinfo") == 0){
