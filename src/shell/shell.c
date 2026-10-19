@@ -18,7 +18,7 @@ execute_command(const char *cmd)
 		kprint(" puts <text>\n sleep <seconds>\n memmap\n", GREEN);
     } else if (strcmp(cmd, "info registers") == 0) {
 		uint64_t rax, rdi, rsi, rdx, rsp, rbp, rbx, rcx;/* some x86-64 bit registers */
-		uint64_t cr0, cr1, cr2, cr3; /* control registers */
+		uint64_t cr0, cr2, cr3, cr4; /* control registers */
 		__asm__ volatile ("mov %%rax, %0" : "=r"(rax));
 		__asm__ volatile ("mov %%rdi, %0" : "=r"(rdi));
 		__asm__ volatile ("mov %%rsi, %0" : "=r"(rsi));
@@ -28,10 +28,10 @@ execute_command(const char *cmd)
 		__asm__ volatile ("mov %%rbx, %0" : "=r"(rbx));
 		__asm__ volatile ("mov %%rcx, %0" : "=r"(rcx));
 		/* compute for control reisters */
-		//__asm__ volatile ("mov %%cr0, %0" : "=r"(cr0));
-		//__asm__ volatile ("mov %%cr1, %0" : "=r"(cr1));
+		__asm__ volatile ("mov %%cr0, %0" : "=r"(cr0));
 		__asm__ volatile ("mov %%cr2, %0" : "=r"(cr2));
-		//__asm__ volatile ("mov %%cr3, %0" : "=r"(cr3));
+		__asm__ volatile ("mov %%cr3, %0" : "=r"(cr3));
+		__asm__ volatile ("mov %%cr4, %0" : "=r"(cr4));
 		kprint("General Registers: \n", WHITE);
 		kprint("rax=", WHITE); kprint_hex(rax, PURPLE); 
 		kprint(" rbx=", WHITE); kprint_hex(rbx, PURPLE);
@@ -47,9 +47,9 @@ execute_command(const char *cmd)
 		kprint("rbp=", WHITE); kprint_hex(rbp, PURPLE); kprint("\n", WHITE);
 		kprint("Control Registers: \n", WHITE);
 		kprint("cr0=", WHITE); kprint_hex(cr0, PURPLE); kprint("\n", WHITE);
-		kprint("cr1=", WHITE); kprint_hex(cr1, PURPLE); kprint("\n", WHITE);
 		kprint("cr2=", WHITE); kprint_hex(cr2, PURPLE); kprint("\n", WHITE);
 		kprint("cr3=", WHITE); kprint_hex(cr3, PURPLE); kprint("\n", WHITE);
+		kprint("cr4=", WHITE); kprint_hex(cr4, PURPLE); kprint("\n", WHITE);
 	} else if (strcmp(cmd, "clear") == 0){
         clear_screen();
     } else if (strcmp(cmd, "sysinfo") == 0){
