@@ -16,7 +16,9 @@ execute_command(const char *cmd)
         kprint("UROS USH Available Commands:\n", WHITE);
         kprint(" help            smap_info\n clear           cpuinfo\n sysinfo         off->powerdown\n vreboot         vmm_test\n trigger_*_panic\n powerdown\n sleep <seconds>\n", GREEN);
 		kprint(" puts <text>\n sleep <seconds>\n memmap\n", GREEN);
-    } else if (strcmp(cmd, "clear") == 0){
+    } else if (strcmp(cmd, "info registers") == 0) {
+		kprint("Registers: \n", WHITE);
+	} else if (strcmp(cmd, "clear") == 0){
         clear_screen();
     } else if (strcmp(cmd, "sysinfo") == 0){
 		uint64_t total_seconds = timer_ticks / 1000;
