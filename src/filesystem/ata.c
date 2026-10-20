@@ -99,7 +99,7 @@ ata_identify_slave(void)
 	uint8_t status = inb(ATA_PRIMARY_STATUS);
 	if (status == 0)
 		return 0;/*drive doesn't exist*/
-	while((status & ATA_STATUS_BSY) && !(status ATA_STATUS_DRQ))/*kind of same thing we did in ata_read and ata_write*/
+	while((status & ATA_STATUS_BSY) && !(status & ATA_STATUS_DRQ))/*kind of same thing we did in ata_read and ata_write*/
 		status = inb(ATA_PRIMARY_STATUS);
 	if (status & 0x01)
 		return 0;/*drive flagged and error*/
@@ -115,7 +115,7 @@ ata_identify_slave(void)
 
 		// ATA text standard streams characters byte-swapped
 		if (high != ' ') kprint_c(high, GREEN);
-		if (low != ' ')  kprint_c(low), GREEN;
+		if (low != ' ')  kprint_c(low, GREEN);
 	}
 	// Extract total 28-bit LBA sectors out of words 60 and 61
 	u32 total_sectors = ((u32)info[61] << 16) | info[60];
