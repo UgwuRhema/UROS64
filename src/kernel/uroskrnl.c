@@ -74,7 +74,7 @@ uroskrnl_main_entry_point(uint32_t memory_entries_count, struct MemoryMapEntry *
 	kp_log("(MEM)Implement Virtual Memory Manager. Active. ", DONE);
 	kp_log("(MEM)VMM Dump Test. ", ONLINE);
 	vmm_test();
-	kheap_init(128); /* Initialization of the kernel heap, 64 Pages for now! */
+	kheap_init(256); /* Initialization of the kernel heap, 64 Pages for now! */
 	kp_log("(MEM)Kernel Heap Initialized and Online. ", DONE);
 	kp_log("(MEM)Kernel Heap Allocator and De-Allocator Online. (kmalloc & kfree)", ONLINE);
 	kp_log("(DRV)Initialize ATA PIO Driver. ATA_READ_SECTOR ACTIVE. ", DONE);
