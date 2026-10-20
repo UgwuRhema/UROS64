@@ -124,6 +124,23 @@ q:
 		-vga std \
 		-serial stdio
 
+#this is like a temporary build
+#for every new addition that i wanted to test but not make default
+#i would modify this rule to meet those needs
+qtmp:
+	qemu-system-x86_64 \
+		-boot order=a \
+		-drive format=raw,file=$(IMG),index=0,if=ide \
+		-drive format=raw,file=$(IMG2),index=1,if=ide \
+		-m 512M \
+		-smp 2 \
+		-cpu Opteron_G2 \
+		-machine pc,pcspk-audiodev=snd0 \
+		-audiodev alsa,id=snd0 \
+		-display gtk,gl=on \
+		-vga std \
+		-serial stdio	
+
 q2:
 	qemu-system-x86_64 \
 		-boot order=a \
