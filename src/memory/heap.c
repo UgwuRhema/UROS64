@@ -17,7 +17,6 @@ kheap_init(uint64_t initial_pages)
 		}
 		vmm_map(virt, (uint64_t)phys, PTE_WRITABLE);
 	}
-
 	heap_start = (struct header_t *)HEAP_START_ADDR;
 	heap_start->size = initial_pages * PAGE_SIZE - sizeof(struct header_t);
 	heap_start->is_free = 1;
@@ -32,7 +31,6 @@ kmalloc(uint64_t size)
 {
 	if (size == 0) return NULL;
 	size = (size + (8 - 1)) & ~(8 - 1); /* rounding size up to alignment */
-
 	/* let's walk the list now... */
 	struct header_t *curr = heap_start;
 	while (curr)
@@ -50,14 +48,12 @@ kmalloc(uint64_t size)
 				curr->next = tail;
 				curr->size = size;
 			}
-
 			curr->is_free = 0;
 			/* hand back the pointer! */
 			return (void *)((char *)curr + sizeof(struct header_t));
 		}
 		curr = curr->next;
 	}
-
 	kprint("Heap Exhausted or Insufficient memory\n", PURPLE);
 	return NULL; /* when heap is exhausted! */
 	/* this is temporary and we will implement a way to grow our heap later */
@@ -102,7 +98,10 @@ heap_walk(void)
 	{
 		kprint("is_free= ", WHITE); kprint_num((uint64_t)curr->is_free,GREEN);
 		if (curr->size < 1024){
-			kprint(" size= ", WHITE); kprint_num((uint64_t)curr->size, GREEN); kprint(" B", WHITE);} else {
+			kprint(" size= ", WHITE); kprint_num((uint64_t)curr->size, GREEN); kprint(" B", WHITE);
+		} else if (curr->size > 10240) {
+			kprint(" size= ", WHITE) kprint_num((uint64_t)curr->size / 10240, GREEN); kprint(" MiB", WHITE);
+		} else {
 			kprint(" size= ", WHITE); kprint_num(((uint64_t)curr->size / 1024), GREEN);
 			kprint(" KiB", WHITE);
 		}
@@ -111,7 +110,6 @@ heap_walk(void)
 		kprint("\n", WHITE);
 		if (!curr->next)
 			break;
-
 		curr = curr->next;
 	}
 }
