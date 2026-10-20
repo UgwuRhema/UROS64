@@ -173,6 +173,10 @@ gdb:
 		-no-reboot -no-shutdown \
 		-display gtk \
 		-monitor stdio
+
 clean:
+	rm -rf $(IMG) $(IMG2)
+
+nuke:
 	rm -rf $(IMG) $(BOOT) $(S2) $(KERN)
 	rm -f $(KE_O) $(K_O) $(VGA_O) $(FUNC_O) $(INT_O) $(HAND_O) $(APIC_O) $(SHELL_O) $(MOUSE_O) $(PMM_O)
