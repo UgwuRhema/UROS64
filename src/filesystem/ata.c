@@ -106,8 +106,9 @@ ata_identify_slave(void)
 	uint16_t info[256];
 	for (int i = 0; i < 256; ++i)/*pull the 512 byte metadata*/
 		info[i] = inw(ATA_PRIMARY_DATA);
-	kp_log("(DRV)External Hard-disk detected. \n", ONLINE);
+	kp_log("(DRV)External Hard-disk detected. ", ONLINE);
 	// Drive model description string lives across words 27 to 46
+	kprint(" ", WHITE);
 	for (int i = 27; i <= 46; ++i)
 	{
 		char high = (char)(info[i] >> 8);  // Upper byte
