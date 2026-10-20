@@ -21,3 +21,4 @@
 
 extern int ata_read_sector(uint32_t, uint8_t *); /* first arg is LBA Sector, second is buffer */
 extern int ata_write_sector(uint32_t, uint8_t *);
+extern int ata_identify_slave(void); /*ATA Drive controller communication*/

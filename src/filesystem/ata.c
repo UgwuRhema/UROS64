@@ -85,3 +85,43 @@ ata_write_sector(uint32_t lba, uint8_t *buffer)
     while ((inb(ATA_PRIMARY_STATUS) & ATA_STATUS_BSY));
     return 0; /*success*/
 }
+
+/*returns 1 if a drive is successfully detected and 0 is not or errored*/
+int
+ata_identify_slave(void)
+{
+	outb(ATA_PRIMARY_DRIVE, ATA_DRIVE_SLAVE);/*select the primary slave drive*/
+	outb(ATA_PRIMARY_SECCOUNT, 0x00);
+	outb(ATA_PRIMARY_LBA_LOW, 0x00);
+	outb(ATA_PRIMARY_LBA_MID, 0x00);
+	outb(ATA_PRIMARY_LBA_HIGH, 0x00);
+	outb(ATA_PRIMARY_COMMAND, 0xec);/*identify command*/
+	uint8_t status = inb(ATA_PRIMARY_STATUS);
+	if (status == 0)
+		return 0;/*drive doesn't exist*/
+	while((status & ATA_STATUS_BSY) && !(status ATA_STATUS_DRQ))/*kind of same thing we did in ata_read and ata_write*/
+		status = inb(ATA_PRIMARY_STATUS);
+	if (status & 0x01)
+		return 0;/*drive flagged and error*/
+	uint16_t info[256];
+	for (int i = 0; i < 256; ++i)/*pull the 512 byte metadata*/
+		info[i] = inw(ATA_PRIMARY_DATA);
+	kp_log("(DRV)External Hard-disk detected. \n", ONLINE);
+	// Drive model description string lives across words 27 to 46
+	for (int i = 27; i <= 46; ++i)
+	{
+		char high = (char)(info[i] >> 8);  // Upper byte
+		char low  = (char)(info[i] & 0xFF); // Lower byte
+
+		// ATA text standard streams characters byte-swapped
+		if (high != ' ') kprint_c(high, GREEN);
+		if (low != ' ')  kprint_c(low), GREEN;
+	}
+	// Extract total 28-bit LBA sectors out of words 60 and 61
+	u32 total_sectors = ((u32)info[61] << 16) | info[60];
+	// stash it in the global
+	kprint(" (", WHITE);
+	kprint_num((total_sectors * 512) / (1024 * 1024), GREEN);
+	kprint(" MB)\n", WHITE);
+	return 1; // Drive successfully loaded!
+}
