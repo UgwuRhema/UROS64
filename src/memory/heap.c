@@ -100,7 +100,7 @@ heap_walk(void)
 		if (curr->size < 1024){
 			kprint(" size= ", WHITE); kprint_num((uint64_t)curr->size, GREEN); kprint(" B", WHITE);
 		} else if (curr->size > 10240) {
-			kprint(" size= ", WHITE) kprint_num((uint64_t)curr->size / 10240, GREEN); kprint(" MiB", WHITE);
+			kprint(" size= ", WHITE); kprint_num((uint64_t)curr->size / 10240, GREEN); kprint(" MiB", WHITE);
 		} else {
 			kprint(" size= ", WHITE); kprint_num(((uint64_t)curr->size / 1024), GREEN);
 			kprint(" KiB", WHITE);
