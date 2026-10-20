@@ -1,9 +1,9 @@
 # unrestricted means it yours
 # figure out the building yourself
-AS := nasm
+AS := /usr/bin/nasm
 ASF := -f bin
 ASF2 := -f elf64
-CC := cc
+CC := /usr/bin/cc
 CFLAGS := -ffreestanding -c -fno-pie -fno-stack-protector -mgeneral-regs-only -nostdlib -fno-builtin -Wall -Wextra -O2 -march=x86-64 -mno-red-zone
 LD := /usr/bin/ld
 LDFLAGS := -nostdlib -static
