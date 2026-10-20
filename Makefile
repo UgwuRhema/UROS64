@@ -46,6 +46,8 @@ ATA_O := ./src/filesystem/ata.o
 
 IMG := uros.img
 
+IMG2 := dummy.img
+
 .PHONY: bloader
 bloader: ./boot/boot.asm
 	$(AS) $(ASF) -o $(BOOT) $(BOOT_SRC)
@@ -78,6 +80,10 @@ kernel:
 	rm -rf $(KER)
 img:
 	qemu-img create -f raw $(IMG) 10M
+
+dummy:
+	qemu-img create -f raw $(IMG2) 5M
+
 iso:
 	mkdir -p ./iso_root
 	cp $(IMG) ./iso_root
