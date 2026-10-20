@@ -75,7 +75,13 @@ execute_command(const char *cmd)
 		kprint(cpu_brand_name, GREEN); kprint("\n", WHITE);
         kp_log("APIC Status: LAPIC/IOAPIC Online. ", ONLINE);
         kp_log("Identity Map: 0 - 4GB (2MB Pages) ", ONLINE);
-    } else if (strcmp(cmd, "vreboot") == 0){
+    } else if (strcmp(cmd, "vols") == 0) {
+		/*this is a rip-off vols command, i just added this so i could test*/
+		/*ata_identify_slave that's all, will improve later on!*/
+		int another_drive = ata_identify_slave();
+		if (another_drive == 0)
+			kp_log("(DRV)No external drive detected. ", NOT_DONE);
+	} else if (strcmp(cmd, "vreboot") == 0){
         kprint("Rebooting...\n", WHITE);
 		sleep(1400);
 		/* CPU reset through PS/2 controller */
