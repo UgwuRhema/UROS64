@@ -99,8 +99,8 @@ heap_walk(void)
 		kprint("is_free= ", WHITE); kprint_num((uint64_t)curr->is_free,GREEN);
 		if (curr->size < 1024){
 			kprint(" size= ", WHITE); kprint_num((uint64_t)curr->size, GREEN); kprint(" B", WHITE);
-		} else if (curr->size > 10240) {
-			kprint(" size= ", WHITE); kprint_num((uint64_t)curr->size / 10240, GREEN); kprint(" MiB", WHITE);
+		} else if (curr->size > 1024000) {
+			kprint(" size= ", WHITE); kprint_num((uint64_t)curr->size / 1024000, GREEN); kprint(" MiB", WHITE);
 		} else {
 			kprint(" size= ", WHITE); kprint_num(((uint64_t)curr->size / 1024), GREEN);
 			kprint(" KiB", WHITE);
