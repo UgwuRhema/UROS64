@@ -1,6 +1,7 @@
 #include "ata.h"
 #include "blockdev.h"
 #include <stdint.h>
+#include <stddef.h>
 
 static void 
 ata_io_delay(void)
