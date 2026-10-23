@@ -24,7 +24,7 @@ primary_create(void)
 	ata_primary_dev.sector_size = 512;/*each sector size*/
 	ata_primary_dev.sector_count = 20480;/*hardcode for now, 10MiB*/
 	ata_primary_dev.read = &ata_read_wrapper;
-	//ata_primary_dev.write = &ata_write_wrapper;
+	ata_primary_dev.write = &ata_write_wrapper;
 	blockdev_register(&ata_primary_dev);
 	return &ata_primary_dev;
 }
@@ -105,12 +105,29 @@ ata_write_sector(uint32_t lba, uint8_t *buffer)
 int
 ata_read_wrapper(struct block_device *d, uint64_t lba, uint32_t count, void *buffer)
 {
+	if (!buffer || !d)
+		return -1;
 	uint8_t *ptr = (uint8_t *)buffer;
 	for (uint32_t i=0;i<count;++i)
 	{
 		int result = ata_read_sector(lba + i, ptr);
 		if (result < 0) return -1;/*fail early*/
 		ptr += 512;/*advance by one sector*/
+	}
+	return 0;
+}
+
+int
+ata_write_wrapper(struct block_device *d, uint64_t lba, uint32_t count, const void *buffer)
+{
+	if (!d || !buffer)
+		return -1;
+	uint8_t *ptr = (uint8_t *)buffer;
+	for (uint32_t i=0;i<count;++i)
+	{
+		int result = ata_write_sector(lba + i, ptr);
+		if (result < 0) return -1;/*aslo fail early*/
+		ptr += 512;
 	}
 	return 0;
 }
