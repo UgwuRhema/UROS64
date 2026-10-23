@@ -11,6 +11,7 @@ blockdev_register(struct block_device *dev)
 	if (!dev)
 		return -1;
 	devices[number_of_devices++] = dev;/*surely this is a valid implementation*/
+	return 0;
 }
 
 struct block_device *

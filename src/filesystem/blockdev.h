@@ -1,5 +1,5 @@
 #ifndef BLOCKDEV_H
-#define BLOCKDEF_H
+#define BLOCKDEV_H
 
 #include <stdint.h>
 
