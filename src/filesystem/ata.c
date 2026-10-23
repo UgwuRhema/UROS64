@@ -134,9 +134,9 @@ ata_write_wrapper(struct block_device *d, uint64_t lba, uint32_t count, const vo
 
 /*returns 1 if a drive is successfully detected and 0 is not or errored*/
 int
-ata_identify_slave(void)
+ata_identify(void)
 {
-	outb(ATA_PRIMARY_DRIVE, ATA_DRIVE_SLAVE);/*select the primary slave drive*/
+	outb(ATA_PRIMARY_DRIVE, ATA_DRIVE_MASTER);/*select the primary slave drive*/
 	outb(ATA_PRIMARY_SECCOUNT, 0x00);
 	outb(ATA_PRIMARY_LBA_LOW, 0x00);
 	outb(ATA_PRIMARY_LBA_MID, 0x00);
