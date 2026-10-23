@@ -78,7 +78,7 @@ execute_command(const char *cmd)
     } else if (strcmp(cmd, "vols") == 0) {
 		/*this is a rip-off vols command, i just added this so i could test*/
 		/*ata_identify_slave that's all, will improve later on!*/
-		int another_drive = ata_identify_slave();
+		int another_drive = ata_identify();
 		if (another_drive == 0)
 			kp_log("(DRV)No external drive detected. ", NOT_DONE);
 	} else if (strcmp(cmd, "vreboot") == 0){
