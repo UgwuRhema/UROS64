@@ -2,6 +2,7 @@
 #define BLOCKDEV_H
 
 #include <stdint.h>
+#include <stddef.h>
 
 struct block_device
 {

@@ -2,6 +2,7 @@
 #include "../vga/vga.h"
 #include "blockdev.h"
 #include <stdint.h>
+#include <stddef.h>
 
 #define ATA_PRIMARY_DATA 0x1f0
 #define ATA_PRIMARY_ERR 0x1f1
