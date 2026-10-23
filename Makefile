@@ -43,6 +43,8 @@ HEAP := ./src/memory/heap.c
 HEAP_O := ./src/memory/heap.o
 ATA := ./src/filesystem/ata.c
 ATA_O := ./src/filesystem/ata.o
+BDEV := ./src/filesystem/blockdev.c
+BDEV_O := ./src/filesystem/blockdev.o
 
 IMG := uros.img
 
@@ -73,8 +75,9 @@ kernel:
 	$(CC) $(CFLAGS) -o $(VMM_O) $(VMM)
 	$(CC) $(CFLAGS) -o $(HEAP_O) $(HEAP)
 	$(CC) $(CFLAGS) -o $(ATA_O) $(ATA)
+	$(CC) $(CFLAGS) -o $(BDEV_O) $(BDEV)
 	$(LD) $(LDFLAGS) -T $(LINK) -o $(KER) $(KE_O) $(K_O) $(VGA_O) $(FUNC_O) $(INT_O) $(HAND_O) \
-	$(APIC_O) $(SHELL_O) $(MOUSE_O) $(PMM_O) $(SOUND_O) $(VMM_O) $(HEAP_O) $(ATA_O)
+	$(APIC_O) $(SHELL_O) $(MOUSE_O) $(PMM_O) $(SOUND_O) $(VMM_O) $(HEAP_O) $(ATA_O) $(BDEV_O)
 	objcopy -O binary $(KER) $(KERN)
 	cp $(KER) ./debug
 	rm -rf $(KER)
