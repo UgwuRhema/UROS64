@@ -1,4 +1,5 @@
 #include "ata.h"
+#include "blockdev.h"
 #include <stdint.h>
 
 static void 
@@ -11,7 +12,22 @@ ata_io_delay(void)
 	inb(0x3f6); /* 100ns each */
 }
 
+/*i think we need a new struct for the primary master drive*/
+
 static uint8_t ata_drive_select = ATA_DRIVE_MASTER;
+static struct block_device ata_primary_dev;
+
+struct block_device *
+primary_create(void)
+{
+	ata_primary_dev.name = "ata0";
+	ata_primary_dev.sector_size = 512;/*each sector size*/
+	ata_primary_dev.sector_count = 20480;/*hardcode for now, 10MiB*/
+	ata_primary_dev.read = &ata_read_wrapper;
+	//ata_primary_dev.write = &ata_write_wrapper;
+	blockdev_register(&ata_primary_dev);
+	return &ata_primary_dev;
+}
 
 int
 ata_read_sector(uint32_t lba, uint8_t *buffer)
@@ -84,6 +100,19 @@ ata_write_sector(uint32_t lba, uint8_t *buffer)
     outb(ATA_PRIMARY_COMMAND, CACHE_FLUSH); /*flush the cache*/
     while ((inb(ATA_PRIMARY_STATUS) & ATA_STATUS_BSY));
     return 0; /*success*/
+}
+
+int
+ata_read_wrapper(struct block_device *d, uint64_t lba, uint32_t count, void *buffer)
+{
+	uint8_t *ptr = (uint8_t *)buffer;
+	for (uint32_t i=0;i<count;++i)
+	{
+		int result = ata_read_sector(lba + i, ptr);
+		if (result < 0) return -1;/*fail early*/
+		ptr += 512;/*advance by one sector*/
+	}
+	return 0;
 }
 
 /*returns 1 if a drive is successfully detected and 0 is not or errored*/

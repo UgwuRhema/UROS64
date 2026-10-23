@@ -1,5 +1,6 @@
 #include "../func/func.h"
 #include "../vga/vga.h"
+#include "blockdev.h"
 #include <stdint.h>
 
 #define ATA_PRIMARY_DATA 0x1f0
@@ -21,4 +22,6 @@
 
 extern int ata_read_sector(uint32_t, uint8_t *); /* first arg is LBA Sector, second is buffer */
 extern int ata_write_sector(uint32_t, uint8_t *);
+extern int ata_read_wrapper(struct block_device *, uint64_t, uint32_t, void *);
 extern int ata_identify_slave(void); /*ATA Drive controller communication*/
+extern struct block_device *primary_create();
