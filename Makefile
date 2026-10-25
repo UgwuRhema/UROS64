@@ -124,7 +124,7 @@ q:
 		-boot order=a \
 		-drive format=raw,file=$(IMG),if=ide \
 		-m 512M \
-		-smp 4,cores=2 \
+		-smp 4 \
 		-cpu Nehalem \
 		-machine pc,pcspk-audiodev=snd0 \
 		-audiodev alsa,id=snd0 \
