@@ -125,7 +125,7 @@ q:
 		-drive format=raw,file=$(IMG),if=ide \
 		-m 512M \
 		-smp 4,cores=2 \
-		-cpu Opteron_G2 \
+		-cpu Nehalem \
 		-machine pc,pcspk-audiodev=snd0 \
 		-audiodev alsa,id=snd0 \
 		-display gtk \
