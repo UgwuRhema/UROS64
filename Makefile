@@ -62,6 +62,9 @@ bloader: ./boot/boot.asm
 
 #successful compile
 
+nothfs:
+	$(CC) -Wall -Wextra -g -O0 -march=native -o $(MKFS_OUT) $(MKFS)
+
 kernel:
 	$(AS) $(ASF2) -o $(KE_O) $(KE_SRC)
 	$(CC) $(CFLAGS)	-o $(K_O) $(K)

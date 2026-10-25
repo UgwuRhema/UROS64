@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
 	if (argv[1])
 		image_name = argv[1];
 	else
-		filename = "uros.img";/*default*/
+		image_name = "uros.img";/*default*/
     FILE *img = fopen(image_name, "r+b"); /*we shouldn't be defaulting to just one image*/
     if(!img){
 		fprintf(stderr, "Failed to find image %s\n", image_name);
