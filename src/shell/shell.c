@@ -73,6 +73,8 @@ execute_command(const char *cmd)
 		kprint(cpu_vendor_name, GREEN); kprint("\n", WHITE);
 		kprint(" CPU Brand Name: ", WHITE);
 		kprint(cpu_brand_name, GREEN); kprint("\n", WHITE);
+		kprint(" CPU Cores: ", WHITE);
+		kprint_num((uint64_t)get_cpu_cores(), GREEN); kprint("\n", WHITE);
         kp_log("APIC Status: LAPIC/IOAPIC Online. ", ONLINE);
         kp_log("Identity Map: 0 - 4GB (2MB Pages) ", ONLINE);
     } else if (strcmp(cmd, "vols") == 0) {
@@ -211,6 +213,11 @@ execute_command(const char *cmd)
 		kprint(vendor, GREEN); kprint("\n", WHITE);
 		kprint(" CPU Brand Name: ", WHITE);
 		kprint(brand, GREEN); kprint("\n", WHITE);
+		kprint(" CPU Cores: ", WHITE); kprint_num((uint64_t)get_cpu_cores(), GREEN);
+		kprint("\n", WHITE);
+	} else if (strcmp(cmd, "ncore") == 0){
+		kprint_num((uint64_t)get_cpu_cores(), WHITE);
+		kprint("\n", WHITE);
 	} else {
         kprint("Unknown Command: ", PURPLE);
         kprint("'", PURPLE);
