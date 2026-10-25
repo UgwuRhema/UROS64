@@ -128,7 +128,7 @@ q:
 		-cpu Opteron_G2 \
 		-machine pc,pcspk-audiodev=snd0 \
 		-audiodev alsa,id=snd0 \
-		-display gtk,gl=on \
+		-display gtk \
 		-vga std \
 		-serial stdio
 
