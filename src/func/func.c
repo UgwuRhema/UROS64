@@ -177,6 +177,23 @@ get_cpu_brand_string(char *brand)
 	brand[48] = '\0';
 }
 
+int
+get_cpu_cores()
+{
+	uint32_t eax, ebx, ecx, edx;/*useful registers*/
+	eax = 0;
+	__asm__ volatile ("cpuid" : "=a"(eax), "=b"(ebx), "=c"(ecx), "=d"(edx) : "a"(eax));
+	if (eax < 0x0b)/*if th CPU doesn't support leaf 0x0b, fallback to one core*/
+		return 1;
+	eax = 0x0b;
+	ecx = 0x1;
+	__asm__ volatile ("cpuid" : "=a"(eax), "=b"(ebx), "=c"(ecx), "=d"(edx) : "a"(eax), "c"(ecx));
+	uint32_t level_type = (ecx >> 8) & 0xff;/*verify that the returned level type is actually "Core"*/
+	if(level_type != 2)
+		return 1;
+	return (int)ebx;
+}
+
 /* just a generic default panic trigger */
 void
 panic(void)
