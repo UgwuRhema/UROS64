@@ -46,8 +46,10 @@ ATA_O := ./src/filesystem/ata.o
 BDEV := ./src/filesystem/blockdev.c
 BDEV_O := ./src/filesystem/blockdev.o
 
-IMG := uros.img
+MKFS := ./src/filesystem/mkfs.c
+MKFS_OUT := ./scripts/mkfs.nothfs 
 
+IMG := uros.img
 IMG2 := dummy.img
 
 .PHONY: bloader
