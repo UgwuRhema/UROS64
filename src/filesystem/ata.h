@@ -26,4 +26,5 @@ extern int ata_write_sector(uint32_t, uint8_t *);
 extern int ata_read_wrapper(struct block_device *, uint64_t, uint32_t, void *);
 extern int ata_write_wrapper(struct block_device *, uint64_t, uint32_t, const void *);
 extern int ata_identify(void); /*ATA Drive controller communication*/
+extern int ata_identify_slave(void);/*the slave drive(ie external hard disk)*/
 extern struct block_device *primary_create();
