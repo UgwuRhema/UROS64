@@ -17,6 +17,6 @@ nothfs_mount(struct block_device *dev)
 		return 1;
 	nothfs_root.dev = dev;
 	nothfs_root.volume_start_lba = NOTHFS_VOLUME_LBA;
-	nothfs_root.superblock = read_sblock;
+	nothfs_root.superblock = *read_sblock;
 	return 0;/*success*/
 }
