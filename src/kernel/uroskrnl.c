@@ -11,6 +11,8 @@ typedef uint64_t u64;
 #include "../shell/shell.h"
 #include "../memory/heap.h"
 #include "../filesystem/ata.h"
+#include "../filesystem/nothfs.h"
+#include "../filesystem/blockdev.h"
 
 /*
 uint64_t get_uptime_in_minutes(uint64_t timer_ticks)
@@ -82,6 +84,11 @@ uroskrnl_main_entry_point(uint32_t memory_entries_count, struct MemoryMapEntry *
 	kprint(" ATA Intial Status=", WHITE); kprint_hex((uint64_t)initial_status, PURPLE);
 	kprint("\n", WHITE);
 	kp_log("(DRV)ATA PIO Driver Subsystem ata_read_sector test success. ", DONE);
+	kprint("\n\nNOTHFS_MOUNT_TEST: ", WHITE);
+	struct block_device *dev = primary_create();
+	int mnt = nothfs_mount(dev);
+	if (mnt < 0)
+		kp_log("FAIL! MOUNT_TEST", NOT_DONE);
 	kp_log("(UTILS)Starting shell...", ONLINE);
 	sleep(900);
 	shell_init();
