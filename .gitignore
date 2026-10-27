@@ -10,3 +10,4 @@ gdb_tips.md
 boot/new_increased_page_style
 *.log
 *.elf
+scripts/mkfs.nothfs
