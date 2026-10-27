@@ -4,7 +4,7 @@
 
 struct nothfs_mount_info nothfs_root;
 
-int /*-1 on error*/
+int /*-1 on device error, 1 on signature error so we can distinguish*/
 nothfs_mount(struct block_device *dev)
 {
 	if (!dev)
@@ -14,6 +14,9 @@ nothfs_mount(struct block_device *dev)
 	dev->read(dev, NOTHFS_VOLUME_LBA, 1, buffer);
 	struct nothfs_superblock *read_sblock = (struct nothfs_superblock *)buffer;
 	if (strcmp((char *)read_sblock->signature, "NOTHFS") != 0)
-		return -1;
-	return 0;
+		return 1;
+	nothfs_root.dev = dev;
+	nothfs_root.volume_start_lba = NOTHFS_VOLUME_LBA;
+	nothfs_root.superblock = read_sblock;
+	return 0;/*success*/
 }
