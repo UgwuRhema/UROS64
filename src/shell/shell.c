@@ -3,6 +3,7 @@
 #include "../memory/vmm.h"
 #include "../memory/heap.h"
 #include "../filesystem/ata.h"
+#include "../filesystem/nothfs.h"
 
 char cmd_buf[CMD_MAX_LEN] = {0};
 size_t cmd_idx = 0;
@@ -52,7 +53,9 @@ execute_command(const char *cmd)
 		kprint("cr4=", WHITE); kprint_hex(cr4, PURPLE); kprint("\n", WHITE);
 	} else if (strcmp(cmd, "clear") == 0){
         clear_screen();
-    } else if (strcmp(cmd, "sysinfo") == 0){
+    } else if (strcmp(cmd, "disk") == 0) {
+		nothfs_test();
+	} else if (strcmp(cmd, "sysinfo") == 0){
 		uint64_t total_seconds = timer_ticks / 1000;
 		uint64_t minutes = total_seconds / 60;
 		uint64_t hours = minutes / 60;
