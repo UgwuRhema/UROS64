@@ -39,8 +39,17 @@ nothfs_test(void)
 	}
 	int mnt = nothfs_mount(disk);
 	if (mnt == 0) {
-		kprint((char *)nothfs_root.superblock.signature, PURPLE);
-		kprint_num(nothfs_root.superblock.version, PURPLE);
+		kprint("Signature: ", PURPLE);
+		kprint((char *)nothfs_root.superblock.signature, WHITE);
+		kprint("\n", WHITE);
+		kprint("Version: ", PURPLE);
+		kprint_num((uint64_t)nothfs_root.superblock.version, GREEN); kprint("\n", WHITE);
+		kprint("Unique-Id: ", PURPLE); kprint_hex(nothfs_root.superblock.unique_id, WHITE);
+		kprint("\n", WHITE);
+		kprint("Volume LBA: ", PURPLE);
+		kprint_num(nothfs_root.superblock.root_start, GREEN); kprint("\n", WHITE);
+		kprint("Sector Size: ", PURPLE);
+		kprint_num((uint64_t)nothfs_root.superblock.sector_size, GREEN); kprint("\n", WHITE);
 	} else if (mnt < 0){
 		kp_log("NULL blockdevice", NOT_DONE);
 		return;
