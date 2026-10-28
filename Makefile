@@ -92,6 +92,7 @@ kernel:
 	rm -rf $(KER)
 img:
 	qemu-img create -f raw $(IMG) 10M
+#get in!
 
 dummy:
 	qemu-img create -f raw $(IMG2) 5M
