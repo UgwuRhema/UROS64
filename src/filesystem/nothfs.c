@@ -29,7 +29,20 @@ nothfs_test(void)
 {
 	kp_log("(DRV)Drive Test", DONE);
 	struct block_device *disk = blockdev_get_primary();
-	if (nothfs_mount(disk) == 0) {
-		kprint(nothfs_root.superblock.signature, PURPLE);
+	if (!disk)
+	{
+		kp_log("NULL blockdevice", NOT_DONE);
+		return;
+	}
+	int mnt = nothfs_mount(disk);
+	if (mnt == 0) {
+		kprint((char *)nothfs_root.superblock.signature, PURPLE);
+		kprint_num(nothfs_root.superblock.version, PURPLE);
+	} else if (mnt < 0){
+		kp_log("NULL blockdevice", NOT_DONE);
+		return;
+	} else {
+		kp_log("Disk is not formatted to NothFS, Signatures don't match", NOT_DONE);
+		return;
 	}
 }
