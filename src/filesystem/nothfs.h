@@ -29,6 +29,6 @@ struct nothfs_mount_info {
 
 extern struct nothfs_mount_info nothfs_root;
 extern int nothfs_mount(struct block_device *);
-void nothfs_test(void);
+extern void nothfs_test(void);
 
 #endif

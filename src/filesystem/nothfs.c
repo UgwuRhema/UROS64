@@ -22,3 +22,11 @@ nothfs_mount(struct block_device *dev)
 	nothfs_root.superblock = sb;
 	return 0;/*success*/
 }
+
+void
+nothfs_test(void)
+{
+	kp_log("(DRV)Drive Test", DONE);
+	struct nothfs_superblock sb = nothfs_root.superblock;
+	kprint((char *)sb.signature, WHITE);
+}
