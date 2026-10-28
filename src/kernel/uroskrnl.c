@@ -90,6 +90,8 @@ uroskrnl_main_entry_point(uint32_t memory_entries_count, struct MemoryMapEntry *
 	int mnt = nothfs_mount(ata);
 	if (mnt < 0)
 		kp_log("(DRV)Block Device failed to initialize. ", NOT_DONE);
+	kp_log("(NOTHFS)NothFS Online. Volume 256 Format->NothFS. ", DONE);
+	kp_log("(NOTHFS)Mount Successful. ", DONE);
 	kp_log("(UTILS)Starting shell...", ONLINE);
 	sleep(900);
 	shell_init();
