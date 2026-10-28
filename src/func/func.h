@@ -16,6 +16,7 @@ extern u8 inb(u16);
 extern void outw(u16, u16);
 extern u16 inw(u16);
 extern void memset(void *, u8, u32);
+extern void *memcpy(void *, const void *, size_t);
 extern void wrmsr(u32, u64);
 extern u64 rdmsr(u32);
 extern int strcmp(const char *, const char *);
