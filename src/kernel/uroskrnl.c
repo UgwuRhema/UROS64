@@ -85,7 +85,7 @@ uroskrnl_main_entry_point(uint32_t memory_entries_count, struct MemoryMapEntry *
 	kprint("\n", WHITE);
 	kp_log("(DRV)ATA PIO Driver Subsystem ata_read_sector test success. ", DONE);
 	struct block_device *ata = primary_create();/*create the block device*/
-	blockdevice_regitster(ata);/*and register it to the list of block devices*/
+	blockdev_register(ata);/*and register it to the list of block devices*/
 	kp_log("(DRV)ATA BlockDevice Created and Registered. ", DONE);
 	kp_log("(UTILS)Starting shell...", ONLINE);
 	sleep(900);
