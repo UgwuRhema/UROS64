@@ -21,7 +21,7 @@ struct nothfs_superblock {
 
 int main(int argc, char *argv[]) {
 	char *image_name;/*general*/
-	if (argv[1])
+	if (argc > 1)
 		image_name = argv[1];
 	else
 		image_name = "uros.img";/*default*/
@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
     fseek(img, VOLUME_START_LBA * SECTOR_SIZE, SEEK_SET);
     struct nothfs_superblock sb;/*the superblock struct*/
     memset(&sb, 0, sizeof(sb));
-    memcpy(sb.signature, "NOTHFS\0", 8);/*label signature*/
+    memcpy(sb.signature, "NOTHFS", 6);/*label signature*/
     sb.version = 1;
     sb.sector_size = SECTOR_SIZE;/*each sector size*/
     sb.total_sectors = (10 * 1024 * 1024 / 512) - VOLUME_START_LBA; 
