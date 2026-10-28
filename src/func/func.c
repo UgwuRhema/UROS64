@@ -43,7 +43,7 @@ memset(void *dest, u8 val, u32 len)
 }
 
 __attribute__((optimize("no-tree-loop-distribute-patterns")))
-void *memcpy(void *dest, const void *src, size_t n)
+void *memcpy(void * restrict dest, const void * restrict src, size_t n)
 {
     uint8_t       *d = (uint8_t *)dest;
     const uint8_t *s = (const uint8_t *)src;

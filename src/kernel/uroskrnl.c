@@ -84,15 +84,6 @@ uroskrnl_main_entry_point(uint32_t memory_entries_count, struct MemoryMapEntry *
 	kprint(" ATA Intial Status=", WHITE); kprint_hex((uint64_t)initial_status, PURPLE);
 	kprint("\n", WHITE);
 	kp_log("(DRV)ATA PIO Driver Subsystem ata_read_sector test success. ", DONE);
-	kprint("NOTHFS_MOUNT_TEST: ", WHITE);
-	struct block_device *dev = primary_create();
-	int mnt = nothfs_mount(dev);
-	if (mnt < 0)
-		kp_log("FAIL! MOUNT_TEST", NOT_DONE);
-	else {
-		kp_log("Read Success", DONE);
-		kprint_num(mnt, GREEN);
-	}
 	kp_log("(UTILS)Starting shell...", ONLINE);
 	sleep(900);
 	shell_init();
