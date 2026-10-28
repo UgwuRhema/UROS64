@@ -16,7 +16,8 @@ nothfs_mount(struct block_device *dev)
 		return -1;
 	struct nothfs_superblock sb;
 	/*since the superblock was written to LBA256*/
-	dev->read(dev, NOTHFS_VOLUME_LBA, 1, (uint8_t *)&sb);
+	if (dev->read(dev, NOTHFS_VOLUME_LBA, 1, (uint8_t *)&sb) != 0)
+		return -1;
 	if (strcmp((char *)sb.signature, "NOTHFS") != 0)
 		return 1;
 	nothfs_root.dev = dev;
