@@ -7,6 +7,23 @@
 #define NOTHFS_MAGIC "NOTHFS\0"
 #define NOTHFS_VOLUME_LBA 256
 
+#define NOTHFS_DIRENT_SIZE 64
+#define NOTHFS_NAME_LEN 38
+
+#define NOTHFS_ATTR_DIR (1 << 0)
+#define NOTHFS_ATTR_CONTIG (1 << 1)
+#define NOTHFS_ATTR_DELETED (1 << 2)
+
+struct nothfs_dirent
+{
+	uint16_t attr;
+	uint8_t name[NOTHFS_NAME_LEN];/*null terminated filename*/
+	uint64_t clus;/*starting sector*/
+	uint64_t size;
+	uint64_t datetime;
+	uint8_t reserved[8];/*padding*/
+} __attribute__((packed));
+
 /*we match the exact one used in mkfs.nothfs*/
 struct nothfs_superblock {
 	uint8_t signature[8];
@@ -30,5 +47,6 @@ struct nothfs_mount_info {
 extern struct nothfs_mount_info nothfs_root;
 extern int nothfs_mount(struct block_device *);
 extern void nothfs_test(void);
+extern int nothfs_readdir(void);
 
 #endif

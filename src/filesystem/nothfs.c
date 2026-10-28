@@ -3,6 +3,7 @@
 #include "../vga/vga.h"
 #include "blockdev.h"
 #include "ata.h"
+#include "../memory/heap.h"
 
 struct nothfs_mount_info nothfs_root;
 
@@ -58,4 +59,34 @@ nothfs_test(void)
 		kp_log("Disk is not formatted to NothFS, Signatures don't match", NOT_DONE);
 		return;
 	}
+}
+
+/*returns no of files/directories found or -1 on error*/
+int
+nothfs_readdir(void)
+{
+	struct nothfs_dirent *dirent;
+	uint64_t current_lba = nothfs_root.volume_start_lba + nothfs_root.superblock.root_start;
+	int file_count = 0;
+	/*read the first sector of the root directory into  a 512byte buffer*/
+	uint8_t *buffer = kmalloc(512);
+	if (nothfs_root.dev->read(nothfs_root.dev, current_lba, 1, buffer) != 0){
+		return -1;
+	}
+	dirent = (struct nothfs_dirent *)buffer;
+	for (int i = 0; i < 8; ++i)
+	{
+		if (dirent[i].attr == 0)/*if attr is 0, it's an empty slot. EOD*/
+			break;
+		if (dirent[i].attr & NOTHFS_ATTR_DELETED)
+			continue;
+		/*just a debug*/
+		kprint(" [FILE] ", WHITE);
+		kprint((char *)dirent[i].name, GREEN);
+		kprint(" (", WHITE);
+		kprint_num(dirent[i].size, GREEN);
+		kprint(" bytes)\n", WHITE);
+		file_count++;
+	}
+	return file_count;
 }
