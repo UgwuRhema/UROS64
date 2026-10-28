@@ -17,7 +17,7 @@ struct nothfs_superblock {
 	uint64_t bitmap_sectors;
 	uint64_t root_start;/*rel to volume start*/
 	uint64_t unique_id;
-	uint8_t reserved[462];/*padding*/
+	uint8_t reserved[512 - 56];/*padding*/
 } __attribute__((packed));
 
 /*tracker*/
