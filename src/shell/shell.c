@@ -81,6 +81,7 @@ execute_command(const char *cmd)
 		/*this is a rip-off vols command, i just added this so i could test*/
 		/*ata_identify_slave that's all, will improve later on!*/
 		int main_drive = ata_identify();
+		(void)main_drive;
 		int another_drive = ata_identify_slave();
 		if (another_drive == 0)
 			kp_log("(DRV)No external drive detected. ", NOT_DONE);

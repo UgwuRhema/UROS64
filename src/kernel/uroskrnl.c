@@ -84,7 +84,6 @@ uroskrnl_main_entry_point(uint32_t memory_entries_count, struct MemoryMapEntry *
 	kprint(" ATA Intial Status=", WHITE); kprint_hex((uint64_t)initial_status, PURPLE);
 	kprint("\n", WHITE);
 	kp_log("(DRV)ATA PIO Driver Subsystem ata_read_sector test success. ", DONE);
-	nothfs_test();
 	kp_log("(UTILS)Starting shell...", ONLINE);
 	sleep(900);
 	shell_init();
