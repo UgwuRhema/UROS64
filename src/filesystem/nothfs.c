@@ -12,14 +12,13 @@ nothfs_mount(struct block_device *dev)
 {
 	if (!dev)
 		return -1;
-	uint8_t buffer[512];
+	struct nothfs_superblock sb;
 	/*since the superblock was written to LBA256*/
-	dev->read(dev, NOTHFS_VOLUME_LBA, 1, buffer);
-	struct nothfs_superblock *read_sblock = (struct nothfs_superblock *)buffer;
-	if (strcmp((char *)read_sblock->signature, "NOTHFS") != 0)
+	dev->read(dev, NOTHFS_VOLUME_LBA, 1, (uint8_t *)&sb);
+	if (strcmp((char *)sb.signature, "NOTHFS") != 0)
 		return 1;
 	nothfs_root.dev = dev;
 	nothfs_root.volume_start_lba = NOTHFS_VOLUME_LBA;
-	nothfs_root.superblock = memcpy();
+	nothfs_root.superblock = sb;
 	return 0;/*success*/
 }
