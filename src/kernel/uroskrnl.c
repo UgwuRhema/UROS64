@@ -87,6 +87,9 @@ uroskrnl_main_entry_point(uint32_t memory_entries_count, struct MemoryMapEntry *
 	struct block_device *ata = primary_create();/*create the block device*/
 	blockdev_register(ata);/*and register it to the list of block devices*/
 	kp_log("(DRV)ATA BlockDevice Created and Registered. ", DONE);
+	int mnt = nothfs_mount(ata);
+	if (mnt < 0)
+		kp_log("(DRV)Block Device failed to initialize. ", NOT_DONE);
 	kp_log("(UTILS)Starting shell...", ONLINE);
 	sleep(900);
 	shell_init();
