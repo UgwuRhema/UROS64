@@ -4,6 +4,9 @@
 
 struct nothfs_mount_info nothfs_root;
 
+_Static_assert(sizeof(struct nothfs_superblock) <= 512,
+               "nothfs superblock must fit in one sector");
+
 int /*-1 on device error, 1 on signature error so we can distinguish*/
 nothfs_mount(struct block_device *dev)
 {
@@ -17,6 +20,6 @@ nothfs_mount(struct block_device *dev)
 		return 1;
 	nothfs_root.dev = dev;
 	nothfs_root.volume_start_lba = NOTHFS_VOLUME_LBA;
-	nothfs_root.superblock = *read_sblock;
+	nothfs_root.superblock = memcpy();
 	return 0;/*success*/
 }
