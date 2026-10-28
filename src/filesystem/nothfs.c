@@ -29,8 +29,8 @@ void
 nothfs_test(void)
 {
 	kp_log("(DRV)Drive Test", DONE);
-	struct block_device *ata = primary_create();
-	blockdev_register(ata);
+	//struct block_device *ata = primary_create();
+	//blockdev_register(ata);
 	struct block_device *disk = blockdev_get_primary();
 	if (!disk)
 	{
