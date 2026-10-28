@@ -1,6 +1,7 @@
 #include "nothfs.h"
 #include "../func/func.h"
 #include "../vga/vga.h"
+#include "blockdev.h"
 
 struct nothfs_mount_info nothfs_root;
 
@@ -27,6 +28,8 @@ void
 nothfs_test(void)
 {
 	kp_log("(DRV)Drive Test", DONE);
+	struct block_device *main = blockdev_get_primary();
+	int mnt = nothfs_mount(main);
 	struct nothfs_superblock sb = nothfs_root.superblock;
 	kprint((char *)sb.signature, WHITE);
 }
