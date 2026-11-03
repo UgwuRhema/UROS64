@@ -95,7 +95,8 @@ void
 fake_nothfs_dirent_test(void)
 {
 	struct nothfs_dirent dummy;
-	uint64_t current_lba = nothfs_root.volume_start_lba + nothfs_root.superblock.root_start;/*262*/
+	uint32_t current_lba = (uint32_t)(nothfs_root.volume_start_lba + nothfs_root.superblock.root_start);/*262*/
+	kprint_num((uint64_t)current_lba, WHITE);
 	memset(&dummy, 0, sizeof(dummy));
 	dummy.attr = NOTHFS_ATTR_CONTIG;
 	kstrcpy((char *)dummy.name, "hello.txt");
