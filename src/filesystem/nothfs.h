@@ -21,7 +21,7 @@ struct nothfs_dirent
 	uint64_t clus;/*starting sector*/
 	uint64_t size;
 	uint64_t datetime;
-	uint8_t reserved[8];/*padding*/
+	/*already packed*/
 } __attribute__((packed));
 
 /*we match the exact one used in mkfs.nothfs*/
