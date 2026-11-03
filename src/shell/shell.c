@@ -231,7 +231,14 @@ execute_command(const char *cmd)
 		}
 	} else if (strcmp(cmd, "halt") == 0) {
 		kprint("Are you sure you want to halt the CPU (y/n)? ", WHITE);
-		char response = buffer_pop();
+		char response = 0;
+		while (response == 0)
+		{
+			__asm__ volatile ("hlt"); /*rest the CPU*/
+			response = buffer_pop(); /*probe for input*/
+		}
+		kprint_c(response, GREEN);
+		kprint("\n", WHITE);
 		if (response == 'y')
 		{
 			kp_log("(SYS)Halting... ", DONE);
