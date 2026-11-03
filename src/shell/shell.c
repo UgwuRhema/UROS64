@@ -229,6 +229,8 @@ execute_command(const char *cmd)
 			kfree((void *)addr);
 			kprint("Memory region ", WHITE); kprint_hex(addr, WHITE); kprint(" freed\n", WHITE);
 		}
+	} else if (strcmp(cmd, "dirent_test") == 0) {
+		fake_nothfs_dirent_test();
 	} else if (strcmp(cmd,"cpuinfo") == 0){
 		char vendor[12];
 		char brand[49];
