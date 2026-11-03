@@ -37,6 +37,7 @@ ata_read_sector(uint32_t lba, uint8_t *buffer)
     if (!buffer) return -1;
 	/* send bits 24-27 of lba along with drive identifier */
 	outb(ATA_PRIMARY_DRIVE, ata_drive_select | ((lba >> 24) & 0x0f));
+	ata_io_delay();
 	outb(ATA_PRIMARY_SECCOUNT, 1); /* 1 sector at a time.. */
 	/* send the remaining LBA bytes sequentially accross ports */
 	outb(ATA_PRIMARY_LBA_LOW, (uint8_t)lba);
@@ -85,9 +86,11 @@ ata_write_sector(uint32_t lba, uint8_t *buffer)
     uint8_t status = inb(ATA_PRIMARY_STATUS);
     while ((status & ATA_STATUS_BSY) && --timeout); /* wait for drive to not be busy */
     if (!timeout)
-        return 1;
+        return -1;
     outb(ATA_PRIMARY_DRIVE, ata_drive_select | ((lba >> 24) & 0x0f));
-    outb(ATA_PRIMARY_LBA_LOW, (uint8_t)lba); /* send the remaining LBA bytes */
+    ata_io_delay();
+	outb(ATA_PRIMARY_SECCOUNT, 1);/*1 sector*/
+	outb(ATA_PRIMARY_LBA_LOW, (uint8_t)lba); /* send the remaining LBA bytes */
     outb(ATA_PRIMARY_LBA_MID, (uint8_t)(lba >> 8));
     outb(ATA_PRIMARY_LBA_HIGH, (uint8_t)(lba >> 16));
     outb(ATA_PRIMARY_COMMAND, ATA_CMD_WRITE_PIO); /* issue the ATA PIO write command */
@@ -100,7 +103,9 @@ ata_write_sector(uint32_t lba, uint8_t *buffer)
         outw(ATA_PRIMARY_DATA, ptr[i]);
     #define CACHE_FLUSH 0xe7
     outb(ATA_PRIMARY_COMMAND, CACHE_FLUSH); /*flush the cache*/
-    while ((inb(ATA_PRIMARY_STATUS) & ATA_STATUS_BSY));
+    uint32_t timeout3 = 1000000;
+	while ((inb(ATA_PRIMARY_STATUS) & ATA_STATUS_BSY) && --timeout3);
+   if (!timeout3) return -1;
     return 0; /*success*/
 }
 
