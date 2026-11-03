@@ -241,12 +241,12 @@ execute_command(const char *cmd)
 		kprint("\n", WHITE);
 		if (response == 'y')
 		{
-			kp_log("(SYS)Halting... ", DONE);
+			kp_log("(SYS)Halt. ", DONE);
 			__asm__ volatile ("cli");
 			while (1)
 				__asm__ volatile ("hlt");
 		} else if (response == 'n'){
-			kprint("\n", WHITE);
+			//nothing
 		} else {
 			kprint("Invalid Response! \n", PURPLE);
 		}
