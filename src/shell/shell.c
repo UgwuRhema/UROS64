@@ -185,7 +185,27 @@ execute_command(const char *cmd)
             kp_log("(DRV)ATA PIO Driver LBA Sector write success. ", DONE);
             kfree((void *)buffer);
         }
-    } else if (strncmp(cmd, "tmp_alloc ", 10) == 0){
+    } else if (strncmp(cmd, "mkfs.nothfs ", 12) == 0) {
+		uint32_t lba = (uint32_t)string_to_int(&cmd[12]);
+		struct nothfs_superblock sb;
+		memset(&sb, 0, sizeof(sb));
+		memcpy(sb.signature, "NOTHFS", 6);/*label signature*/
+		sb.version = 1;
+		sb.sector_size = 512;
+		sb.total_sectors = (10 * 1024 * 1024 / 512) - lba;
+		sb.bitmap_start = 1;
+		sb.bitmap_sectors = 5;
+		sb.root_start = 1 + sb.bitmap_sectors;
+		sb.unique_id = 0xdeadbeef;
+		/*now we call ata_write_sector*/
+		int write = ata_write_sector(lba, (uint8_t *)sb);
+		if (write < 0)
+			kp_log("(DRV)ATA PIO Driver LBA Sector write fail. ", NOT_DONE);
+		else if (write > 0)
+			kp_log("(DRV)ATA PIO Driver timeout during Status polling. ", NOT_DONE);
+		else
+			kp_log("(DRV)ATA PIO Driver LBA Sector write success. ", DONE);
+	} else if (strncmp(cmd, "tmp_alloc ", 10) == 0){
 		const char *val = &cmd[10];
 		if (!val || *val == ' ')
 			kprint("Usage: tmp_alloc <bytes>\n", BLUE);
