@@ -71,6 +71,7 @@ nothfs_readdir(void)
 	/*read the first sector of the root directory into  a 512byte buffer*/
 	uint8_t *buffer = kmalloc(512);
 	if (nothfs_root.dev->read(nothfs_root.dev, current_lba, 1, buffer) != 0){
+		kfree(buffer);
 		return -1;
 	}
 	dirent = (struct nothfs_dirent *)buffer;
@@ -88,21 +89,23 @@ nothfs_readdir(void)
 		kprint(" bytes)\n", WHITE);
 		file_count++;
 	}
+	kfree(buffer);
 	return file_count;
 }
 
 void
 fake_nothfs_dirent_test(void)
 {
-	struct nothfs_dirent dummy;
+	uint8_t buffer[512];
+	memset(buffer, 0, 512);
+	struct nothfs_dirent *dummy = (struct nothfs_dirent *)buffer;
 	uint32_t current_lba = (uint32_t)(nothfs_root.volume_start_lba + nothfs_root.superblock.root_start);/*262*/
 	kprint_num((uint64_t)current_lba, WHITE);
-	memset(&dummy, 0, sizeof(dummy));
-	dummy.attr = NOTHFS_ATTR_CONTIG;
-	kstrcpy((char *)dummy.name, "hello.txt");
-	dummy.clus = 10;
-	dummy.size = 1024;
-	int a = ata_write_sector(current_lba, (uint8_t *)&dummy);
+	dummy->attr = NOTHFS_ATTR_CONTIG;
+	kstrcpy((char *)dummy->name, "hello.txt");
+	dummy->clus = 10;
+	dummy->size = 1024;
+	int a = nothfs_root.dev->write(nothfs_root.dev, current_lba, 1, (uint8_t *)dummy);
 	if (a != 0)
 		kp_log("Fake-nothfs_dirent_test_fail. ", NOT_DONE);
 }
