@@ -198,7 +198,7 @@ execute_command(const char *cmd)
 		sb.root_start = 1 + sb.bitmap_sectors;
 		sb.unique_id = 0xdeadbeef;
 		/*now we call ata_write_sector*/
-		int write = ata_write_sector(lba, (uint8_t *)sb);
+		int write = ata_write_sector(lba, (uint8_t *)&sb);
 		if (write < 0)
 			kp_log("(DRV)ATA PIO Driver LBA Sector write fail. ", NOT_DONE);
 		else if (write > 0)
