@@ -175,7 +175,7 @@ execute_command(const char *cmd)
         const char *val = &cmd[10];
         uint32_t lba = (uint32_t)string_to_int(val);
         uint8_t *buffer = (uint8_t *)kmalloc(512);/*this is the buffer that will be written at the give lba*/
-        kstrcpy((char *)buffer, "hlt");
+        kstrcpy((char *)buffer, "Iifeffhedhe3fiuebfebfewfjbfewjfjewfwfwhfewjfhbfe3bcurebfewbfjewbfuhbfiufewifnewihf");
         int write = ata_write_sector(lba, buffer);
         if (write < 0)
             kp_log("(DRV)ATA PIO Driver LBA Sector write fail. ", NOT_DONE);
