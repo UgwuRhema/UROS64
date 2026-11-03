@@ -306,7 +306,6 @@ buffer_pop(void)
     /* check buffer bounds */
     if (buffer_head == buffer_tail)
         return 0;
-
     char c = key_buffer[buffer_tail];
     buffer_tail = (buffer_tail + 1) % _BUFFER_SIZE;
     return c;

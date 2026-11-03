@@ -229,6 +229,20 @@ execute_command(const char *cmd)
 			kfree((void *)addr);
 			kprint("Memory region ", WHITE); kprint_hex(addr, WHITE); kprint(" freed\n", WHITE);
 		}
+	} else if (strcmp(cmd, "halt") == 0) {
+		kprint("Are you sure you want to halt the CPU (y/n)? ", WHITE);
+		char response = buffer_pop();
+		if (response == 'y')
+		{
+			kp_log("(SYS)Halting... ", DONE);
+			__asm__ volatile ("cli");
+			while (1)
+				__asm__ volatile ("hlt");
+		} else if (response == 'n'){
+			kprint("\n", WHITE);
+		} else {
+			kprint("Invalid Response! \n", PURPLE);
+		}
 	} else if (strcmp(cmd, "dirent_test") == 0) {
 		fake_nothfs_dirent_test();
 	} else if (strcmp(cmd,"cpuinfo") == 0){
