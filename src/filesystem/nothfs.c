@@ -90,3 +90,18 @@ nothfs_readdir(void)
 	}
 	return file_count;
 }
+
+void
+fake_nothfs_dirent_test(void)
+{
+	struct nothfs_dirent dummy;
+	uint64_t current_lba = nothfs_root.volume_start_lba + nothfs_root.superblock.root_start;/*262*/
+	memset(&dummy, 0, sizeof(dummy));
+	dummy.attr = NOTHFS_ATTR_CONTIG;
+	kstrcpy((char *)dummy.name, "hello.txt");
+	dummy.clus = 10;
+	dummy.size = 1024;
+	int a = ata_write_sector(current_lba, (uint8_t *)&dummy);
+	if (a != 0)
+		kp_log("Fake-nothfs_dirent_test_fail. ", NOT_DONE);
+}
