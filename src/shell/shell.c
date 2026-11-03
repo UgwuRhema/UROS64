@@ -245,10 +245,7 @@ execute_command(const char *cmd)
 	} else if (strcmp(cmd, "finddir") == 0){
 		/*this is a minimal test for finddir*/
 		int dir = nothfs_readdir();
-		if (dir == 0)
-			kp_log("Success!", DONE);
-		else
-			kp_log("Nothfs_finddir Failure!", NOT_DONE);
+		kprint("File Count: ", WHITE); kprint_num(dir, PURPLE); kprint("\n", WHITE);
 	} else if (strcmp(cmd, "ncore") == 0){
 		kprint_num((uint64_t)get_cpu_cores(), WHITE);
 		kprint("\n", WHITE);
