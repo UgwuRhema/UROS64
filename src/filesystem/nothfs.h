@@ -46,6 +46,7 @@ struct nothfs_mount_info_t {
 };
 
 extern struct nothfs_mount_info_t nothfs_root;
+extern struct vfs_ops_t nothfs_ops;
 extern int nothfs_mount(struct block_device *);
 extern void nothfs_test(void);
 extern int nothfs_readdir(void);

@@ -7,7 +7,7 @@ struct vfs_ops_t
 {
 	int (*read)(struct vfs_file_t *, void *, uint64_t); /*read data from a file*/
 	/*find a file by name and return a new node if found*/
-	struct vfs_node_t *(*lookup)(struct vfs_file_t *, const char *);
+	struct vfs_node_t *(*lookup)(struct vfs_node_t *, const char *);
 };
 
 /*generic inode*/

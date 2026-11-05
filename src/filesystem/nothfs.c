@@ -6,6 +6,10 @@
 #include "../memory/heap.h"
 
 struct nothfs_mount_info_t nothfs_root;
+struct vfs_ops_t nothfs_ops = {
+	.lookup = &nothfs_lookup,
+	.read = &nothfs_read
+};
 
 _Static_assert(sizeof(struct nothfs_superblock) <= 512,
                "nothfs superblock must fit in one sector");
@@ -113,9 +117,12 @@ fake_nothfs_dirent_test(void)
 int
 nothfs_read(struct vfs_file_t *file, void *buffer, uint64_t size)
 {
-
+	if (!file || !buffer) return -1;
+	uint64_t starting_clus = (uint64_t)file->node->fs_data; /*we get the starting cluster that we saved*/
+	
 }
 
+/*this is very simple*/
 struct vfs_node_t *
 nothfs_lookup(struct vfs_node_t *dir, const char *name)
 {
@@ -137,11 +144,13 @@ nothfs_lookup(struct vfs_node_t *dir, const char *name)
 			continue;
 		if(strcmp(dirent[i].attr, name) == 0)
 		{
+			/*we now make a new vfs_node_t*/
 			struct vfs_node_t *nnode = (struct vfs_node_t *)kmalloc(sizeof(struct vfs_node_t));
 			if (!nnode) return NULL;
 			nnode->size = dirent.size;
-			nnode->ops = NULL;
+			nnode->ops = &nothfs_ops;
 			nnode->fs_data = (void *)(uintptr_t)dirent.clus;/*we save starting NothFS sector*/
+			kfree(buffer);
 			return nnode;
 		}
 	}
