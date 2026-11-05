@@ -25,7 +25,7 @@ uint64_t get_uptime_in_minutes(uint64_t timer_ticks)
 */
 
 void
-uroskrnl_main_entry_point(uint32_t memory_entries_count, struct MemoryMapEntry *mmap_entries)
+uroskrnl_main_entry_point(uint32_t memory_entries_count, struct MemoryMapEntry_t *mmap_entries)
 {
 	/* enable_pit(1000); */
 	idt_init();

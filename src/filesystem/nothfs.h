@@ -38,13 +38,13 @@ struct nothfs_superblock {
 } __attribute__((packed));
 
 /*tracker*/
-struct nothfs_mount_info {
+struct nothfs_mount_info_t {
 	struct block_device *dev;
 	uint64_t volume_start_lba;
 	struct nothfs_superblock superblock;
 };
 
-extern struct nothfs_mount_info nothfs_root;
+extern struct nothfs_mount_info_t nothfs_root;
 extern int nothfs_mount(struct block_device *);
 extern void nothfs_test(void);
 extern int nothfs_readdir(void);

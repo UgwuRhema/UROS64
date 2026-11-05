@@ -9,14 +9,14 @@
 #define TOTAL_PAGES (MAX_PHYS_ADDR / PAGE_SIZE)
 #define BITMAP_SIZE (TOTAL_PAGES / 8)
 
-struct MemoryMapEntry {
+struct MemoryMapEntry_t {
     uint64_t base_address;
     uint64_t length;
     uint32_t type;
     uint32_t acpi;
 } __attribute__((packed));
 
-void pmm_init(uint32_t, struct MemoryMapEntry *);
+void pmm_init(uint32_t, struct MemoryMapEntry_t *);
 void *pmm_alloc(void);
 void pmm_free(void *);
 void pmm_dump_stats(void);

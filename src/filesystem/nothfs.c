@@ -5,7 +5,7 @@
 #include "ata.h"
 #include "../memory/heap.h"
 
-struct nothfs_mount_info nothfs_root;
+struct nothfs_mount_info_t nothfs_root;
 
 _Static_assert(sizeof(struct nothfs_superblock) <= 512,
                "nothfs superblock must fit in one sector");

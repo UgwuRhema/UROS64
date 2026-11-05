@@ -14,12 +14,12 @@ extern char __kernel_start[];
 extern char __kernel_end[];
 
 static uint64_t free_pages = 0;
-static struct MemoryMapEntry *smap_saved = NULL;
+static struct MemoryMapEntry_t *smap_saved = NULL;
 static uint32_t smap_saved_count = 0;
 static uint64_t pmm_canary = 0xdeadbeef;
 
 void
-pmm_init(uint32_t count, struct MemoryMapEntry *entries)
+pmm_init(uint32_t count, struct MemoryMapEntry_t *entries)
 {
 	kprint("pmm_init: count=", WHITE); kprint_num(count, WHITE);
 	kprint(" entries=", WHITE); kprint_hex((uint64_t)entries, WHITE);
@@ -199,7 +199,7 @@ pmm_dump_map(void)
     kprint(" usable):\n", WHITE);
 
     for (uint32_t i = 0; i < smap_saved_count; ++i) {
-        struct MemoryMapEntry *e = &smap_saved[i];
+        struct MemoryMapEntry_t *e = &smap_saved[i];
 
         if (e->type == 1) kprint("  [usable]   ", GREEN);
         else              kprint("  [reserved] ", WHITE);

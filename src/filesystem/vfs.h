@@ -6,7 +6,7 @@
 /*represent an open file*/
 struct vfs_file
 {
-	struct nothfs_mount_info *info;
+	struct nothfs_mount_info_t *info;
 	uint64_t clus;
 	uint64_t total_size;
 	uint64_t rw_offset;
