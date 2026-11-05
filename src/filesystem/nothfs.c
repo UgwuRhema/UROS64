@@ -65,7 +65,7 @@ nothfs_test(void)
 int
 nothfs_readdir(void)
 {
-	struct nothfs_dirent *dirent;
+	struct nothfs_dirent_t *dirent;
 	uint64_t current_lba = nothfs_root.volume_start_lba + nothfs_root.superblock.root_start;
 	int file_count = 0;
 	/*read the first sector of the root directory into  a 512byte buffer*/
@@ -74,7 +74,7 @@ nothfs_readdir(void)
 		kfree(buffer);
 		return -1;
 	}
-	dirent = (struct nothfs_dirent *)buffer;
+	dirent = (struct nothfs_dirent_t *)buffer;
 	for (int i = 0; i < 8; ++i)
 	{
 		if (dirent[i].attr == 0)/*if attr is 0, it's an empty slot. EOD*/
@@ -98,7 +98,7 @@ fake_nothfs_dirent_test(void)
 {
 	uint8_t buffer[512];
 	memset(buffer, 0, 512);
-	struct nothfs_dirent *dummy = (struct nothfs_dirent *)buffer;
+	struct nothfs_dirent_t *dummy = (struct nothfs_dirent_t *)buffer;
 	uint32_t current_lba = (uint32_t)(nothfs_root.volume_start_lba + nothfs_root.superblock.root_start);/*262*/
 	kprint_num((uint64_t)current_lba, WHITE);
 	dummy->attr = NOTHFS_ATTR_CONTIG;
@@ -107,5 +107,5 @@ fake_nothfs_dirent_test(void)
 	dummy->size = 1024;
 	int a = nothfs_root.dev->write(nothfs_root.dev, current_lba, 1, (uint8_t *)dummy);
 	if (a != 0)
-		kp_log("Fake-nothfs_dirent_test_fail. ", NOT_DONE);
+		kp_log("Fake-nothfs_dirent_t_test_fail. ", NOT_DONE);
 }

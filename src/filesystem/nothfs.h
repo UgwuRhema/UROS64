@@ -14,7 +14,7 @@
 #define NOTHFS_ATTR_CONTIG (1 << 1)
 #define NOTHFS_ATTR_DELETED (1 << 2)
 
-struct nothfs_dirent
+struct nothfs_dirent_t
 {
 	uint16_t attr;
 	uint8_t name[NOTHFS_NAME_LEN];/*null terminated filename*/
