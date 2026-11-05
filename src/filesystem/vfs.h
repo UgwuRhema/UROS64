@@ -13,8 +13,4 @@ struct vfs_file
 	uint8_t filename[38];
 } __attribute__((packed));
 
-int vfs_open(const char *, struct vfs_file *);
-int vfs_read(struct vfs_file *, void *, uint64_t);
-void vfs_close(struct vfs_file *);
-
 #endif
