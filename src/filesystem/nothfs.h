@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include "blockdev.h"
+#include "vfs.h"
 
 #define NOTHFS_MAGIC "NOTHFS\0"
 #define NOTHFS_VOLUME_LBA 256
@@ -50,5 +51,6 @@ extern void nothfs_test(void);
 extern int nothfs_readdir(void);
 extern void fake_nothfs_dirent_test(void);
 extern int nothfs_read(struct vfs_file_t *, void *, uint64_t);
+extern struct vfs_node_t *nothfs_lookup(struct vfs_node_t *, const char *);
 
 #endif

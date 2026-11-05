@@ -109,3 +109,42 @@ fake_nothfs_dirent_test(void)
 	if (a != 0)
 		kp_log("Fake-nothfs_dirent_t_test_fail. ", NOT_DONE);
 }
+
+int
+nothfs_read(struct vfs_file_t *file, void *buffer, uint64_t size)
+{
+
+}
+
+struct vfs_node_t *
+nothfs_lookup(struct vfs_node_t *dir, const char *name)
+{
+	struct nothfs_dirent_t *dirent;
+	uint64_t current_lba = nothfs_root.volume_start_lba + nothfs_root.superblock.root_start;
+	/*read the first sector of the root directory into  a 512byte buffer*/
+	uint8_t *buffer = kmalloc(512);
+	if (!buffer) return NULL;
+	if (nothfs_root.dev->read(nothfs_root.dev, current_lba, 1, buffer) != 0){
+		kfree(buffer);
+		return NULL;
+	}
+	dirent = (struct nothfs_dirent_t *)buffer;
+	for (int i = 0; i < 8; ++i)
+	{
+		if (dirent[i].attr == 0)/*if attr is 0, it's an empty slot. EOD*/
+			break;
+		if (dirent[i].attr & NOTHFS_ATTR_DELETED)
+			continue;
+		if(strcmp(dirent[i].attr, name) == 0)
+		{
+			struct vfs_node_t *nnode = (struct vfs_node_t *)kmalloc(sizeof(struct vfs_node_t));
+			if (!nnode) return NULL;
+			nnode->size = dirent.size;
+			nnode->ops = NULL;
+			nnode->fs_data = (void *)(uintptr_t)dirent.clus;/*we save starting NothFS sector*/
+			return nnode;
+		}
+	}
+	kfree(buffer);
+	return NULL;
+}
