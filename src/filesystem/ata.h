@@ -1,3 +1,6 @@
+#ifndef ATA_H
+#define ATA_H
+
 #include "../func/func.h"
 #include "../vga/vga.h"
 #include "blockdev.h"
@@ -28,3 +31,5 @@ extern int ata_write_wrapper(struct block_device *, uint64_t, uint32_t, const vo
 extern int ata_identify(void); /*ATA Drive controller communication*/
 extern int ata_identify_slave(void);/*the slave drive(ie external hard disk)*/
 extern struct block_device *primary_create();
+
+#endif
