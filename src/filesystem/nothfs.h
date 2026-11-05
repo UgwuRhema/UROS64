@@ -49,8 +49,6 @@ extern int nothfs_mount(struct block_device *);
 extern void nothfs_test(void);
 extern int nothfs_readdir(void);
 extern void fake_nothfs_dirent_test(void);
-extern int nothfs_open();
-extern int nothfs_read();
-extern void nothfs_close();
+extern int nothfs_read(struct vfs_file_t *, void *, uint64_t);
 
 #endif
