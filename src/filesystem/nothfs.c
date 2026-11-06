@@ -114,13 +114,13 @@ fake_nothfs_dirent_test(void)
 		kp_log("Fake-nothfs_dirent_t_test_fail. ", NOT_DONE);
 }
 
-int
-nothfs_read(struct vfs_file_t *file, void *buffer, uint64_t size)
-{
-	if (!file || !buffer) return -1;
-	uint64_t starting_clus = (uint64_t)file->node->fs_data; /*we get the starting cluster that we saved*/
-	
-}
+//int
+//nothfs_read(struct vfs_file_t *file, void *buffer, uint64_t size)
+//{
+//	if (!file || !buffer) return -1;
+//	uint64_t starting_clus = (uint64_t)file->node->fs_data; /*we get the starting cluster that we saved*/
+//	
+//}
 
 /*this is very simple*/
 struct vfs_node_t *
@@ -142,14 +142,14 @@ nothfs_lookup(struct vfs_node_t *dir, const char *name)
 			break;
 		if (dirent[i].attr & NOTHFS_ATTR_DELETED)
 			continue;
-		if(strcmp(dirent[i].attr, name) == 0)
+		if(strcmp((char *)dirent[i].name, name) == 0)
 		{
 			/*we now make a new vfs_node_t*/
 			struct vfs_node_t *nnode = (struct vfs_node_t *)kmalloc(sizeof(struct vfs_node_t));
 			if (!nnode) return NULL;
-			nnode->size = dirent.size;
+			nnode->size = dirent[i].size;
 			nnode->ops = &nothfs_ops;
-			nnode->fs_data = (void *)(uintptr_t)dirent.clus;/*we save starting NothFS sector*/
+			nnode->fs_data = (void *)(uintptr_t)dirent[i].clus;/*we save starting NothFS sector*/
 			kfree(buffer);
 			return nnode;
 		}
