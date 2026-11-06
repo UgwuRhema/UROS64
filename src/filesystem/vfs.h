@@ -3,6 +3,9 @@
 
 #include "nothfs.h"
 
+struct vfs_file_t;
+struct vfs_node_t;
+
 struct vfs_ops_t
 {
 	int (*read)(struct vfs_file_t *, void *, uint64_t); /*read data from a file*/
