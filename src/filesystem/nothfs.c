@@ -112,6 +112,7 @@ fake_nothfs_dirent_test(void)
 	int a = nothfs_root.dev->write(nothfs_root.dev, current_lba, 1, (uint8_t *)dummy);
 	if (a != 0)
 		kp_log("Fake-nothfs_dirent_t_test_fail. ", NOT_DONE);
+	/*we will now create anothre fake dirent*/
 }
 
 int

@@ -4,6 +4,7 @@
 #include "../memory/heap.h"
 #include "../filesystem/ata.h"
 #include "../filesystem/nothfs.h"
+#include "../filesystem/vfs.h"
 
 char cmd_buf[CMD_MAX_LEN] = {0};
 size_t cmd_idx = 0;
@@ -250,6 +251,13 @@ execute_command(const char *cmd)
 		/*this is a minimal test for finddir*/
 		int dir = nothfs_readdir();
 		kprint("File Count: ", WHITE); kprint_num(dir, PURPLE); kprint("\n", WHITE);
+	} else if (strcmp("nothfs_vfs_test") == 0) {
+		struct vfs_node_t *found = NULL;
+		found = nothfs_ops->lookup(NULL, "hello.txt");
+		if (found == NULL)
+		{
+			kprint("nothfs_lookup failure!\n", PURPLE);
+		}
 	} else if (strcmp(cmd, "ncore") == 0){
 		kprint_num((uint64_t)get_cpu_cores(), WHITE);
 		kprint("\n", WHITE);
