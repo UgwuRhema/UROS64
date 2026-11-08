@@ -264,7 +264,7 @@ execute_command(const char *cmd)
 			.node = found,
 			.offset = 0
 		};
-		uint8_t *buffer = (uint8_t *)kmalloc(1024);
+		uint8_t *buffer = (uint8_t *)kmalloc(512);
 		if (nothfs_ops.read(&file, buffer, 0) != 0)/*since size if not currently used*/
 			kprint("nothfs_read failure!\n", PURPLE);
 		/*cleanup*/
