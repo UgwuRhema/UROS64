@@ -258,6 +258,7 @@ execute_command(const char *cmd)
 		{
 			kprint("nothfs_lookup failure!\n", PURPLE);
 		}
+		kfree((void *)found);
 	} else if (strcmp(cmd, "ncore") == 0){
 		kprint_num((uint64_t)get_cpu_cores(), WHITE);
 		kprint("\n", WHITE);
