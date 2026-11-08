@@ -126,7 +126,7 @@ max:
 
 q:
 	qemu-system-x86_64 \
-		-boot order=a \
+		-boot order=c,menu=on \
 		-drive format=raw,file=$(IMG),if=ide \
 		-m 512M \
 		-smp 4 \
