@@ -267,6 +267,8 @@ execute_command(const char *cmd)
 		uint8_t *buffer = (uint8_t *)kmalloc(512);
 		if (nothfs_ops.read(&file, buffer, 0) != 0)/*since size if not currently used*/
 			kprint("nothfs_read failure!\n", PURPLE);
+		for (int i = 0; i < 512; ++i)
+			kprint_num((uint64_t)buffer[i], WHITE);
 		/*cleanup*/
 		kfree((void *)buffer);
 		kfree((void *)found);
