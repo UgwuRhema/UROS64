@@ -160,6 +160,7 @@ nothfs_lookup(struct vfs_node_t *dir, const char *name)
 			nnode->fs_data = (void *)(uintptr_t)dirent[i].clus;/*we save starting NothFS sector*/
 			kfree(buffer);
 			return nnode;
+			/*but why is the vfs_node_t dir there as an argument, i dont see any use for it*/
 		}
 	}
 	kfree(buffer);
