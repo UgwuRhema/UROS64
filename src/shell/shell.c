@@ -16,56 +16,59 @@ execute_command(const char *cmd)
     if (strcmp(cmd, "help") == 0)
     {
         kprint("UROS USH Available Commands:\n", WHITE);
-        kprint(" help            smap_info\n clear           cpuinfo\n sysinfo         off->powerdown\n vreboot         vmm_test\n trigger_*_panic\n powerdown\n sleep <seconds>\n", GREEN);
-		kprint(" puts <text>\n sleep <seconds>\n memmap\n", GREEN);
+        kprint(" System : help  sysinfo  cpuinfo  ncore  clear  halt  sleep <s>\n", GREEN);
+        kprint("          powerdown|off  vreboot  linux\n", GREEN);
+        kprint(" Memory : memmap  smap_info  heap  vmm_test\n", GREEN);
+        kprint("          tmp_alloc <bytes>  tmp_free <addr>\n", GREEN);
+        kprint(" Storage: vols  ata_read <lba>  ata_write <lba>  mkfs.nothfs <lba>\n", GREEN);
+        kprint(" Filesys: disk  finddir  dirent_test  nothfs_vfs_test\n", GREEN);
+        kprint(" Debug  : info registers  trigger_pf_panic  trigger_dz_panic  trigger_uo_panic\n", GREEN);
+        kprint(" Misc   : puts <text>\n", GREEN);
     } else if (strcmp(cmd, "info registers") == 0) {
-		uint64_t rax, rdi, rsi, rdx, rsp, rbp, rbx, rcx;/* some x86-64 bit registers */
+		uint64_t rax, rbx, rcx, rdx, rsi, rdi, rsp, rbp, rip; /* general purpose registers */
 		uint64_t cr0, cr2, cr3, cr4; /* control registers */
-		__asm__ volatile ("mov %%rax, %0" : "=r"(rax));
-		__asm__ volatile ("mov %%rdi, %0" : "=r"(rdi));
-		__asm__ volatile ("mov %%rsi, %0" : "=r"(rsi));
-		__asm__ volatile ("mov %%rdx, %0" : "=r"(rdx));
+		/* fixed constraints so reading one register cannot clobber another */
+		__asm__ volatile ("mov %%rax, %0" : "=a"(rax));
+		__asm__ volatile ("mov %%rbx, %0" : "=b"(rbx));
+		__asm__ volatile ("mov %%rcx, %0" : "=c"(rcx));
+		__asm__ volatile ("mov %%rdx, %0" : "=d"(rdx));
+		__asm__ volatile ("mov %%rsi, %0" : "=S"(rsi));
+		__asm__ volatile ("mov %%rdi, %0" : "=D"(rdi));
 		__asm__ volatile ("mov %%rsp, %0" : "=r"(rsp));
 		__asm__ volatile ("mov %%rbp, %0" : "=r"(rbp));
-		__asm__ volatile ("mov %%rbx, %0" : "=r"(rbx));
-		__asm__ volatile ("mov %%rcx, %0" : "=r"(rcx));
-		/* compute for control reisters */
+		__asm__ volatile ("lea 0(%%rip), %0" : "=r"(rip)); /* rip cannot be moved directly */
 		__asm__ volatile ("mov %%cr0, %0" : "=r"(cr0));
 		__asm__ volatile ("mov %%cr2, %0" : "=r"(cr2));
 		__asm__ volatile ("mov %%cr3, %0" : "=r"(cr3));
 		__asm__ volatile ("mov %%cr4, %0" : "=r"(cr4));
-		kprint("General Registers: \n", WHITE);
-		kprint("rax=", WHITE); kprint_hex(rax, PURPLE); 
+		kprint("General Registers:\n", WHITE);
+		kprint(" rax=", WHITE); kprint_hex(rax, PURPLE);
 		kprint(" rbx=", WHITE); kprint_hex(rbx, PURPLE);
-		kprint("\n", WHITE);
-		kprint("rdi=", WHITE); kprint_hex(rdi, PURPLE); 
 		kprint(" rcx=", WHITE); kprint_hex(rcx, PURPLE);
-		kprint("\n", WHITE);
-		kprint("rsi=", WHITE); kprint_hex(rsi, PURPLE); 
-		//kprint(" rip=", WHITE); kprint_hex(rip, PURPLE);
-		kprint("\n", WHITE);
-		kprint("rdx=", WHITE); kprint_hex(rdx, PURPLE); kprint("\n", WHITE);
-		kprint("rsp=", WHITE); kprint_hex(rsp, PURPLE); kprint("\n", WHITE);
-		kprint("rbp=", WHITE); kprint_hex(rbp, PURPLE); kprint("\n", WHITE);
-		kprint("Control Registers: \n", WHITE);
-		kprint("cr0=", WHITE); kprint_hex(cr0, PURPLE); kprint("\n", WHITE);
-		kprint("cr2=", WHITE); kprint_hex(cr2, PURPLE); kprint("\n", WHITE);
-		kprint("cr3=", WHITE); kprint_hex(cr3, PURPLE); kprint("\n", WHITE);
-		kprint("cr4=", WHITE); kprint_hex(cr4, PURPLE); kprint("\n", WHITE);
+		kprint(" rdx=", WHITE); kprint_hex(rdx, PURPLE); kprint("\n", WHITE);
+		kprint(" rsi=", WHITE); kprint_hex(rsi, PURPLE);
+		kprint(" rdi=", WHITE); kprint_hex(rdi, PURPLE); kprint("\n", WHITE);
+		kprint(" rsp=", WHITE); kprint_hex(rsp, PURPLE);
+		kprint(" rbp=", WHITE); kprint_hex(rbp, PURPLE); kprint("\n", WHITE);
+		kprint(" rip=", WHITE); kprint_hex(rip, PURPLE); kprint("\n", WHITE);
+		kprint("Control Registers:\n", WHITE);
+		kprint(" cr0=", WHITE); kprint_hex(cr0, PURPLE);
+		kprint(" cr2=", WHITE); kprint_hex(cr2, PURPLE); kprint("\n", WHITE);
+		kprint(" cr3=", WHITE); kprint_hex(cr3, PURPLE);
+		kprint(" cr4=", WHITE); kprint_hex(cr4, PURPLE); kprint("\n", WHITE);
 	} else if (strcmp(cmd, "clear") == 0){
         clear_screen();
     } else if (strcmp(cmd, "disk") == 0) {
 		nothfs_test();
 	} else if (strcmp(cmd, "sysinfo") == 0){
 		uint64_t total_seconds = timer_ticks / 1000;
-		uint64_t minutes = total_seconds / 60;
-		uint64_t hours = minutes / 60;
+		uint64_t hours = total_seconds / 3600;
+		uint64_t minutes = (total_seconds % 3600) / 60;
 		uint64_t seconds = total_seconds % 60;
-		char cpu_vendor_name[12] = {0}; /* array for the CPU Vendor name */
+		char cpu_vendor_name[13] = {0}; /* 12 chars + null terminator */
 		char cpu_brand_name[49] = {0};
 		get_cpu_vendor_name(cpu_vendor_name); /* the new function we just made to get the name */
 		get_cpu_brand_string(cpu_brand_name);
-		if (minutes >= 60) { minutes = 0; hours = hours + 1; }
         kp_log("OS: UROS (Unrestricted Runtime Operating System) ", ONLINE);
         kp_log("Kernel: UROS KERNEL(uroskrnl.ubin/uroskrnl) ", ONLINE);
 		kprint(" Uptime: ", WHITE); 
@@ -248,7 +251,7 @@ execute_command(const char *cmd)
 	} else if (strcmp(cmd, "dirent_test") == 0) {
 		fake_nothfs_dirent_test();
 	} else if (strcmp(cmd,"cpuinfo") == 0){
-		char vendor[12];
+		char vendor[13];
 		char brand[49];
 		get_cpu_vendor_name(vendor);
 		get_cpu_brand_string(brand);
