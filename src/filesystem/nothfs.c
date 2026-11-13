@@ -52,7 +52,7 @@ nothfs_test(void)
 		kprint_num((uint64_t)nothfs_root.superblock.version, GREEN); kprint("\n", WHITE);
 		kprint("Unique-Id: ", PURPLE); kprint_hex(nothfs_root.superblock.unique_id, WHITE);
 		kprint("\n", WHITE);
-		kprint("Volume LBA: ", PURPLE);
+		kprint("Root Start: ", PURPLE);
 		kprint_num(nothfs_root.superblock.root_start, GREEN); kprint("\n", WHITE);
 		kprint("Sector Size: ", PURPLE);
 		kprint_num((uint64_t)nothfs_root.superblock.sector_size, GREEN); kprint("\n", WHITE);
@@ -125,6 +125,7 @@ nothfs_read(struct vfs_file_t *file, void *buffer, uint64_t size)
     /*sector we need*/
     while (size != 0)
     {
+        if (file->offset >= file->node->size)  break;
         uint64_t sector_index = file->offset / 512;
         uint64_t byte_offset = file->offset % 512;/*byte position in that sector*/
         uint64_t lba = starting_clus + sector_index;
