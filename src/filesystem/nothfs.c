@@ -80,7 +80,7 @@ nothfs_readdir(void)
 		return -1;
 	}
 	dirent = (struct nothfs_dirent_t *)buffer;
-	for (int i = 0; i < 16; ++i)
+	for (int i = 0; i < (int)(1024 / sizeof(struct nothfs_dirent_t)); ++i)
 	{
 		if (dirent[i].attr == 0)/*if attr is 0, it's an empty slot. EOD*/
 			break;
@@ -136,15 +136,17 @@ nothfs_read(struct vfs_file_t *file, void *buffer, uint64_t size)
         }
         uint64_t bytes_left_in_sector = 512 - byte_offset;
         if (bytes_left_in_sector > size) {
-            memcpy((uint8_t *)buffer, temp + byte_offset, size);
+            uint8_t *dest = (uint8_t *)buffer;
+            memcpy(dest, temp + byte_offset, size);
             total_bytes_read += size;
-            buffer += size;
+            dest += size;
             file->offset += size;
             size -= size;
         } else {
-            memcpy((uint8_t *)buffer, temp + byte_offset, bytes_left_in_sector);
+            uint8_t *dest = (uint8_t *)buffer;
+            memcpy(dest, temp + byte_offset, bytes_left_in_sector);
             total_bytes_read += bytes_left_in_sector;
-            buffer += bytes_left_in_sector;
+            dest += bytes_left_in_sector;
             file->offset += bytes_left_in_sector;
             size -= bytes_left_in_sector;
         }
@@ -160,15 +162,15 @@ nothfs_lookup(struct vfs_node_t *dir, const char *name)
 	struct nothfs_dirent_t *dirent;
 	uint64_t current_lba = nothfs_root.volume_start_lba + nothfs_root.superblock.root_start;
 	/*read the first sector of the root directory into  a 512byte buffer*/
-	uint8_t *buffer = kmalloc(512);
+	uint8_t *buffer = kmalloc(1024);
 	if (!buffer) return NULL;
     /*what if i read 2 sectors*/
-	if (nothfs_root.dev->read(nothfs_root.dev, current_lba, 1, buffer) != 0){
+	if (nothfs_root.dev->read(nothfs_root.dev, current_lba, 2, buffer) != 0){
 		kfree(buffer);
 		return NULL;
 	}
 	dirent = (struct nothfs_dirent_t *)buffer;
-	for (int i = 0; i < 8; ++i)
+	for (int i = 0; i < (int)(1024 / sizeof(struct nothfs_dirent_t)); ++i)
 	{
 		if (dirent[i].attr == 0)/*if attr is 0, it's an empty slot. EOD*/
 			break;
