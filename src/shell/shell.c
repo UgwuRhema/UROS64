@@ -265,6 +265,8 @@ execute_command(const char *cmd)
 		/*this is a minimal test for finddir*/
 		int dir = nothfs_readdir();
 		kprint("File Count: ", WHITE); kprint_num(dir, PURPLE); kprint("\n", WHITE);
+	} else if (strncmp(cmd, "cat ", 4) == 0) {
+		/*coming soon*/
 	} else if (strcmp(cmd, "nothfs_vfs_test") == 0) {
 		struct vfs_node_t *found = vfs_root->ops->lookup(vfs_root, "hello.txt");
         if (found == NULL)
