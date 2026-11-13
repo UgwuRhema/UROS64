@@ -29,4 +29,11 @@ struct vfs_file_t
 	uint64_t offset;
 } __attribute__((packed));
 
+/*important externs*/
+extern vfs_node_t *vfs_root;
+extern int vfs_init(void);
+extern int vfs_open(const char *, struct vfs_file_t *);
+extern int vfs_read(struct vfs_file_t *, void *, uint64_t);
+extern void vfs_close(struct vfs_file_t *);
+
 #endif
