@@ -137,18 +137,20 @@ nothfs_read(struct vfs_file_t *file, void *buffer, uint64_t size)
         uint64_t bytes_left_in_sector = 512 - byte_offset;
         if (bytes_left_in_sector > size) {
             memcpy((uint8_t *)buffer, temp + byte_offset, size);
+            total_bytes_read += size;
             buffer += size;
             file->offset += size;
             size -= size;
         } else {
             memcpy((uint8_t *)buffer, temp + byte_offset, bytes_left_in_sector);
+            total_bytes_read += bytes_left_in_sector;
             buffer += bytes_left_in_sector;
             file->offset += bytes_left_in_sector;
             size -= bytes_left_in_sector;
         }
     }
     kfree(temp);
-    return 0;
+    return total_bytes_read;
 }
 
 /*this is very simple*/
@@ -182,7 +184,7 @@ nothfs_lookup(struct vfs_node_t *dir, const char *name)
 			}
             /*fixed positioning, although we can mall a 0 page
              * we still check for allocation failure before any operations*/
-            memset(nnode, 0, sizeof(*nnode));
+            memset(nnode, (uint8_t)0, (uint32_t)sizeof(*nnode));
 			nnode->size = dirent[i].size;
 			nnode->ops = &nothfs_ops;
 			nnode->fs_data = (void *)(uintptr_t)dirent[i].clus;/*we save starting NothFS sector*/
