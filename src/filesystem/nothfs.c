@@ -109,7 +109,7 @@ fake_nothfs_dirent_test(int add)
 	uint32_t current_lba = (uint32_t)(nothfs_root.volume_start_lba + nothfs_root.superblock.root_start + add);/*262*/
 	kprint_num((uint64_t)current_lba, WHITE);
 	dummy->attr = NOTHFS_ATTR_CONTIG;
-	kstrcpy((char *)dummy->name, "hello.txt");
+	kstrcpy((char *)dummy->name, "book.txt");
 	dummy->clus = 10;
 	dummy->size = 1024;
 	int a = nothfs_root.dev->write(nothfs_root.dev, current_lba, 1, (uint8_t *)dummy);
