@@ -4,7 +4,6 @@
 #include "blockdev.h"
 #include "ata.h"
 #include "../memory/heap.h"
-#include <string.h>
 
 struct nothfs_mount_info_t nothfs_root;
 struct vfs_ops_t nothfs_ops = {
@@ -81,7 +80,7 @@ nothfs_readdir(void)
 		return -1;
 	}
 	dirent = (struct nothfs_dirent_t *)buffer;
-	for (int i = 0; i < 8; ++i)
+	for (int i = 0; i < 16; ++i)
 	{
 		if (dirent[i].attr == 0)/*if attr is 0, it's an empty slot. EOD*/
 			break;
@@ -160,10 +159,10 @@ nothfs_lookup(struct vfs_node_t *dir, const char *name)
 	struct nothfs_dirent_t *dirent;
 	uint64_t current_lba = nothfs_root.volume_start_lba + nothfs_root.superblock.root_start;
 	/*read the first sector of the root directory into  a 512byte buffer*/
-	uint8_t *buffer = kmalloc(1024);
+	uint8_t *buffer = kmalloc(512);
 	if (!buffer) return NULL;
     /*what if i read 2 sectors*/
-	if (nothfs_root.dev->read(nothfs_root.dev, current_lba, 2, buffer) != 0){
+	if (nothfs_root.dev->read(nothfs_root.dev, current_lba, 1, buffer) != 0){
 		kfree(buffer);
 		return NULL;
 	}
