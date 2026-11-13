@@ -248,8 +248,9 @@ execute_command(const char *cmd)
 		} else {
 			kprint("Invalid Response! \n", PURPLE);
 		}
-	} else if (strcmp(cmd, "dirent_test") == 0) {
-		fake_nothfs_dirent_test(0);
+	} else if (strncmp(cmd, "dirent_test ", 12) == 0) {
+		int offset = (int)string_to_int(&cmd[12]);
+		fake_nothfs_dirent_test(offset);
 	} else if (strcmp(cmd,"cpuinfo") == 0){
 		char vendor[13];
 		char brand[49];
