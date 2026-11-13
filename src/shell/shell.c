@@ -23,7 +23,7 @@ execute_command(const char *cmd)
         kprint(" Storage: vols  ata_read <lba>  ata_write <lba>  mkfs.nothfs <lba>\n", GREEN);
         kprint(" Filesys: disk  finddir  dirent_test  nothfs_vfs_test\n", GREEN);
         kprint(" Debug  : info registers  trigger_pf_panic  trigger_dz_panic  trigger_uo_panic\n", GREEN);
-        kprint(" Misc   : puts <text>\n", GREEN);
+        kprint(" Misc   : puts <text> cat <file>\n", GREEN);
     } else if (strcmp(cmd, "info registers") == 0) {
 		uint64_t rax, rbx, rcx, rdx, rsi, rdi, rsp, rbp, rip; /* general purpose registers */
 		uint64_t cr0, cr2, cr3, cr4; /* control registers */
