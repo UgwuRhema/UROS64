@@ -87,9 +87,8 @@ nothfs_readdir(void)
 	dirent = (struct nothfs_dirent_t *)buffer;
 	for (int i = 0; i < (int)((NOTHFS_DIR_SECTORS * NOTHFS_SECTOR_SIZE) / sizeof(struct nothfs_dirent_t)); ++i)
 	{
-		/*attr 0 means this slot is free, NOT end of directory: an empty
-		 * slot can sit before a live entry (e.g. the next sector's first
-		 * slot), so keep scanning instead of breaking out early.*/
+		/*attr 0 means this slot is free not EOD, an empty
+		 * slot can sit before a valid entry so we keep scanning instead of breaking out early like before*/
 		if (dirent[i].attr == 0)
 			continue;
 		if (dirent[i].attr & NOTHFS_ATTR_DELETED)
