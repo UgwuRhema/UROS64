@@ -15,6 +15,8 @@ struct vfs_ops_t nothfs_ops = {
 
 _Static_assert(sizeof(struct nothfs_superblock) <= 512,
                "nothfs superblock must fit in one sector");
+_Static_assert(sizeof(struct nothfs_dirent_t) == NOTHFS_DIRENT_SIZE,
+               "nothfs dirent size must match NOTHFS_DIRENT_SIZE");
 
 int /*-1 on device error, 1 on signature error so we can distinguish*/
 nothfs_mount(struct block_device *dev)
@@ -74,18 +76,22 @@ nothfs_readdir(void)
 	struct nothfs_dirent_t *dirent;
 	uint64_t current_lba = nothfs_root.volume_start_lba + nothfs_root.superblock.root_start;
 	int file_count = 0;
-	/*read the first sector of the root directory into  a 512byte buffer*/
-	uint8_t *buffer = kmalloc(1024);
-    /*now we read the first 2 sectors of the root directory*/
-	if (nothfs_root.dev->read(nothfs_root.dev, current_lba, 2, buffer) != 0){
+	/*read the first 2 sectors of the root directory into a 1024byte buffer*/
+	uint8_t *buffer = kmalloc(NOTHFS_DIR_SECTORS * NOTHFS_SECTOR_SIZE);
+	if (!buffer)
+		return -1;
+	if (nothfs_root.dev->read(nothfs_root.dev, current_lba, NOTHFS_DIR_SECTORS, buffer) != 0){
 		kfree(buffer);
 		return -1;
 	}
 	dirent = (struct nothfs_dirent_t *)buffer;
-	for (int i = 0; i < (int)(1024 / sizeof(struct nothfs_dirent_t)); ++i)
+	for (int i = 0; i < (int)((NOTHFS_DIR_SECTORS * NOTHFS_SECTOR_SIZE) / sizeof(struct nothfs_dirent_t)); ++i)
 	{
-		if (dirent[i].attr == 0)/*if attr is 0, it's an empty slot. EOD*/
-			break;
+		/*attr 0 means this slot is free, NOT end of directory: an empty
+		 * slot can sit before a live entry (e.g. the next sector's first
+		 * slot), so keep scanning instead of breaking out early.*/
+		if (dirent[i].attr == 0)
+			continue;
 		if (dirent[i].attr & NOTHFS_ATTR_DELETED)
 			continue;
 		/*just a debug*/
@@ -166,19 +172,19 @@ nothfs_lookup(struct vfs_node_t *dir, const char *name)
     if (!dir) dir_start_clus = nothfs_root.superblock.root_start;/*defaults to root directory*/
     else dir_start_clus = (uint64_t)(uintptr_t)dir->fs_data;
 	uint64_t current_lba = nothfs_root.volume_start_lba + dir_start_clus;
-	/*read the first sector of the root directory into  a 512byte buffer*/
-	uint8_t *buffer = kmalloc(1024);
+	/*read the first 2 sectors of the directory into a 1024byte buffer*/
+	uint8_t *buffer = kmalloc(NOTHFS_DIR_SECTORS * NOTHFS_SECTOR_SIZE);
 	if (!buffer) return NULL;
-    /*what if i read 2 sectors*/
-	if (nothfs_root.dev->read(nothfs_root.dev, current_lba, 2, buffer) != 0){
+	if (nothfs_root.dev->read(nothfs_root.dev, current_lba, NOTHFS_DIR_SECTORS, buffer) != 0){
 		kfree(buffer);
 		return NULL;
 	}
 	dirent = (struct nothfs_dirent_t *)buffer;
-	for (int i = 0; i < (int)(1024 / sizeof(struct nothfs_dirent_t)); ++i)
+	for (int i = 0; i < (int)((NOTHFS_DIR_SECTORS * NOTHFS_SECTOR_SIZE) / sizeof(struct nothfs_dirent_t)); ++i)
 	{
-		if (dirent[i].attr == 0)/*if attr is 0, it's an empty slot. EOD*/
-			break;
+		/*attr 0 is a free slot, not end of directory*/
+		if (dirent[i].attr == 0)
+			continue;
 		if (dirent[i].attr & NOTHFS_ATTR_DELETED)
 			continue;
 		if(strcmp((char *)dirent[i].name, name) == 0)

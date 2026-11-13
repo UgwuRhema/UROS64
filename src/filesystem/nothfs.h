@@ -10,6 +10,10 @@
 #define NOTHFS_DIRENT_SIZE 64
 #define NOTHFS_NAME_LEN 38
 
+#define NOTHFS_SECTOR_SIZE 512
+/*number of sectors we scan at the start of a directory*/
+#define NOTHFS_DIR_SECTORS 2
+
 #define NOTHFS_ATTR_DIR (1 << 0)
 #define NOTHFS_ATTR_CONTIG (1 << 1)
 #define NOTHFS_ATTR_DELETED (1 << 2)
