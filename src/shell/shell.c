@@ -249,7 +249,7 @@ execute_command(const char *cmd)
 			kprint("Invalid Response! \n", PURPLE);
 		}
 	} else if (strcmp(cmd, "dirent_test") == 0) {
-		fake_nothfs_dirent_test();
+		fake_nothfs_dirent_test(0);
 	} else if (strcmp(cmd,"cpuinfo") == 0){
 		char vendor[13];
 		char brand[49];

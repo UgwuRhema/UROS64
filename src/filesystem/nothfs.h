@@ -53,7 +53,7 @@ extern struct vfs_ops_t nothfs_ops;
 extern int nothfs_mount(struct block_device *);
 extern void nothfs_test(void);
 extern int nothfs_readdir(void);
-extern void fake_nothfs_dirent_test(void);
+extern void fake_nothfs_dirent_test(int);
 extern int nothfs_read(struct vfs_file_t *, void *, uint64_t);
 extern struct vfs_node_t *nothfs_lookup(struct vfs_node_t *, const char *);
 
