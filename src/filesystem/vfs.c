@@ -36,3 +36,10 @@ vfs_read(struct vfs_file_t *file, void *buffer, uint64_t size)
 		return 1;
 	return file->node->ops->read(file, buffer, size);
 }
+
+void
+vfs_close(struct vfs_file_t *file)
+{
+	kfree((void *)file->node);
+	/*we'll worry about reference count later*/
+}
