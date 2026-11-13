@@ -5,6 +5,7 @@
 #include "ata.h"
 #include "../memory/heap.h"
 #include <stdint.h>
+#include "vfs.h"
 
 struct nothfs_mount_info_t nothfs_root;
 struct vfs_ops_t nothfs_ops = {

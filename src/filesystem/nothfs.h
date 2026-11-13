@@ -3,7 +3,6 @@
 
 #include <stdint.h>
 #include "blockdev.h"
-#include "vfs.h"
 
 #define NOTHFS_MAGIC "NOTHFS\0"
 #define NOTHFS_VOLUME_LBA 256
@@ -44,6 +43,10 @@ struct nothfs_mount_info_t {
 	uint64_t volume_start_lba;
 	struct nothfs_superblock superblock;
 };
+
+struct vfs_file_t;
+struct vfs_node_t;
+struct vfs_ops_t;
 
 extern struct nothfs_mount_info_t nothfs_root;
 extern struct vfs_ops_t nothfs_ops;
