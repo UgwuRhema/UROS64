@@ -13,3 +13,14 @@ int vfs_init(void)
     vfs_root->fs_data = (void *)(uintptr_t)nothfs_root.superblock.root_start;
     return 0;
 }
+
+/*vfs_open*/
+
+/*returns bytes read and 1 on error*/
+int
+vfs_read(struct vfs_file_t *file, void *buffer, uint64_t size)
+{
+	if (!file || !buffer || size < 0)
+		return 1;
+	return vfs_root->ops->read(file, buffer, size);
+}
