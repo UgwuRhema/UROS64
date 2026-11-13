@@ -4,6 +4,7 @@
 #include "blockdev.h"
 #include "ata.h"
 #include "../memory/heap.h"
+#include <stdint.h>
 
 struct nothfs_mount_info_t nothfs_root;
 struct vfs_ops_t nothfs_ops = {
@@ -160,7 +161,8 @@ struct vfs_node_t *
 nothfs_lookup(struct vfs_node_t *dir, const char *name)
 {
 	struct nothfs_dirent_t *dirent;
-	uint64_t current_lba = nothfs_root.volume_start_lba + nothfs_root.superblock.root_start;
+    uint64_t dir_start_clus = (uint64_t)(uintptr_t)dir->fs_data;
+	uint64_t current_lba = nothfs_root.volume_start_lba + dir_start_clus;
 	/*read the first sector of the root directory into  a 512byte buffer*/
 	uint8_t *buffer = kmalloc(1024);
 	if (!buffer) return NULL;
