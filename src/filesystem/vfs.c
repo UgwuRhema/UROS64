@@ -20,7 +20,7 @@ int vfs_init(void)
 int
 vfs_read(struct vfs_file_t *file, void *buffer, uint64_t size)
 {
-	if (!file || !buffer || size < 0)
+	if (!file || !buffer)
 		return 1;
 	return vfs_root->ops->read(file, buffer, size);
 }

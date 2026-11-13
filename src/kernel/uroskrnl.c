@@ -97,6 +97,8 @@ uroskrnl_main_entry_point(uint32_t memory_entries_count, struct MemoryMapEntry_t
         kp_log("(VFS)Failed to initialize VFS. ", NOT_DONE);
     }
     kp_log("(NOTHFS)NothFS Online. Volume 256 Format->NothFS. ", DONE);
+	kp_log("(VFS)Initialize Virtual File System. ", DONE);
+	kp_log("(NOTHFS & VFS)Implement NothFS and VFS Drivers. ", DONE);
 	kp_log("(NOTHFS)Mount Successful. ", DONE);
 	kp_log("(UTILS)Starting shell...", ONLINE);
 	sleep(900);
