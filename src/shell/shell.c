@@ -267,7 +267,7 @@ execute_command(const char *cmd)
 		kprint("File Count: ", WHITE); kprint_num(dir, PURPLE); kprint("\n", WHITE);
 	} else if (strcmp(cmd, "nothfs_vfs_test") == 0) {
 		struct vfs_node_t *found = NULL;
-		found = nothfs_ops.lookup(found, "hello.txt");/*find the dirent with filename "hello.txt"*/
+		found = nothfs_ops.lookup(NULL, "hello.txt");/*find the dirent with filename "hello.txt"*/
 		if (found == NULL)
 		{
 			kprint("nothfs_lookup failure!\n", PURPLE);

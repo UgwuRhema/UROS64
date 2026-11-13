@@ -161,8 +161,9 @@ struct vfs_node_t *
 nothfs_lookup(struct vfs_node_t *dir, const char *name)
 {
 	struct nothfs_dirent_t *dirent;
-    if (!dir) return NULL;
-    uint64_t dir_start_clus = (uint64_t)(uintptr_t)dir->fs_data;
+    uint64_t dir_start_clus = 0;
+    if (!dir) dir_start_clus = nothfs_root.superblock.root_start;/*defaults to root directory*/
+    else dir_start_clus = (uint64_t)(uintptr_t)dir->fs_data;
 	uint64_t current_lba = nothfs_root.volume_start_lba + dir_start_clus;
 	/*read the first sector of the root directory into  a 512byte buffer*/
 	uint8_t *buffer = kmalloc(1024);
