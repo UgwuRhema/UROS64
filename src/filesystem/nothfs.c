@@ -73,8 +73,9 @@ nothfs_readdir(void)
 	uint64_t current_lba = nothfs_root.volume_start_lba + nothfs_root.superblock.root_start;
 	int file_count = 0;
 	/*read the first sector of the root directory into  a 512byte buffer*/
-	uint8_t *buffer = kmalloc(512);
-	if (nothfs_root.dev->read(nothfs_root.dev, current_lba, 1, buffer) != 0){
+	uint8_t *buffer = kmalloc(1024);
+    /*now we read the first 2 sectors of the root directory*/
+	if (nothfs_root.dev->read(nothfs_root.dev, current_lba, 2, buffer) != 0){
 		kfree(buffer);
 		return -1;
 	}
@@ -133,9 +134,10 @@ nothfs_lookup(struct vfs_node_t *dir, const char *name)
 	struct nothfs_dirent_t *dirent;
 	uint64_t current_lba = nothfs_root.volume_start_lba + nothfs_root.superblock.root_start;
 	/*read the first sector of the root directory into  a 512byte buffer*/
-	uint8_t *buffer = kmalloc(512);
+	uint8_t *buffer = kmalloc(1024);
 	if (!buffer) return NULL;
-	if (nothfs_root.dev->read(nothfs_root.dev, current_lba, 1, buffer) != 0){
+    /*what if i read 2 sectors*/
+	if (nothfs_root.dev->read(nothfs_root.dev, current_lba, 2, buffer) != 0){
 		kfree(buffer);
 		return NULL;
 	}
