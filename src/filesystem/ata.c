@@ -49,6 +49,7 @@ ata_read_sector(uint32_t lba, uint8_t *buffer)
 	/* poll the status register */
 	uint32_t timeout = 1000000;
 	uint8_t status = inb(ATA_PRIMARY_STATUS);
+	/*busy-wait*/
 	while ((status & ATA_STATUS_BSY) && --timeout)
 		status = inb(ATA_PRIMARY_STATUS);
 	if (!timeout)

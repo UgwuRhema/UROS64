@@ -142,10 +142,15 @@ execute_command(const char *cmd)
 		uint32_t lba = (uint32_t)string_to_int(val);
 		kprint("Reading LBA ", WHITE); kprint_num(lba, GREEN); kprint("\n", WHITE);
 		uint8_t *buffer = (uint8_t *)kmalloc(512); /* allocate memory for the buffer */
-		int read = ata_read_sector(lba, buffer);
-		if (read < 0)
+		if (!buffer) {
+            kprint("Kmalloc allocation failure\n", PURPLE);
+            return;
+        }
+        int read = ata_read_sector(lba, buffer);
+		if (read < 0) {
 			kp_log("(DRV)ATA PIO Driver LBA sector read fail. ", NOT_DONE);
-		else {
+		    kfree((void *)buffer); 
+        } else {
 			kp_log("(DRV)ATA PIO Driver LBA sector read success. ", DONE);
 			kprint("Contents: \n", PURPLE);
 			/* let's try showing each character by character */
@@ -159,13 +164,17 @@ execute_command(const char *cmd)
         const char *val = &cmd[10];
         uint32_t lba = (uint32_t)string_to_int(val);
         uint8_t *buffer = (uint8_t *)kmalloc(512);/*this is the buffer that will be written at the give lba*/
+        if (!buffer)
+            return;
         kstrcpy((char *)buffer, "Iifeffhedhe3fiuebfebfewfjbfewjfjewfwfwhfewjfhbfe3bcurebfewbfjewbfuhbfiufewifnewihf");
         int write = ata_write_sector(lba, buffer);
-        if (write < 0)
+        if (write < 0) {
             kp_log("(DRV)ATA PIO Driver LBA Sector write fail. ", NOT_DONE);
-        else if (write > 0)
+            kfree((void *)buffer);
+        } else if (write > 0) {
             kp_log("(DRV)ATA PIO Driver timeout during Status polling. ", NOT_DONE);
-        else {
+            kfree((void *)buffer);
+        } else {
             kp_log("(DRV)ATA PIO Driver LBA Sector write success. ", DONE);
             kfree((void *)buffer);
         }
@@ -196,6 +205,8 @@ execute_command(const char *cmd)
 		else {
 			uint64_t bytes = string_to_int(val);
 			uint64_t *temp_pointer = (uint64_t *)kmalloc(bytes);
+            if (!temp_pointer)
+                return;
 			kprint("Allocated temporary memory for ", WHITE); kprint_num(bytes, WHITE);
 			kprint(" bytes of unsigned 64 bit integers\n", WHITE);
 			kprint("Warning: This Pointer will not be freed so it will cause memory leaks. \n", PURPLE);
@@ -260,13 +271,19 @@ execute_command(const char *cmd)
 		}
 		/*we need a struct vfs_file_t whose node points to new the new node*/
 		/*we made after successfully finding the nothfs_dirent*/
-		struct vfs_file_t file = {
+    	struct vfs_file_t file = {
 			.node = found,
 			.offset = 0
 		};
 		uint8_t *buffer = (uint8_t *)kmalloc(512);
-		if (nothfs_ops.read(&file, buffer, 0) != 0)/*since size if not currently used*/
+        if (!buffer){
+            kp_log("KMalloc Allocation failure. ", NOT_DONE);
+            return;
+        }
+		if (nothfs_ops.read(&file, buffer, 0) != 0) {/*since size if not currently used*/
 			kprint("nothfs_read failure!\n", PURPLE);
+            kfree((void *)buffer);
+        }
 		for (int i = 0; i < 512; ++i)
 			kprint_num((uint64_t)buffer[i], WHITE);
 		/*cleanup*/

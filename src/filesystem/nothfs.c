@@ -150,11 +150,13 @@ nothfs_lookup(struct vfs_node_t *dir, const char *name)
 		{
 			/*we now make a new vfs_node_t*/
 			struct vfs_node_t *nnode = (struct vfs_node_t *)kmalloc(sizeof(struct vfs_node_t));
-			memset(nnode, 0, sizeof(*nnode));
 			if (!nnode) {
 				kfree(buffer);
 				return NULL;
 			}
+            /*fixed positioning, although we can mall a 0 page
+             * we still check for allocation failure before any operations*/
+            memset(nnode, 0, sizeof(*nnode));
 			nnode->size = dirent[i].size;
 			nnode->ops = &nothfs_ops;
 			nnode->fs_data = (void *)(uintptr_t)dirent[i].clus;/*we save starting NothFS sector*/
