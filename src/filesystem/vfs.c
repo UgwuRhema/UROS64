@@ -15,6 +15,18 @@ int vfs_init(void)
 }
 
 /*vfs_open*/
+int
+vfs_open(const char *dir_name, struct vfs_file_t *file)
+{
+	struct vfs_node_t *found = vfs_root->ops->lookup(vfs_root, dir_name);
+	if (found)
+	{
+		file->node = found;
+		file->offset = 0;
+		return 0;
+	}
+	return 1; /*on failure*/
+}
 
 /*returns bytes read and 1 on error*/
 int
@@ -22,5 +34,5 @@ vfs_read(struct vfs_file_t *file, void *buffer, uint64_t size)
 {
 	if (!file || !buffer)
 		return 1;
-	return vfs_root->ops->read(file, buffer, size);
+	return file->node->ops->read(file, buffer, size);
 }
