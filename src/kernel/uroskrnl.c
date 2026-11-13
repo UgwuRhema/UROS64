@@ -13,6 +13,7 @@ typedef uint64_t u64;
 #include "../filesystem/ata.h"
 #include "../filesystem/nothfs.h"
 #include "../filesystem/blockdev.h"
+#include "../filesystem/vfs.h"
 
 /*
 uint64_t get_uptime_in_minutes(uint64_t timer_ticks)
@@ -90,7 +91,7 @@ uroskrnl_main_entry_point(uint32_t memory_entries_count, struct MemoryMapEntry_t
 	int mnt = nothfs_mount(ata);
 	if (mnt < 0)
 		kp_log("(DRV)Block Device failed to initialize. ", NOT_DONE);
-	int vfs_init_res = vfs_init();
+	int vfs_init_res = vfs_init();/*initialize Virtual File System*/
     if (vfs_init_res != 0)
     {
         kp_log("(VFS)Failed to initialize VFS. ", NOT_DONE);

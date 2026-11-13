@@ -30,7 +30,7 @@ struct vfs_file_t
 } __attribute__((packed));
 
 /*important externs*/
-extern struct vfs_node_t *vfs_root;
+extern struct vfs_node_t *vfs_root; /*does this really extern?*/
 extern int vfs_init(void);
 extern int vfs_open(const char *, struct vfs_file_t *);
 extern int vfs_read(struct vfs_file_t *, void *, uint64_t);

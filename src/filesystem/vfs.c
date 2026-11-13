@@ -3,6 +3,7 @@
 #include "nothfs.h"
 
 struct vfs_node_t *vfs_root = NULL;
+/*VirtualFile System initialization function*/
 int vfs_init(void)
 {
     vfs_root = (struct vfs_node_t *)kmalloc(sizeof(struct vfs_node_t));
