@@ -4,6 +4,7 @@
 #include "blockdev.h"
 #include "ata.h"
 #include "../memory/heap.h"
+#include <string.h>
 
 struct nothfs_mount_info_t nothfs_root;
 struct vfs_ops_t nothfs_ops = {
@@ -119,12 +120,35 @@ fake_nothfs_dirent_test(void)
 int
 nothfs_read(struct vfs_file_t *file, void *buffer, uint64_t size)
 {
-	if (!file || !buffer) return -1;
-	uint64_t starting_clus = (uint64_t)(uintptr_t)file->node->fs_data; /*we get the starting cluster that we saved*/
-	uint64_t lba = nothfs_root.volume_start_lba + starting_clus;	
-	if (nothfs_root.dev->read(nothfs_root.dev, lba, 1, buffer) != 0)
-		return -1;
-	return 0;
+    uint8_t *temp = kmalloc(512);/*temporary buffer*/
+    uint64_t total_bytes_read = 0;
+    uint64_t starting_clus = (uint64_t)(uintptr_t)file->node->fs_data;
+    /*sector we need*/
+    while (size != 0)
+    {
+        uint64_t sector_index = file->offset / 512;
+        uint64_t byte_offset = file->offset % 512;/*byte position in that sector*/
+        uint64_t lba = starting_clus + sector_index;
+        if (nothfs_root.dev->read(nothfs_root.dev, lba, 1, temp) != 0)
+        {
+            kfree((void *)temp);
+            return -1;
+        }
+        uint64_t bytes_left_in_sector = 512 - byte_offset;
+        if (bytes_left_in_sector > size) {
+            memcpy((uint8_t *)buffer, temp + byte_offset, size);
+            buffer += size;
+            file->offset += size;
+            size -= size;
+        } else {
+            memcpy((uint8_t *)buffer, temp + byte_offset, bytes_left_in_sector);
+            buffer += bytes_left_in_sector;
+            file->offset += bytes_left_in_sector;
+            size -= bytes_left_in_sector;
+        }
+    }
+    kfree(temp);
+    return 0;
 }
 
 /*this is very simple*/
