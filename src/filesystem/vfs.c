@@ -2,7 +2,7 @@
 #include "../memory/heap.h"
 #include "nothfs.h"
 
-struct vfs_node_t *vfs_root;
+struct vfs_node_t *vfs_root = NULL;
 int vfs_init(void)
 {
     vfs_root = (struct vfs_node_t *)kmalloc(sizeof(struct vfs_node_t));

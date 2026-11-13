@@ -266,9 +266,8 @@ execute_command(const char *cmd)
 		int dir = nothfs_readdir();
 		kprint("File Count: ", WHITE); kprint_num(dir, PURPLE); kprint("\n", WHITE);
 	} else if (strcmp(cmd, "nothfs_vfs_test") == 0) {
-		struct vfs_node_t *found = NULL;
-		found = nothfs_ops.lookup(vfs_root, "hello.txt");/*find the dirent with filename "hello.txt"*/
-		if (found == NULL)
+		struct vfs_node_t *found = vfs_root->ops->lookup(vfs_root, "hello.txt");
+        if (found == NULL)
 		{
 			kprint("nothfs_lookup failure!\n", PURPLE);
 		    return;
@@ -279,19 +278,13 @@ execute_command(const char *cmd)
 			.node = found,
 			.offset = 0
 		};
-		uint8_t *buffer = (uint8_t *)kmalloc(512);
-        if (!buffer){
-            kp_log("KMalloc Allocation failure. ", NOT_DONE);
-            return;
-        }
-		if (nothfs_ops.read(&file, buffer, 0) != 0) {/*since size if not currently used*/
+		uint8_t buffer[1024];
+		if (vfs_root->ops->read(&file, buffer, 0) != 0) {/*since size if not currently used*/
 			kprint("nothfs_read failure!\n", PURPLE);
-            kfree((void *)buffer);
         }
 		for (int i = 0; i < 512; ++i)
 			kprint_num((uint64_t)buffer[i], WHITE);
 		/*cleanup*/
-		kfree((void *)buffer);
 		kfree((void *)found);
 	} else if (strcmp(cmd, "ncore") == 0){
 		kprint_num((uint64_t)get_cpu_cores(), WHITE);
