@@ -170,7 +170,7 @@ execute_command(const char *cmd)
         if (!buffer)
             return;
 		memset(buffer, 0, 512);/*let's clean the buffer*/
-        kstrcpy((char *)buffer, "Hello World\n\0");
+        kstrcpy((char *)buffer, "Hello World\0");
         int write = ata_write_sector(lba, buffer);
         if (write < 0) {
             kp_log("(DRV)ATA PIO Driver LBA Sector write fail. ", NOT_DONE);
