@@ -108,58 +108,77 @@ nothfs_readdir(void)
 void
 fake_nothfs_dirent_test(int add)
 {
+	/*one place decides where the fake file lives, so the dirent and the
+	 *data can never disagree again*/
+	const uint64_t test_clus = 10;/*volume-relative sector*/
+	const char payload[] = "Hello World\n";
 	uint8_t buffer[512];
-	memset(buffer, 0, 512);
+	memset(buffer, 0, sizeof(buffer));
 	struct nothfs_dirent_t *dummy = (struct nothfs_dirent_t *)buffer;
-	uint32_t current_lba = (uint32_t)(nothfs_root.volume_start_lba + nothfs_root.superblock.root_start + add);/*262*/
-	kprint_num((uint64_t)current_lba, WHITE);
+	uint32_t dirent_lba = (uint32_t)(nothfs_root.volume_start_lba + nothfs_root.superblock.root_start + add);
+	uint64_t data_lba = nothfs_root.volume_start_lba + test_clus;
+	kprint_num((uint64_t)dirent_lba, WHITE);
 	dummy->attr = NOTHFS_ATTR_CONTIG;
 	kstrcpy((char *)dummy->name, "book.txt");
-	dummy->clus = 10;
-	dummy->size = 1024;
-	int a = nothfs_root.dev->write(nothfs_root.dev, current_lba, 1, (uint8_t *)dummy);
-	if (a != 0)
+	dummy->clus = test_clus;
+	/*size is a byte count, not a sector count, and a file does not
+	 *include its terminating NUL*/
+	dummy->size = sizeof(payload) - 1;
+	int a = nothfs_root.dev->write(nothfs_root.dev, dirent_lba, 1, buffer);
+	if (a != 0) {
 		kp_log("Fake-nothfs_dirent_t_test_fail. ", NOT_DONE);
+		return;
+	}
+	/*write the file data as well, so the test is self-contained*/
+	memset(buffer, 0, sizeof(buffer));
+	kstrcpy((char *)buffer, payload);
+	a = nothfs_root.dev->write(nothfs_root.dev, data_lba, 1, buffer);
+	if (a != 0)
+		kp_log("Fake-nothfs_data_test_fail. ", NOT_DONE);
 	/*we will now create anothre fake dirent*/
 }
 
 int
 nothfs_read(struct vfs_file_t *file, void *buffer, uint64_t size)
 {
-    uint8_t *temp = kmalloc(512);/*temporary buffer*/
+    if (!file || !file->node || !buffer)
+        return -1;
+    /*the superblock is the authority; fall back to the format default if a
+     *bad image has a zero here*/
+    uint32_t sector_size = nothfs_root.superblock.sector_size;
+    if (sector_size == 0)
+        sector_size = NOTHFS_SECTOR_SIZE;
+    uint8_t *temp = kmalloc(sector_size);
+    if (!temp)
+        return -1;
+    uint64_t starting_clus = (uint64_t)(uintptr_t)file->node->fs_data;/*okay we get the startin cluster*/
+    uint8_t *dest = (uint8_t *)buffer;/*advance this, not buffer itself*/
     uint64_t total_bytes_read = 0;
-    uint64_t starting_clus = (uint64_t)(uintptr_t)file->node->fs_data;
-    /*sector we need*/
-    while (size != 0)
+    while (total_bytes_read < size && file->offset < file->node->size)
     {
-        if (file->offset >= file->node->size)  break;
-        uint64_t sector_index = file->offset / 512;
-        uint64_t byte_offset = file->offset % 512;/*byte position in that sector*/
+        uint64_t sector_index = file->offset / sector_size;
+        uint64_t byte_offset = file->offset % sector_size;/*position inside sector*/
         uint64_t lba = nothfs_root.volume_start_lba + starting_clus + sector_index;
         if (nothfs_root.dev->read(nothfs_root.dev, lba, 1, temp) != 0)
         {
-            kfree((void *)temp);
+            kfree(temp);
             return -1;
         }
-        uint64_t bytes_left_in_sector = 512 - byte_offset;
-        if (bytes_left_in_sector > size) {
-            uint8_t *dest = (uint8_t *)buffer;
-            memcpy(dest, temp + byte_offset, size);
-            total_bytes_read += size;
-            dest += size;
-            file->offset += size;
-            size -= size;
-        } else {
-            uint8_t *dest = (uint8_t *)buffer;
-            memcpy(dest, temp + byte_offset, bytes_left_in_sector);
-            total_bytes_read += bytes_left_in_sector;
-            dest += bytes_left_in_sector;
-            file->offset += bytes_left_in_sector;
-            size -= bytes_left_in_sector;
-        }
+        uint64_t bytes_left_in_sector = sector_size - byte_offset;
+        uint64_t bytes_left_in_file = file->node->size - file->offset;
+        uint64_t chunk = size - total_bytes_read;
+        /*copy no more than the request, the sector, or the rest of the file*/
+        if (chunk > bytes_left_in_sector)
+            chunk = bytes_left_in_sector;
+        if (chunk > bytes_left_in_file)
+            chunk = bytes_left_in_file;
+        memcpy(dest, temp + byte_offset, chunk);
+        dest += chunk;
+        file->offset += chunk;
+        total_bytes_read += chunk;
     }
     kfree(temp);
-    return total_bytes_read;
+    return (int)total_bytes_read;
 }
 
 /*this is very simple*/
@@ -197,9 +216,12 @@ nothfs_lookup(struct vfs_node_t *dir, const char *name)
             /*fixed positioning, although we can mall a 0 page
              * we still check for allocation failure before any operations*/
             memset(nnode, (uint8_t)0, (uint32_t)sizeof(*nnode));
+			/*translate the on-disk dirent into a generic in-memory inode*/
+			nnode->flags = (dirent[i].attr & NOTHFS_ATTR_DIR) ? VFS_DIR : VFS_FILE;
 			nnode->size = dirent[i].size;
 			nnode->ops = &nothfs_ops;
-			nnode->fs_data = (void *)(uintptr_t)dirent[i].clus;/*we save starting NothFS sector*/
+			/*volume-relative, not an absolute LBA; nothfs_read() converts it*/
+			nnode->fs_data = (void *)(uintptr_t)dirent[i].clus;
 			kfree(buffer);
 			return nnode;
 			/*but why is the vfs_node_t dir there as an argument, i dont see any use for it*/

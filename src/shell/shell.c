@@ -170,7 +170,7 @@ execute_command(const char *cmd)
         if (!buffer)
             return;
 		memset(buffer, 0, 512);/*let's clean the buffer*/
-        kstrcpy((char *)buffer, "Hello World\0");
+        kstrcpy((char *)buffer, "Hello World\n");
         int write = ata_write_sector(lba, buffer);
         if (write < 0) {
             kp_log("(DRV)ATA PIO Driver LBA Sector write fail. ", NOT_DONE);
@@ -274,14 +274,19 @@ execute_command(const char *cmd)
 		{
 			/*real men use the heap*/
 			char *buffer = (char *)kmalloc(512);/*buffer for contents of the file*/
+			if (!buffer) {
+				kprint("Out of memory\n", PURPLE);
+				vfs_close(&nothfs_file);
+				return;
+			}
+
 			int bytes_read = 0;
+			/*cat prints exactly what read() gives us. The file size, not a
+			 *NUL byte, decides where the file ends, so binary-safe.*/
 			while ((bytes_read = vfs_read(&nothfs_file, buffer, 512)) > 0)
 			{
-				int i = 0;
-				while (buffer[i] != '\0')
-				{
-					kprint_c(buffer[i++], WHITE);
-				}
+				for (int i = 0; i < bytes_read; ++i)
+					kprint_c(buffer[i], WHITE);
 			}
 			kprint("\n", WHITE);
 			kfree((void *)buffer);

@@ -22,8 +22,8 @@ struct nothfs_dirent_t
 {
 	uint16_t attr;
 	uint8_t name[NOTHFS_NAME_LEN];/*null terminated filename*/
-	uint64_t clus;/*starting sector*/
-	uint64_t size;
+	uint64_t clus;/*starting sector, relative to volume start*/
+	uint64_t size;/*file size in bytes*/
 	uint64_t datetime;
 	/*already packed*/
 } __attribute__((packed));

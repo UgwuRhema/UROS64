@@ -3,6 +3,10 @@
 
 #include "nothfs.h"
 
+/*generic inode types, so callers do not have to know the on-disk format*/
+#define VFS_FILE 0x01
+#define VFS_DIR  0x02
+
 struct vfs_file_t;
 struct vfs_node_t;
 
