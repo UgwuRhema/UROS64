@@ -267,7 +267,22 @@ execute_command(const char *cmd)
 		int dir = nothfs_readdir();
 		kprint("File Count: ", WHITE); kprint_num(dir, PURPLE); kprint("\n", WHITE);
 	} else if (strncmp(cmd, "cat ", 4) == 0) {
-		/*coming soon*/
+		const char *dirent_name = &cmd[4];
+		struct vfs_file_t nothfs_file;
+		if (vfs_open(dirent_name, &nothfs_file) == 0)/*we open the file, -1 on file not found*/
+		{
+			char buffer[512];/*buffer for contents of the file*/
+			int bytes_read = 0;
+			while ((bytes_read = vfs_read(&nothfs_file, buffer, 512)) > 0)
+			{
+				for (int i = 0; i < bytes_read; ++i)
+					kprint_c(buffer[i], WHITE);
+			}
+			kprint("\n", WHITE);
+			vfs_close(&nothfs_file);
+		} else {
+			kprint("File not found!\n", PURPLE);
+		}
 	} else if (strcmp(cmd, "nothfs_vfs_test") == 0) {
 		struct vfs_node_t *found = vfs_root->ops->lookup(vfs_root, "hello.txt");
         if (found == NULL)
