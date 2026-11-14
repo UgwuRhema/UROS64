@@ -277,11 +277,10 @@ execute_command(const char *cmd)
 			int bytes_read = 0;
 			while ((bytes_read = vfs_read(&nothfs_file, buffer, 512)) > 0)
 			{
-				/*this way 'cat' actually prints bytes(string) and stops exactly at the
-				 * first null terminator*/
-				while (*buffer++)
+				int i = 0;
+				while (buffer[i] != '\0')
 				{
-					kprint_c(*(buffer - 1), WHITE);
+					kprint_c(buffer[i++], WHITE);
 				}
 			}
 			kprint("\n", WHITE);

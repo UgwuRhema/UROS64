@@ -25,13 +25,11 @@ kprint_c(char c, u16 attr)
         _VGA_BUF[cursor_pos] = (u16)c | (attr << 8);
         cursor_pos++;
     }
-
 	if (cursor_pos >= _VGA_COLS * _VGA_ROWS)
 	{
 		vga_scroll();
 		cursor_pos = (_VGA_ROWS - 1) * _VGA_COLS;
 	}
-    
     /* track the blinking cursor */
     outb(0x3d4, 0x0f);
     outb(0x3d5, (u8)(cursor_pos & 0xff));
