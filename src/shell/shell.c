@@ -277,8 +277,12 @@ execute_command(const char *cmd)
 			int bytes_read = 0;
 			while ((bytes_read = vfs_read(&nothfs_file, buffer, 512)) > 0)
 			{
-				for (int i = 0; i < bytes_read; ++i)
-					kprint_c(buffer[i], WHITE);
+				/*this way 'cat' actually prints bytes(string) and stops exactly at the
+				 * first null terminator*/
+				while (*buffer++)
+				{
+					kprint_c(*(buffer - 1), WHITE);
+				}
 			}
 			kprint("\n", WHITE);
 			kfree((void *)buffer);
