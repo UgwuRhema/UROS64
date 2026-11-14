@@ -271,7 +271,8 @@ execute_command(const char *cmd)
 		struct vfs_file_t nothfs_file;
 		if (vfs_open(dirent_name, &nothfs_file) == 0)/*we open the file, -1 on file not found*/
 		{
-			char buffer[512];/*buffer for contents of the file*/
+			/*real men use the heap*/
+			char *buffer = (char *)kmalloc(512);/*buffer for contents of the file*/
 			int bytes_read = 0;
 			while ((bytes_read = vfs_read(&nothfs_file, buffer, 512)) > 0)
 			{
@@ -279,6 +280,7 @@ execute_command(const char *cmd)
 					kprint_c(buffer[i], WHITE);
 			}
 			kprint("\n", WHITE);
+			kfree((void *)buffer);
 			vfs_close(&nothfs_file);
 		} else {
 			kprint("File not found!\n", PURPLE);
