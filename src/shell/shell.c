@@ -169,6 +169,7 @@ execute_command(const char *cmd)
         uint8_t *buffer = (uint8_t *)kmalloc(512);/*this is the buffer that will be written at the give lba*/
         if (!buffer)
             return;
+		memset(buffer, 0, 512);/*let's clean the buffer*/
         kstrcpy((char *)buffer, "Hello World\n\0");
         int write = ata_write_sector(lba, buffer);
         if (write < 0) {
