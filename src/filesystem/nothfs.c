@@ -30,7 +30,7 @@ nothfs_mount(struct block_device *dev)
 	if (strcmp((char *)sb.signature, "NOTHFS") != 0)
 		return 1;
 	nothfs_root.dev = dev;
-	nothfs_root.volume_start_lba = NOTHFS_VOLUME_LBA;
+	nothfs_root.volume_start_lba = NOTHFS_VOLUME_LBA;/*every NothFS address is relative to this*/
 	nothfs_root.superblock = sb;
 	return 0;/*success*/
 }
@@ -74,9 +74,9 @@ int
 nothfs_readdir(void)
 {
 	struct nothfs_dirent_t *dirent;
-	uint64_t current_lba = nothfs_root.volume_start_lba + nothfs_root.superblock.root_start;
+	uint64_t current_lba = nothfs_root.volume_start_lba + nothfs_root.superblock.root_start;/*root_start is volume-relative*/
 	int file_count = 0;
-	/*read the first 2 sectors of the root directory into a 1024byte buffer*/
+	/*read the 3 directory sectors*/
 	uint8_t *buffer = kmalloc(NOTHFS_DIR_SECTORS * NOTHFS_SECTOR_SIZE);
 	if (!buffer)
 		return -1;
@@ -85,6 +85,7 @@ nothfs_readdir(void)
 		return -1;
 	}
 	dirent = (struct nothfs_dirent_t *)buffer;
+	/*scan every 64-byte dirent slot*/
 	for (int i = 0; i < (int)((NOTHFS_DIR_SECTORS * NOTHFS_SECTOR_SIZE) / sizeof(struct nothfs_dirent_t)); ++i)
 	{
 		/*attr 0 means this slot is free not EOD, an empty
@@ -116,7 +117,7 @@ fake_nothfs_dirent_test(int add)
 	memset(buffer, 0, sizeof(buffer));
 	struct nothfs_dirent_t *dummy = (struct nothfs_dirent_t *)buffer;
 	uint32_t dirent_lba = (uint32_t)(nothfs_root.volume_start_lba + nothfs_root.superblock.root_start + add);
-	uint64_t data_lba = nothfs_root.volume_start_lba + test_clus;
+	uint64_t data_lba = nothfs_root.volume_start_lba + test_clus;/*where clus actually points on disk*/
 	kprint_num((uint64_t)dirent_lba, WHITE);
 	dummy->attr = NOTHFS_ATTR_CONTIG;
 	kstrcpy((char *)dummy->name, "book.txt");
@@ -124,6 +125,7 @@ fake_nothfs_dirent_test(int add)
 	/*size is a byte count, not a sector count, and a file does not
 	 *include its terminating NUL*/
 	dummy->size = sizeof(payload) - 1;
+	/*write the card into the root directory*/
 	int a = nothfs_root.dev->write(nothfs_root.dev, dirent_lba, 1, buffer);
 	if (a != 0) {
 		kp_log("Fake-nothfs_dirent_t_test_fail. ", NOT_DONE);
@@ -158,15 +160,15 @@ nothfs_read(struct vfs_file_t *file, void *buffer, uint64_t size)
     {
         uint64_t sector_index = file->offset / sector_size;
         uint64_t byte_offset = file->offset % sector_size;/*position inside sector*/
-        uint64_t lba = nothfs_root.volume_start_lba + starting_clus + sector_index;
+        uint64_t lba = nothfs_root.volume_start_lba + starting_clus + sector_index;/*volume sector -> disk LBA*/
         if (nothfs_root.dev->read(nothfs_root.dev, lba, 1, temp) != 0)
         {
             kfree(temp);
             return -1;
         }
-        uint64_t bytes_left_in_sector = sector_size - byte_offset;
-        uint64_t bytes_left_in_file = file->node->size - file->offset;
-        uint64_t chunk = size - total_bytes_read;
+        uint64_t bytes_left_in_sector = sector_size - byte_offset;/*rest of this sector*/
+        uint64_t bytes_left_in_file = file->node->size - file->offset;/*rest of the file*/
+        uint64_t chunk = size - total_bytes_read;/*rest of the caller's buffer*/
         /*copy no more than the request, the sector, or the rest of the file*/
         if (chunk > bytes_left_in_sector)
             chunk = bytes_left_in_sector;
@@ -189,8 +191,8 @@ nothfs_lookup(struct vfs_node_t *dir, const char *name)
     uint64_t dir_start_clus = 0;
     if (!dir) dir_start_clus = nothfs_root.superblock.root_start;/*defaults to root directory*/
     else dir_start_clus = (uint64_t)(uintptr_t)dir->fs_data;
-	uint64_t current_lba = nothfs_root.volume_start_lba + dir_start_clus;
-	/*read the first 2 sectors of the directory into a 1024byte buffer*/
+	uint64_t current_lba = nothfs_root.volume_start_lba + dir_start_clus;/*dir cluster -> disk LBA*/
+	/*read the 3 directory sectors*/
 	uint8_t *buffer = kmalloc(NOTHFS_DIR_SECTORS * NOTHFS_SECTOR_SIZE);
 	if (!buffer) return NULL;
 	if (nothfs_root.dev->read(nothfs_root.dev, current_lba, NOTHFS_DIR_SECTORS, buffer) != 0){

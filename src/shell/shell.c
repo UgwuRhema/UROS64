@@ -281,16 +281,15 @@ execute_command(const char *cmd)
 			}
 
 			int bytes_read = 0;
-			/*cat prints exactly what read() gives us. The file size, not a
-			 *NUL byte, decides where the file ends, so binary-safe.*/
+			/*size decides where the file ends, not a NUL byte*/
 			while ((bytes_read = vfs_read(&nothfs_file, buffer, 512)) > 0)
 			{
-				for (int i = 0; i < bytes_read; ++i)
+				for (int i = 0; i < bytes_read; ++i)/*print exactly what read returned*/
 					kprint_c(buffer[i], WHITE);
 			}
 			kprint("\n", WHITE);
-			kfree((void *)buffer);
-			vfs_close(&nothfs_file);
+			kfree((void *)buffer);/*free the buffer*/
+			vfs_close(&nothfs_file);/*free the inode*/
 		} else {
 			kprint("File not found!\n", PURPLE);
 		}

@@ -10,11 +10,10 @@ int vfs_init(void)
     if (!vfs_root)
         return 1;
     /*kmalloc does not zero memory, so initialise every field we rely on*/
-    vfs_root->flags = VFS_DIR;
+    vfs_root->flags = VFS_DIR;/*root is a directory inode*/
     vfs_root->size = 0;
     vfs_root->ops = &nothfs_ops;
-    /*NothFS keeps addresses volume-relative; the FS converts them when it
-     *talks to the block device*/
+    /*root_start is volume-relative; NothFS converts it when reading*/
     vfs_root->fs_data = (void *)(uintptr_t)nothfs_root.superblock.root_start;
     return 0;
 }
@@ -25,11 +24,11 @@ vfs_open(const char *name, struct vfs_file_t *file)
 {
 	if (!vfs_root || !vfs_root->ops || !vfs_root->ops->lookup || !name || !file)
 		return -1;
-	struct vfs_node_t *found = vfs_root->ops->lookup(vfs_root, name);
+	struct vfs_node_t *found = vfs_root->ops->lookup(vfs_root, name);/*ask NothFS to find the name*/
 	if (!found)
 		return -1;
 	file->node = found;
-	file->offset = 0;
+	file->offset = 0;/*fresh file starts at offset 0*/
 	return 0;
 }
 
@@ -40,7 +39,7 @@ vfs_read(struct vfs_file_t *file, void *buffer, uint64_t size)
 	if (!file || !file->node || !file->node->ops ||
 	    !file->node->ops->read || !buffer)
 		return -1;
-	return file->node->ops->read(file, buffer, size);
+	return file->node->ops->read(file, buffer, size);/*dispatch to the filesystem*/
 }
 
 void
@@ -48,7 +47,7 @@ vfs_close(struct vfs_file_t *file)
 {
 	if (!file || !file->node)
 		return;
-	kfree((void *)file->node);
+	kfree((void *)file->node);/*free the inode lookup created*/
 	file->node = NULL;
 	/*we'll worry about reference count later*/
 }
