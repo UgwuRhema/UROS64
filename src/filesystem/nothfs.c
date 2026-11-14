@@ -135,7 +135,7 @@ nothfs_read(struct vfs_file_t *file, void *buffer, uint64_t size)
         if (file->offset >= file->node->size)  break;
         uint64_t sector_index = file->offset / 512;
         uint64_t byte_offset = file->offset % 512;/*byte position in that sector*/
-        uint64_t lba = starting_clus + sector_index;
+        uint64_t lba = nothfs_root.volume_start_lba + starting_clus + sector_index;
         if (nothfs_root.dev->read(nothfs_root.dev, lba, 1, temp) != 0)
         {
             kfree((void *)temp);
