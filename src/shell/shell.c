@@ -336,7 +336,7 @@ shell_init(void)
     cmd_idx = 0;
 	kprint("[", WHITE);
 	kprint((char *)nothfs_root.superblock.signature, WHITE);
-	kprint(":/Uros64]# ", WHITE);
+	kprint(":/Uros64]% ", WHITE);
 }
 
 void
@@ -354,7 +354,7 @@ shell_update(void)
         memset(cmd_buf, 0, CMD_MAX_LEN);
 		kprint("[", WHITE);
 		kprint((char *)nothfs_root.superblock.signature, WHITE);
-        kprint(":/Uros64]# ", WHITE);
+        kprint(":/Uros64]% ", WHITE);
     } else if (c == '\b'){
         if (cmd_idx > 0)
         {
