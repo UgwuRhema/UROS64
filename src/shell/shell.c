@@ -317,6 +317,10 @@ execute_command(const char *cmd)
 	} else if (strcmp(cmd, "ncore") == 0){
 		kprint_num((uint64_t)get_cpu_cores(), WHITE);
 		kprint("\n", WHITE);
+	} else if (strcmp(cmd, "mnt") == 0) {
+		if (nothfs_mount(nothfs_root.dev) != 0)
+			kp_log("(NOTHFS)Failed to mount disk, LBA 256 doesn't contain NothFS Superblock\n"
+					, NOT_DONE);
 	} else {
         kprint("Unknown Command: ", PURPLE);
         kprint("'", PURPLE);
