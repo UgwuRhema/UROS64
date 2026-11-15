@@ -334,9 +334,8 @@ shell_init(void)
     //kprint("\n", WHITE);
 	memset(cmd_buf, 0, CMD_MAX_LEN);
     cmd_idx = 0;
-	kprint("[", WHITE);
-	kprint((char *)nothfs_root.superblock.signature, WHITE);
-	kprint(":/Uros64]% ", WHITE);
+	//kprint("[", WHITE);
+	kprint("Noth% ", WHITE);
 }
 
 void
@@ -352,9 +351,8 @@ shell_update(void)
         /* reset command line */
         cmd_idx = 0;
         memset(cmd_buf, 0, CMD_MAX_LEN);
-		kprint("[", WHITE);
-		kprint((char *)nothfs_root.superblock.signature, WHITE);
-        kprint(":/Uros64]% ", WHITE);
+		//kprint("", WHITE);
+        kprint("Noth% ", WHITE);
     } else if (c == '\b'){
         if (cmd_idx > 0)
         {
