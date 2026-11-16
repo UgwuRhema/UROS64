@@ -34,7 +34,7 @@ uroskrnl_main_entry_point(uint32_t memory_entries_count, struct MemoryMapEntry_t
 	beep();
 	kprint("UROS(Unrestricted Runtime Operating System) KERNEL ", WHITE);
 	kprint("v0.01\n", GREEN);
-	kprint("x86 Monolithic 64-bit Kernel written in URSL\n", WHITE);
+	kprint("x86-64-bit Unrestricted Kernel written in C & ASM, porting to URSL soon\n", WHITE);
 	/*kprint("\n", WHITE); */
 	skprint("Entering setup....\n");
 	kp_log("(HARD)Enabled PC Speaker. ", DONE);
