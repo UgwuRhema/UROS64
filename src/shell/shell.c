@@ -20,7 +20,7 @@ execute_command(const char *cmd)
         kprint("          powerdown|off  vreboot  linux\n", GREEN);
         kprint(" Memory : memmap  smap_info  heap  vmm_test\n", GREEN);
         kprint("          tmp_alloc <bytes>  tmp_free <addr>\n", GREEN);
-        kprint(" Storage: vols  ata_read <lba>  ata_write <lba>  mkfs.nothfs <lba>\n", GREEN);
+        kprint(" Storage: vols  mnt ata_read <lba>  ata_write <lba>  mkfs.nothfs <lba>\n", GREEN);
         kprint(" Filesys: disk  finddir  dirent_test  nothfs_vfs_test\n", GREEN);
         kprint(" Debug  : info registers  trigger_pf_panic  trigger_dz_panic  trigger_uo_panic\n", GREEN);
         kprint(" Misc   : puts <text> cat <file>\n", GREEN);
