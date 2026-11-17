@@ -53,6 +53,9 @@ VFS_O := ./src/filesystem/vfs.o
 MKFS := ./src/filesystem/mkfs.c
 MKFS_OUT := ./scripts/mkfs.nothfs 
 
+SCRIPT1 := ./scipts/small_script.c
+SCRIPT1_OUT := ./scripts/nthfs
+
 IMG := uros.img
 IMG2 := dummy.img
 
@@ -68,6 +71,9 @@ bloader: ./boot/boot.asm
 
 nothfs:
 	$(CC) -Wall -Wextra -g -O0 -march=native -o $(MKFS_OUT) $(MKFS)
+
+script01:
+	$(CC) -Wall -Wextra -g -O0 -march=native -o $(SCRIPT1_OUT) $(SCRIPT1)
 
 kernel:
 	$(AS) $(ASF2) -o $(KE_O) $(KE_SRC)
