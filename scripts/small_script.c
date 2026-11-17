@@ -14,7 +14,7 @@ main(int argc, char *argv[])
 	if (argc > 1)
 		default_image_filename = argv[1];
 	else
-		default_image_filename = "uros.img";
+		default_image_filename = "../uros.img";
 	FILE *fd = fopen(default_image_filename, "r+b");
 	/*let's create the new nothfs_dirent*/
 	struct nothfs_dirent_t *new_file = (struct nothfs_dirent_t *)malloc(sizeof(struct nothfs_dirent_t));

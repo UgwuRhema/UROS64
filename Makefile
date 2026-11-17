@@ -53,7 +53,7 @@ VFS_O := ./src/filesystem/vfs.o
 MKFS := ./src/filesystem/mkfs.c
 MKFS_OUT := ./scripts/mkfs.nothfs 
 
-SCRIPT1 := ./scipts/small_script.c
+SCRIPT1 := ./scripts/small_script.c
 SCRIPT1_OUT := ./scripts/nthfs
 
 IMG := uros.img
