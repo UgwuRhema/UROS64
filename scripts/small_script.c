@@ -21,7 +21,7 @@ main(int argc, char *argv[])
 	memset(new_file, 0, sizeof(struct nothfs_dirent_t));/*clean memory*/
 	new_file->attr = NOTHFS_ATTR_CONTIG;/*file attribute*/
 	memcpy(new_file->name, "payload.txt\0", 12);
-	new_file->clus = 30;
+	new_file->clus = 31;
 	new_file->size = 12;
 	new_file->datetime = 17112026;
 	fseek(fd, SECTOR_SIZE * SPECIFIED_LBA, SEEK_SET);/*go to ba 267 on the disk*/
