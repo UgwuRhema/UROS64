@@ -5,6 +5,7 @@
 
 #define SECTOR_SIZE 512
 #define SPECIFIED_LBA 263
+#define DEF_VOL 256
 
 int
 main(int argc, char *argv[])
@@ -22,11 +23,18 @@ main(int argc, char *argv[])
 	new_file->attr = NOTHFS_ATTR_CONTIG;/*file attribute*/
 	memcpy(new_file->name, "payload.txt\0", 12);
 	new_file->clus = 31;
-	new_file->size = 12;
+	new_file->size = 0;/*no data yet*/
 	new_file->datetime = 17112026;
 	fseek(fd, SECTOR_SIZE * SPECIFIED_LBA, SEEK_SET);/*go to ba 267 on the disk*/
 	fwrite(new_file, sizeof(struct nothfs_dirent_t), 1, fd);
 	printf("New Nothfs_dirent written to LBA %d of name %s\n", SPECIFIED_LBA, new_file->name);
+	fseek(fd, 0, SEEK_SET);
+	fseek(fd, SECTOR_SIZE * (DEF_VOL + new_file->clus), SEEK_SET);/*at the file's cluster sector so we
+	can write data */
+	char big_text[512];/*fahh, it had a const qualifier*/
+	for (int i = 0; i < 512; ++i)
+		big_text[i] = 'A';/*what?!*/
+	fwrite(big_text, 512, 1, fd);
 	free(new_file);
 	fclose(fd);
 	return 0;
