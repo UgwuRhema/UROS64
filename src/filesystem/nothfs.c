@@ -111,7 +111,7 @@ fake_nothfs_dirent_test(int add)
 {
 	/*one place decides where the fake file lives, so the dirent and the
 	 *data can never disagree again*/
-	const uint64_t test_clus = 10;/*volume-relative sector*/
+	const uint64_t test_clus = 30;/*volume-relative sector*/
 	const char payload[] = "Hello World\n";
 	uint8_t buffer[512];
 	memset(buffer, 0, sizeof(buffer));

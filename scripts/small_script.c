@@ -4,7 +4,7 @@
 #include <string.h>
 
 #define SECTOR_SIZE 512
-#define SPECIFIED_LBA 267
+#define SPECIFIED_LBA 263
 
 int
 main(int argc, char *argv[])
