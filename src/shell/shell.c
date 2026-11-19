@@ -266,7 +266,6 @@ execute_command(const char *cmd)
 	} else if (strcmp(cmd, "finddir") == 0 || strcmp(cmd, "dir") == 0){
 		/*this is a minimal test for finddir*/
 		int dir = nothfs_readdir();
-		kprint("File Count: ", WHITE); kprint_num(dir, PURPLE); kprint("\n", WHITE);
 	} else if (strncmp(cmd, "cat ", 4) == 0) {
 		const char *dirent_name = &cmd[4];
 		struct vfs_file_t nothfs_file;

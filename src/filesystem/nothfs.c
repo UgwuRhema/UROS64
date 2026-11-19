@@ -97,7 +97,7 @@ nothfs_readdir(void)
 		/*just a debug*/
 		kprint((char *)dirent[i].name, WHITE);
 		kprint(" ", WHITE);/*space between*/
-		kprint_num(dirent[i].size, WHITE); kprint("\n", WHITE);
+		kprint_num(dirent[i].size, BLUE); kprint("\n", WHITE);
 		file_count++;
 	}
 	kfree(buffer);
