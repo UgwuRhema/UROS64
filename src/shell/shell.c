@@ -21,7 +21,7 @@ execute_command(const char *cmd)
         kprint(" Memory : memmap  smap_info  heap  vmm_test\n", GREEN);
         kprint("          tmp_alloc <bytes>  tmp_free <addr>\n", GREEN);
         kprint(" Storage: vols  mnt ata_read <lba>  ata_write <lba>  mkfs.nothfs <lba>\n", GREEN);
-        kprint(" Filesys: disk  finddir  dirent_test  nothfs_vfs_test\n", GREEN);
+        kprint(" Filesys: disk  dir finddir  dirent_test  nothfs_vfs_test\n", GREEN);
         kprint(" Debug  : info registers  trigger_pf_panic  trigger_dz_panic  trigger_uo_panic\n", GREEN);
         kprint(" Misc   : puts <text> cat <file>\n", GREEN);
     } else if (strcmp(cmd, "info registers") == 0) {
@@ -263,7 +263,7 @@ execute_command(const char *cmd)
 		kprint(brand, GREEN); kprint("\n", WHITE);
 		kprint(" CPU Cores: ", WHITE); kprint_num((uint64_t)get_cpu_cores(), GREEN);
 		kprint("\n", WHITE);
-	} else if (strcmp(cmd, "finddir") == 0){
+	} else if (strcmp(cmd, "finddir") == 0 || strcmp(cmd, "dir") == 0){
 		/*this is a minimal test for finddir*/
 		int dir = nothfs_readdir();
 		kprint("File Count: ", WHITE); kprint_num(dir, PURPLE); kprint("\n", WHITE);
@@ -279,7 +279,6 @@ execute_command(const char *cmd)
 				vfs_close(&nothfs_file);
 				return;
 			}
-
 			int bytes_read = 0;
 			/*size decides where the file ends, not a NUL byte*/
 			while ((bytes_read = vfs_read(&nothfs_file, buffer, 512)) > 0)
