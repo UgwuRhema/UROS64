@@ -95,11 +95,9 @@ nothfs_readdir(void)
 		if (dirent[i].attr & NOTHFS_ATTR_DELETED)
 			continue;
 		/*just a debug*/
-		kprint(" [FILE] ", WHITE);
-		kprint((char *)dirent[i].name, GREEN);
-		kprint(" (", WHITE);
-		kprint_num(dirent[i].size, GREEN);
-		kprint(" bytes)\n", WHITE);
+		kprint((char *)dirent[i].name, WHITE);
+		kprint(" ", WHITE);/*space between*/
+		kprint_num(dirent[i].size, WHITE); kprint("\n", WHITE);
 		file_count++;
 	}
 	kfree(buffer);
