@@ -94,10 +94,18 @@ nothfs_readdir(void)
 			continue;
 		if (dirent[i].attr & NOTHFS_ATTR_DELETED)
 			continue;
+		if (dirent[i].attr & NOTHFS_ATTR_DIR)
+		{
+			/*every directory is 2 sectors?*/
+			kprint((char *)dirent[i].name, BLUE);
+			kprint(" ", WHITE);
+			kprint_num(dirent[i].size);kprint("\n", WHITE);
+			file_count++; /*a directory is still a file*/
+		}
 		/*just a debug*/
 		kprint((char *)dirent[i].name, WHITE);
 		kprint(" ", WHITE);/*space between*/
-		kprint_num(dirent[i].size, BLUE); kprint("\n", WHITE);
+		kprint_num(dirent[i].size, GREEN); kprint("\n", WHITE);
 		file_count++;
 	}
 	kfree(buffer);
