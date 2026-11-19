@@ -107,9 +107,11 @@ nothfs_readdir(void)
 void
 fake_nothfs_dirent_test(int add)
 {
+	/*this creates a nothfs_dirent with attribute = NOTHFS_CONTIG for representing
+	 * a normal file */
 	/*one place decides where the fake file lives, so the dirent and the
 	 *data can never disagree again*/
-	const uint64_t test_clus = 30;/*volume-relative sector*/
+	const uint64_t test_clus = 10;/*volume-relative sector*/
 	const char payload[] = "Hello World\n";
 	uint8_t buffer[512];
 	memset(buffer, 0, sizeof(buffer));
@@ -136,6 +138,9 @@ fake_nothfs_dirent_test(int add)
 	if (a != 0)
 		kp_log("Fake-nothfs_data_test_fail. ", NOT_DONE);
 	/*we will now create anothre fake dirent*/
+	/*this new nothfs_dirent will have attribute NOTHFS_DIR | NOTHFS_CONTIG to represent
+	 * a directory */
+	
 }
 
 int
