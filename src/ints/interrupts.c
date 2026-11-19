@@ -2,22 +2,23 @@
 #include "handlers.h"
 #include "apic.h"
 
-struct IDT_Entry idt[_IDT_ENTRIES];
+struct IDT_Entry idt[_IDT_ENTRIES];/*256 IDT Entries*/
 
 #define PIT_COMMAND 0x43
 #define PIT_CHANNEL0 0x40
 
+/*enables the programmable interval timer*/
 void 
 enable_pit(uint32_t freq)
 {
 	/* 1193182 Hz is the internal PIT Oscillator frequency */
 	uint32_t divisor = 1193182 / freq;
-
 	outb(PIT_COMMAND, 0x36);
 	outb(PIT_CHANNEL0, (uint8_t)(divisor & 0xff));
 	outb(PIT_CHANNEL0, (uint8_t)((divisor >> 8) & 0xff));
 }
 
+/*enable's COM1 serial port*/
 void
 serial_init(void)
 {
@@ -30,7 +31,6 @@ serial_init(void)
     outb(COM1 + 4, 0x0b); /* Enable IRQs ,OUT2 bit set */
     inb(COM1 + 5); /* Read Line Status Register */
     inb(COM1 + 0); /* Read Receive Buffer Register */
-
     outb(COM1 + 1, 0x01); /* Enable Received Data Available Interrupt */
 }
 
@@ -38,6 +38,7 @@ serial_init(void)
 void
 idt_set_entry(int index, uint8_t ist,uint64_t hand_addr, uint16_t selector, uint8_t attr)
 {
+	/*this sets one IDT Entry*/
    idt[index].offset_low = hand_addr & 0xffff; /* low 16 bits */
    idt[index].offset_middle = (hand_addr >> 16) & 0xffff; /* blah blah */
    idt[index].offset_high = (hand_addr >> 32);
