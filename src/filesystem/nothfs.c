@@ -99,7 +99,7 @@ nothfs_readdir(void)
 			/*every directory is 2 sectors?*/
 			kprint((char *)dirent[i].name, BLUE);
 			kprint(" ", WHITE);
-			kprint_num(dirent[i].size);kprint("\n", WHITE);
+			kprint_num(dirent[i].size, GREEN);kprint("\n", WHITE);
 			file_count++; /*a directory is still a file*/
 		}
 		/*just a debug*/
@@ -148,7 +148,25 @@ fake_nothfs_dirent_test(int add)
 	/*we will now create anothre fake dirent*/
 	/*this new nothfs_dirent will have attribute NOTHFS_DIR | NOTHFS_CONTIG to represent
 	 * a directory */
-	
+	const uint64_t test_clus2 = 20;
+	uint8_t another_buffer[512];
+	memset(another_buffer, 0, sizeof(another_buffer));/*cleanup*/
+	struct nothfs_dirent_t *dummy_dir = (struct nothfs_dirent_t *)another_buffer;
+	uint32_t dirent2_lba = (uint32_t)(nothfs_root.volume_start_lba + nothfs_root.superblock.root_start + 1 + add);/*the next sector after
+	the root dir, LBA 263*/
+	uint64_t data_lba2 = nothfs_root.volume_start_lba + test_clus2;/*LBA 276*/
+	kprint(" ", WHITE);kprint_num((uint64_t)dirent2_lba, WHITE);
+	dummy_dir->attr = NOTHFS_ATTR_DIR | NOTHFS_ATTR_CONTIG;
+	kstrcpy((char *)dummy_dir->name, "docs");
+	dummy_dir->clus = test_clus2;
+	dummy_dir->size = 1024; /*size for directories are different, every directory apart from root dir is 2 sectors*/
+	int b = nothfs_root.dev->write(nothfs_root.dev, dirent2_lba, 1, buffer);
+	if (b != 0)
+	{
+		kp_log("Fake-nothfs_dirent2_test failure. ", NOT_DONE);
+		return;
+	}
+	/*has no data yet*/
 }
 
 int
