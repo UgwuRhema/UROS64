@@ -6,10 +6,10 @@ struct vfs_node_t *vfs_root = NULL;
 /*VirtualFile System initialization function*/
 int vfs_init(void)
 {
-    vfs_root = (struct vfs_node_t *)kmalloc(sizeof(struct vfs_node_t));
+    vfs_root = (struct vfs_node_t *)kernel_heap_malloc(sizeof(struct vfs_node_t));
     if (!vfs_root)
         return 1;
-    /*kmalloc does not zero memory, so initialise every field we rely on*/
+    /*kernel_heap_malloc does not zero memory, so initialise every field we rely on*/
     vfs_root->flags = VFS_DIR;/*root is a directory inode*/
     vfs_root->size = 0;
     vfs_root->ops = &nothfs_ops;
@@ -48,7 +48,7 @@ vfs_close(struct vfs_file_t *file)
 {
 	if (!file || !file->node)
 		return;
-	kfree((void *)file->node);/*free the inode lookup created*/
+	kernel_heap_free((void *)file->node);/*free the inode lookup created*/
 	file->node = NULL;
 	/*we'll worry about reference count later*/
 }

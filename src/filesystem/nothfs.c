@@ -77,11 +77,11 @@ nothfs_readdir(void)
 	uint64_t current_lba = nothfs_root.volume_start_lba + nothfs_root.superblock.root_start;/*root_start is volume-relative*/
 	int file_count = 0;
 	/*read the 3 directory sectors*/
-	uint8_t *buffer = kmalloc(NOTHFS_DIR_SECTORS * NOTHFS_SECTOR_SIZE);
+	uint8_t *buffer = kernel_heap_malloc(NOTHFS_DIR_SECTORS * NOTHFS_SECTOR_SIZE);
 	if (!buffer)
 		return -1;
 	if (nothfs_root.dev->read(nothfs_root.dev, current_lba, NOTHFS_DIR_SECTORS, buffer) != 0){
-		kfree(buffer);
+		kernel_heap_free(buffer);
 		return -1;
 	}
 	dirent = (struct nothfs_dirent_t *)buffer;
@@ -116,7 +116,7 @@ nothfs_readdir(void)
 			kprint("Not a File\n", PURPLE);
 		}
 	}
-	kfree(buffer);
+	kernel_heap_free(buffer);
 	return file_count;
 }
 
@@ -187,7 +187,7 @@ nothfs_read(struct vfs_file_t *file, void *buffer, uint64_t size)
     uint32_t sector_size = nothfs_root.superblock.sector_size;
     if (sector_size == 0)
         sector_size = NOTHFS_SECTOR_SIZE;
-    uint8_t *temp = kmalloc(sector_size);
+    uint8_t *temp = kernel_heap_malloc(sector_size);
     if (!temp)
         return -1;
     uint64_t starting_clus = (uint64_t)(uintptr_t)file->node->fs_data;/*okay we get the startin cluster*/
@@ -200,7 +200,7 @@ nothfs_read(struct vfs_file_t *file, void *buffer, uint64_t size)
         uint64_t lba = nothfs_root.volume_start_lba + starting_clus + sector_index;/*volume sector -> disk LBA*/
         if (nothfs_root.dev->read(nothfs_root.dev, lba, 1, temp) != 0)
         {
-            kfree(temp);
+            kernel_heap_free(temp);
             return -1;
         }
         uint64_t bytes_left_in_sector = sector_size - byte_offset;/*rest of this sector*/
@@ -216,7 +216,7 @@ nothfs_read(struct vfs_file_t *file, void *buffer, uint64_t size)
         file->offset += chunk;
         total_bytes_read += chunk;
     }
-    kfree(temp);
+    kernel_heap_free(temp);
     return (int)total_bytes_read;
 }
 
@@ -230,10 +230,10 @@ nothfs_lookup(struct vfs_node_t *dir, const char *name)
     else dir_start_clus = (uint64_t)(uintptr_t)dir->fs_data;
 	uint64_t current_lba = nothfs_root.volume_start_lba + dir_start_clus;/*dir cluster -> disk LBA*/
 	/*read the 3 directory sectors*/
-	uint8_t *buffer = kmalloc(NOTHFS_DIR_SECTORS * NOTHFS_SECTOR_SIZE);
+	uint8_t *buffer = kernel_heap_malloc(NOTHFS_DIR_SECTORS * NOTHFS_SECTOR_SIZE);
 	if (!buffer) return NULL;
 	if (nothfs_root.dev->read(nothfs_root.dev, current_lba, NOTHFS_DIR_SECTORS, buffer) != 0){
-		kfree(buffer);
+		kernel_heap_free(buffer);
 		return NULL;
 	}
 	dirent = (struct nothfs_dirent_t *)buffer;
@@ -247,9 +247,9 @@ nothfs_lookup(struct vfs_node_t *dir, const char *name)
 		if(strncmp((char *)dirent[i].name, name, NOTHFS_NAME_LEN) == 0)
 		{
 			/*we now make a new vfs_node_t*/
-			struct vfs_node_t *nnode = (struct vfs_node_t *)kmalloc(sizeof(struct vfs_node_t));
+			struct vfs_node_t *nnode = (struct vfs_node_t *)kernel_heap_malloc(sizeof(struct vfs_node_t));
 			if (!nnode) {
-				kfree(buffer);
+				kernel_heap_free(buffer);
 				return NULL;
 			}
             /*fixed positioning, although we can mall a 0 page
@@ -261,10 +261,10 @@ nothfs_lookup(struct vfs_node_t *dir, const char *name)
 			nnode->ops = &nothfs_ops;
 			/*volume-relative, not an absolute LBA; nothfs_read() converts it*/
 			nnode->fs_data = (void *)(uintptr_t)dirent[i].clus;
-			kfree(buffer);
+			kernel_heap_free(buffer);
 			return nnode;
 		}
 	}
-	kfree(buffer);
+	kernel_heap_free(buffer);
 	return NULL;
 }

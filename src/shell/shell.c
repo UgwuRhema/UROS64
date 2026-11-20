@@ -144,7 +144,7 @@ execute_command(const char *cmd)
 		const char *val = &cmd[9]; /* get the LBA we would like to read */
 		uint32_t lba = (uint32_t)string_to_int(val);
 		kprint("Reading LBA ", WHITE); kprint_num(lba, GREEN); kprint("\n", WHITE);
-		uint8_t *buffer = (uint8_t *)kmalloc(512); /* allocate memory for the buffer */
+		uint8_t *buffer = (uint8_t *)kernel_heap_malloc(512); /* allocate memory for the buffer */
 		if (!buffer) {
             kprint("Kmalloc allocation failure\n", PURPLE);
             return;
@@ -152,7 +152,7 @@ execute_command(const char *cmd)
         int read = ata_read_sector(lba, buffer);
 		if (read < 0) {
 			kp_log("(DRV)ATA PIO Driver LBA sector read fail. ", NOT_DONE);
-		    kfree((void *)buffer); 
+		    kernel_heap_free((void *)buffer); 
         } else {
 			kp_log("(DRV)ATA PIO Driver LBA sector read success. ", DONE);
 			kprint("Contents: \n", PURPLE);
@@ -160,13 +160,13 @@ execute_command(const char *cmd)
 			for (int i = 0; i < 512; ++i)
 				kprint_num((uint64_t)buffer[i], GREEN);
 			kprint("\n", WHITE); 
-			kfree((void *)buffer);
+			kernel_heap_free((void *)buffer);
 			kprint("Buffer freed\n", WHITE);
 		}
 	} else if (strncmp(cmd, "ata_write ", 10) == 0){
         const char *val = &cmd[10];
         uint32_t lba = (uint32_t)string_to_int(val);
-        uint8_t *buffer = (uint8_t *)kmalloc(512);/*this is the buffer that will be written at the give lba*/
+        uint8_t *buffer = (uint8_t *)kernel_heap_malloc(512);/*this is the buffer that will be written at the give lba*/
         if (!buffer)
             return;
 		memset(buffer, 0, 512);/*let's clean the buffer*/
@@ -174,13 +174,13 @@ execute_command(const char *cmd)
         int write = ata_write_sector(lba, buffer);
         if (write < 0) {
             kp_log("(DRV)ATA PIO Driver LBA Sector write fail. ", NOT_DONE);
-            kfree((void *)buffer);
+            kernel_heap_free((void *)buffer);
         } else if (write > 0) {
             kp_log("(DRV)ATA PIO Driver timeout during Status polling. ", NOT_DONE);
-            kfree((void *)buffer);
+            kernel_heap_free((void *)buffer);
         } else {
             kp_log("(DRV)ATA PIO Driver LBA Sector write success. ", DONE);
-            kfree((void *)buffer);
+            kernel_heap_free((void *)buffer);
         }
     } else if (strncmp(cmd, "mkfs.nothfs ", 12) == 0) {
 		uint32_t lba = (uint32_t)string_to_int(&cmd[12]);
@@ -208,7 +208,7 @@ execute_command(const char *cmd)
 			kprint("Usage: tmp_alloc <bytes>\n", BLUE);
 		else {
 			uint64_t bytes = string_to_int(val);
-			uint64_t *temp_pointer = (uint64_t *)kmalloc(bytes);
+			uint64_t *temp_pointer = (uint64_t *)kernel_heap_malloc(bytes);
             if (!temp_pointer)
                 return;
 			kprint("Allocated temporary memory for ", WHITE); kprint_num(bytes, WHITE);
@@ -221,11 +221,11 @@ execute_command(const char *cmd)
 		}
 	} else if (strncmp(cmd, "tmp_free ", 9) == 0){
 		uint64_t addr = string_to_int(&cmd[9]);
-		/* so currently that's a string and we need to convert it to a void *, so that kfree can de-allocate it */
+		/* so currently that's a string and we need to convert it to a void *, so that kernel_heap_free can de-allocate it */
 		if (addr == 0)
 			kprint("Usage: tmp_free <address>\nNote: tmp_alloc returns the address_id which is just the address in decimal, pass it as the argument to tmp_free.\n", BLUE);
 		else {
-			kfree((void *)addr);
+			kernel_heap_free((void *)addr);
 			kprint("Memory region ", WHITE); kprint_hex(addr, WHITE); kprint(" freed\n", WHITE);
 		}
 	} else if (strcmp(cmd, "halt") == 0) {
@@ -279,7 +279,7 @@ execute_command(const char *cmd)
 				return;
 			}
 			/*real men use the heap*/
-			char *buffer = (char *)kmalloc(512);/*buffer for contents of the file*/
+			char *buffer = (char *)kernel_heap_malloc(512);/*buffer for contents of the file*/
 			if (!buffer) {
 				kprint("Out of memory\n", PURPLE);
 				vfs_close(&nothfs_file);
@@ -293,7 +293,7 @@ execute_command(const char *cmd)
 					kprint_c(buffer[i], WHITE);
 			}
 			kprint("\n", WHITE);
-			kfree((void *)buffer);/*free the buffer*/
+			kernel_heap_free((void *)buffer);/*free the buffer*/
 			vfs_close(&nothfs_file);/*free the inode*/
 		} else {
 			kprint("File not found!\n", PURPLE);
@@ -318,7 +318,7 @@ execute_command(const char *cmd)
 		for (int i = 0; i < 512; ++i)
 			kprint_num((uint64_t)buffer[i], WHITE);
 		/*cleanup*/
-		kfree((void *)found);
+		kernel_heap_free((void *)found);
 	} else if (strcmp(cmd, "ncore") == 0){
 		kprint_num((uint64_t)get_cpu_cores(), WHITE);
 		kprint("\n", WHITE);

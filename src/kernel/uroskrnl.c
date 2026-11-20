@@ -79,7 +79,7 @@ uroskrnl_main_entry_point(uint32_t memory_entries_count, struct MemoryMapEntry_t
 	vmm_test();
 	kheap_init(4096); /* Initialization of the kernel heap, 4096 Pages for now! */
 	kp_log("(MEM)Kernel Heap Initialized and Online. ", DONE);
-	kp_log("(MEM)Kernel Heap Allocator and De-Allocator Online. (kmalloc & kfree)", ONLINE);
+	kp_log("(MEM)Kernel Heap Allocator and De-Allocator Online. (kernel_heap_malloc & kernel_heap_free)", ONLINE);
 	kp_log("(DRV)Initialize ATA PIO Driver. ATA_READ_SECTOR ACTIVE. ", DONE);
 	uint8_t initial_status = inb(0x1f7);
 	kprint(" ATA Intial Status=", WHITE); kprint_hex((uint64_t)initial_status, PURPLE);

@@ -27,7 +27,7 @@ kheap_init(uint64_t initial_pages)
 #define MIN_SPLIT 32 /* bumped UP! */
 
 void *
-kmalloc(uint64_t size)
+kernel_heap_malloc(uint64_t size)
 {
 	if (size == 0) return NULL;
 	size = (size + (8 - 1)) & ~(8 - 1); /* rounding size up to alignment */
@@ -60,7 +60,7 @@ kmalloc(uint64_t size)
 }
 
 void
-kfree(void *ptr)
+kernel_heap_free(void *ptr)
 {
 	if (!ptr) return;
 	struct header_t *header = (struct header_t *)((char *)ptr - sizeof(struct header_t));
