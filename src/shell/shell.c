@@ -9,8 +9,6 @@
 char cmd_buf[CMD_MAX_LEN] = {0};
 size_t cmd_idx = 0;
 
-char *cmd_list[16];/*16 max command line arguments*/
-
 void
 execute_command(const char *cmd)
 {
@@ -354,6 +352,8 @@ shell_update(void)
 {
     char c= buffer_pop();
     if (!c) return; /* buffer empty */
+	char *argv[16];/*max 16 arguments*/
+	int argc = 0;/*argument counter*/
     if (c == '\n')
     {
         kprint("\n", WHITE);
