@@ -19,14 +19,19 @@ extern void memset(void *, u8, u32);
 extern void *memcpy(void * restrict, const void * restrict, size_t);
 extern void wrmsr(u32, u64);
 extern u64 rdmsr(u32);
+/*string functions*/
 extern int strcmp(const char *, const char *);
 extern size_t strlen(const char *);
 extern void shutdown(void);
 extern int64_t string_to_int(const char *);
 extern int strncmp(const char *, const char *, size_t);
+extern char *k_strchr(char *, char c);
+extern char *k_strstr(char *, char *);
+/*CPU functions*/
 extern void get_cpu_vendor_name(char *);
 extern void get_cpu_brand_string(char *);
 extern int get_cpu_cores();
+/*another string function*/
 extern int kstrcpy(char *, const char *);
 
 extern void panic(void);

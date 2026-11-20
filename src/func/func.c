@@ -103,6 +103,24 @@ strlen(const char *str)
 	return count;
 }
 
+char *
+k_strchr(char * s, char c)
+{
+	while (*s)
+	{
+		if (*s == c)
+			return s;
+		s++;
+	}
+	return NULL;
+}
+
+char *
+k_strstr(char * haystack, char * needle)
+{
+	return k_strchr(haystack, *needle);
+}
+
 int
 kstrcpy(char *dest, const char *src)
 {
