@@ -54,7 +54,7 @@ kernel_heap_malloc(uint64_t size)
 		}
 		curr = curr->next;
 	}
-	kprint("Heap Exhausted or Insufficient memory\n", PURPLE);
+	kprint("(kernel_heap_malloc)Heap Exhausted or Insufficient memory\n", PURPLE);
 	return NULL; /* when heap is exhausted! */
 	/* this is temporary and we will implement a way to grow our heap later */
 }
