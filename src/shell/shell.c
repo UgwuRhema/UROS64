@@ -299,7 +299,7 @@ execute_command(const char *cmd)
 			kprint("File not found!\n", PURPLE);
 		}
 	} else if (strcmp(cmd, "nothfs_vfs_test") == 0) {
-		struct vfs_node_t *found = vfs_root->ops->lookup(vfs_root, "hello.txt");
+		struct vfs_node_t *found = vfs_root->ops->lookup(vfs_root, "book.txt");
         if (found == NULL)
 		{
 			kprint("nothfs_lookup failure!\n", PURPLE);
