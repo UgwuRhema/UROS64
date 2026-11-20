@@ -137,7 +137,7 @@ q:
 	qemu-system-x86_64 \
 		-boot order=c,menu=on \
 		-drive format=raw,file=$(IMG),if=ide \
-		-m 512M \
+		-m 2G \
 		-smp 4 \
 		-cpu Nehalem \
 		-machine pc,pcspk-audiodev=snd0 \
