@@ -102,11 +102,18 @@ nothfs_readdir(void)
 			kprint_num(dirent[i].size, GREEN);kprint("\n", WHITE);
 			file_count++; /*a directory is still a file*/
 		}
-		/*just a debug*/
-		kprint((char *)dirent[i].name, WHITE);
-		kprint(" ", WHITE);/*space between*/
-		kprint_num(dirent[i].size, GREEN); kprint("\n", WHITE);
-		file_count++;
+		if (dirent[i].attr & NOTHFS_ATTR_CONTIG) {
+			/*just a debug*/
+			if (dirent[i].attr & NOTHFS_ATTR_DIR) /*if we find a dir because dir's also have
+			NOTHFS_ATTR_CONTIG */
+				continue;
+			kprint((char *)dirent[i].name, WHITE);
+			kprint(" ", WHITE);/*space between*/
+			kprint_num(dirent[i].size, GREEN); kprint("\n", WHITE);
+			file_count++;
+		} else {
+			kprint("Not a File\n", PURPLE);
+		}
 	}
 	kfree(buffer);
 	return file_count;
