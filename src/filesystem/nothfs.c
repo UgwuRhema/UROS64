@@ -245,26 +245,26 @@ nothfs_lookup(struct vfs_node_t *dir, const char *name)
 			continue;
 		if (dirent[i].attr & NOTHFS_ATTR_DELETED)
 			continue;
-		if(strncmp((char *)dirent[i].name, name, NOTHFS_NAME_LEN) == 0)
-		{
-			/*we now make a new vfs_node_t*/
-			struct vfs_node_t *nnode = (struct vfs_node_t *)kernel_heap_malloc(sizeof(struct vfs_node_t));
-			if (!nnode) {
-				kernel_heap_free(buffer);
-				return NULL;
-			}
+        if(strncmp((char *)dirent[i].name, name, NOTHFS_NAME_LEN) == 0)
+        {
+            /*we now make a new vfs_node_t*/
+            struct vfs_node_t *nnode = (struct vfs_node_t *)kernel_heap_malloc(sizeof(struct vfs_node_t));
+            if (!nnode) {
+                kernel_heap_free(buffer);
+                return NULL;
+            }
             /*fixed positioning, although we can mall a 0 page
              * we still check for allocation failure before any operations*/
             memset(nnode, (uint8_t)0, (uint32_t)sizeof(*nnode));
-			/*translate the on-disk dirent into a generic in-memory inode*/
-			nnode->flags = (dirent[i].attr & NOTHFS_ATTR_DIR) ? VFS_DIR : VFS_FILE;
-			nnode->size = dirent[i].size;
-			nnode->ops = &nothfs_ops;
-			/*volume-relative, not an absolute LBA; nothfs_read() converts it*/
-			nnode->fs_data = (void *)(uintptr_t)dirent[i].clus;
-			kernel_heap_free(buffer);
-			return nnode;
-		}
+            /*translate the on-disk dirent into a generic in-memory inode*/
+            nnode->flags = (dirent[i].attr & NOTHFS_ATTR_DIR) ? VFS_DIR : VFS_FILE;
+            nnode->size = dirent[i].size;
+            nnode->ops = &nothfs_ops;
+            /*volume-relative, not an absolute LBA; nothfs_read() converts it*/
+            nnode->fs_data = (void *)(uintptr_t)dirent[i].clus;
+            kernel_heap_free(buffer);
+            return nnode;
+        }
 	}
 	kernel_heap_free(buffer);
 	return NULL;

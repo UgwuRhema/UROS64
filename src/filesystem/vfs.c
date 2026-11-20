@@ -20,13 +20,35 @@ int vfs_init(void)
 
 /*vfs_open: for now this only opens a name in the root directory*/
 int
-vfs_open(const char *name, struct vfs_file_t *file)
+vfs_open(const char *path, struct vfs_file_t *file)
 {
-	if (!vfs_root || !vfs_root->ops || !vfs_root->ops->lookup || !name || !file)
+	if (!vfs_root || !vfs_root->ops || !vfs_root->ops->lookup || !path || !file)
 		return -1;
-	struct vfs_node_t *found = vfs_root->ops->lookup(vfs_root, name);/*ask NothFS to find the name*/
-	if (!found)
-		return -1;
+	struct vfs_node_t *found = vfs_root;
+	const char *ptr = path;
+	while (*ptr)
+	{
+		if (*ptr == '/'){
+			ptr++;
+			continue;
+		}
+		/*find the end of this component*/
+		const char *end = ptr;
+		if (*end && *end != '/')
+		{
+			end++;
+		}
+		char component[38];/*max filename size*/
+		int len = end - ptr;
+		memcpy(component, ptr, len);/*copy the current component string*/
+		component[len] = '\0';/*null terminate the string*/
+		found = found->ops->lookup(found, component);/*look the current component up*/
+		if (!found)
+		{
+			return -1;/*doesn't exist*/
+		}
+		ptr = end;
+	}
 	file->node = found;
 	file->offset = 0;/*fresh file starts at offset 0*/
 	return 0;
