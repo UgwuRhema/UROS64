@@ -128,6 +128,12 @@ k_strstr(char * haystack, char * needle)
 	return NULL;
 }
 
+char *
+k_strtok(const char *string, const char * delimiter)
+{
+    return NULL;
+}
+
 int
 kstrcpy(char *dest, const char *src)
 {

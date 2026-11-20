@@ -27,6 +27,8 @@ extern int64_t string_to_int(const char *);
 extern int strncmp(const char *, const char *, size_t);
 extern int k_str_compare(char *, char *);
 extern char *k_strstr(char *, char *);
+/*complex string functions*/
+extern char *k_strtok(const char *, const char *);
 /*CPU functions*/
 extern void get_cpu_vendor_name(char *);
 extern void get_cpu_brand_string(char *);
