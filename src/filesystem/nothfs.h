@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include "blockdev.h"
 
-#define NOTHFS_MAGIC "NOTHFS\0"
+#define NOTHFS_MAGIC "NOTHFS\0" /*TODO: unused, mount() compares a literal*/
 #define NOTHFS_VOLUME_LBA 256
 
 #define NOTHFS_DIRENT_SIZE 64
@@ -12,12 +12,16 @@
 
 #define NOTHFS_SECTOR_SIZE 512
 /*number of sectors we scan at the start of a directory*/
+/*TODO: hardcoded geometry; should be superblock root_size + each dir's own size field*/
 #define NOTHFS_DIR_SECTORS 3
 
 #define NOTHFS_ATTR_DIR (1 << 0)
 #define NOTHFS_ATTR_CONTIG (1 << 1)
 #define NOTHFS_ATTR_DELETED (1 << 2)
+/*TODO: attr==0 is the only "free" marker; every live entry must carry a bit (no explicit in-use bit)*/
 
+/*TODO: no magic/in-use field, so raw data with attr!=0 parses as a dirent; magic is cheap
+ * insurance, but allocation + bounds must be right first or it just hides the collision*/
 struct nothfs_dirent_t
 {
 	uint16_t attr;
@@ -37,6 +41,7 @@ struct nothfs_superblock {
 	uint64_t bitmap_start;/*rel to volume start*/
 	uint64_t bitmap_sectors;
 	uint64_t root_start;/*rel to volume start*/
+	/*TODO: no root_size/root_sectors, so readers must guess the root dir length*/
 	uint64_t unique_id;
 	uint8_t reserved[512 - 56];/*padding*/
 } __attribute__((packed));
