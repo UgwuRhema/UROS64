@@ -28,25 +28,26 @@ vfs_open(const char *path, struct vfs_file_t *file)
 	const char *ptr = path;
 	while (*ptr)
 	{
-		if (*ptr == '/'){
+		while (*ptr == '/')
 			ptr++;
-			continue;
-		}
+		if (!*ptr) /*path ended in '/'*/
+			break;
 		/*find the end of this component*/
 		const char *end = ptr;
 		while (*end && *end != '/')
-		{
 			end++;
-		}
-		char component[38];/*max filename size*/
-		int len = end - ptr;
+		char component[NOTHFS_NAME_LEN];/*max filename size*/
+		size_t len = (size_t)(end - ptr);
+		if (len >= NOTHFS_NAME_LEN)/*not a valid nothfs filename, too long!*/
+			return -1;
+		if (found->flags != VFS_DIR) /*if the current is not a directory...trying to
+		descend into a file!! Not normal behaviour*/
+			return -1;
 		memcpy(component, ptr, len);/*copy the current component string*/
 		component[len] = '\0';/*null terminate the string*/
 		found = found->ops->lookup(found, component);/*look the current component up*/
 		if (!found)
-		{
 			return -1;/*doesn't exist*/
-		}
 		ptr = end;
 	}
 	file->node = found;
