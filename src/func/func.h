@@ -26,8 +26,11 @@ extern void shutdown(void);
 extern int64_t string_to_int(const char *);
 extern int strncmp(const char *, const char *, size_t);
 extern int k_str_compare(char *, char *);
+extern char * k_strchr(const char *, char);
 extern char *k_strstr(char *, char *);
 /*complex string functions*/
+extern size_t k_strspn(const char *, const char *);
+extern size_t k_strcspn(const char *, const char *);
 extern char *k_strtok(const char *, const char *);
 /*CPU functions*/
 extern void get_cpu_vendor_name(char *);

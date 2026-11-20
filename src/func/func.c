@@ -1,5 +1,6 @@
 #include "func.h"
 #include "../vga/vga.h"
+#include <stddef.h>
 
 //send commands to port...
 void 
@@ -126,6 +127,34 @@ k_strstr(char * haystack, char * needle)
 		haystack++;
 	}
 	return NULL;
+}
+
+char *
+k_strchr(const char *str, char c)
+{
+    char *tmp = str;
+    while (*tmp++)
+        if (c == *tmp)
+            return tmp;
+    return NULL;
+}
+
+size_t
+k_strspn(const char *s, const char *accept)
+{
+    size_t n = 0;
+    while (s[n] && k_strchr(accept, s[n]))
+        n++;
+    return n;
+}
+
+size_t
+k_strcspn(const char *s, const char *reject)
+{
+    size_t n = 0;
+    while (s[n] && !k_strchr(reject, s[n]))
+        n++;
+    return n;
 }
 
 char *
