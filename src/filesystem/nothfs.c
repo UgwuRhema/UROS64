@@ -224,6 +224,7 @@ nothfs_read(struct vfs_file_t *file, void *buffer, uint64_t size)
 struct vfs_node_t *
 nothfs_lookup(struct vfs_node_t *dir, const char *name)
 {
+    /*we will have tobe able to parse aboslute paths and even relative paths*/
 	struct nothfs_dirent_t *dirent;
     uint64_t dir_start_clus = 0;
     if (!dir) dir_start_clus = nothfs_root.superblock.root_start;/*defaults to root directory*/
