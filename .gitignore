@@ -11,3 +11,4 @@ boot/new_increased_page_style
 *.log
 *.elf
 scripts/mkfs.nothfs
+res/gristle
