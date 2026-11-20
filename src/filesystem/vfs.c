@@ -36,6 +36,7 @@ vfs_open(const char *name, struct vfs_file_t *file)
 int
 vfs_read(struct vfs_file_t *file, void *buffer, uint64_t size)
 {
+	if (file->node->flags == VFS_DIR) return -1;
 	if (!file || !file->node || !file->node->ops ||
 	    !file->node->ops->read || !buffer)
 		return -1;

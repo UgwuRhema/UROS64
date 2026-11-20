@@ -244,7 +244,7 @@ nothfs_lookup(struct vfs_node_t *dir, const char *name)
 			continue;
 		if (dirent[i].attr & NOTHFS_ATTR_DELETED)
 			continue;
-		if(strcmp((char *)dirent[i].name, name) == 0)
+		if(strncmp((char *)dirent[i].name, name, NOTHFS_NAME_LEN) == 0)
 		{
 			/*we now make a new vfs_node_t*/
 			struct vfs_node_t *nnode = (struct vfs_node_t *)kmalloc(sizeof(struct vfs_node_t));

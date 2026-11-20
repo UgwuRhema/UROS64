@@ -273,6 +273,11 @@ execute_command(const char *cmd)
 		struct vfs_file_t nothfs_file;
 		if (vfs_open(dirent_name, &nothfs_file) == 0)/*we open the file, -1 on file not found*/
 		{
+			if (nothfs_file.node->flags == VFS_DIR) { /*if vfs_file_t is holding the node of type
+			VFS_DIR, normally cat shouldn't be able to display contents of a directory*/
+				kp_log("(UTILS)cat: Cannot cat a directory. ", NOT_DONE);
+				return;
+			}
 			/*real men use the heap*/
 			char *buffer = (char *)kmalloc(512);/*buffer for contents of the file*/
 			if (!buffer) {
