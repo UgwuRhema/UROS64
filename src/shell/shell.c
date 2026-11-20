@@ -9,6 +9,8 @@
 char cmd_buf[CMD_MAX_LEN] = {0};
 size_t cmd_idx = 0;
 
+char *cmd_list[16];/*16 max command line arguments*/
+
 void
 execute_command(const char *cmd)
 {
