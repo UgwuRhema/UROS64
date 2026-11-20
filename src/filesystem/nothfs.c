@@ -11,7 +11,6 @@ struct nothfs_mount_info_t nothfs_root;
 struct vfs_ops_t nothfs_ops = {
 	.lookup = &nothfs_lookup,
 	.read = &nothfs_read
-	/*TODO: no readdir op, so `dir` can never list a subdirectory*/
 };
 
 _Static_assert(sizeof(struct nothfs_superblock) <= 512,
@@ -28,7 +27,6 @@ nothfs_mount(struct block_device *dev)
 	/*since the superblock was written to LBA256*/
 	if (dev->read(dev, NOTHFS_VOLUME_LBA, 1, (uint8_t *)&sb) != 0)
 		return -1;
-	/*TODO: signature is 8 raw bytes and may not be NUL-terminated -> strcmp reads past it*/
 	if (strcmp((char *)sb.signature, "NOTHFS") != 0)
 		return 1;
 	nothfs_root.dev = dev;
@@ -72,7 +70,6 @@ nothfs_test(void)
 }
 
 /*returns no of files/directories found or -1 on error*/
-/*TODO: takes no dir argument -> always reads root, subdirs unreachable*/
 int
 nothfs_readdir(void)
 {
@@ -80,7 +77,6 @@ nothfs_readdir(void)
 	uint64_t current_lba = nothfs_root.volume_start_lba + nothfs_root.superblock.root_start;/*root_start is volume-relative*/
 	int file_count = 0;
 	/*read the 3 directory sectors*/
-	/*TODO: 3 is hardcoded and superblock.sector_size is ignored; a dir's real length is its size field*/
 	uint8_t *buffer = kmalloc(NOTHFS_DIR_SECTORS * NOTHFS_SECTOR_SIZE);
 	if (!buffer)
 		return -1;
@@ -94,13 +90,11 @@ nothfs_readdir(void)
 	{
 		/*attr 0 means this slot is free not EOD, an empty
 		 * slot can sit before a valid entry so we keep scanning instead of breaking out early like before*/
-		/*TODO: no validation at all here: name NUL, attr bits, clus/size range are all trusted,
-		 * so raw file data with attr!=0 becomes a "file"*/
+		 /* so raw file data with attr!=0 becomes a "file"*/
 		if (dirent[i].attr == 0)
 			continue;
 		if (dirent[i].attr & NOTHFS_ATTR_DELETED)
 			continue;
-		/*TODO: a DIR without CONTIG is counted, then falls into the else below and prints "Not a File"*/
 		if (dirent[i].attr & NOTHFS_ATTR_DIR)
 		{
 			/*every directory is 2 sectors?*/
@@ -119,7 +113,6 @@ nothfs_readdir(void)
 			kprint_num(dirent[i].size, GREEN); kprint("\n", WHITE);
 			file_count++;
 		} else {
-			/*TODO: hit by anything without CONTIG (dir or file) and not counted; message lies*/
 			kprint("Not a File\n", PURPLE);
 		}
 	}
@@ -139,9 +132,7 @@ fake_nothfs_dirent_test(int add)
 	uint8_t buffer[512];
 	memset(buffer, 0, sizeof(buffer));
 	struct nothfs_dirent_t *dummy = (struct nothfs_dirent_t *)buffer;
-	/*TODO: `add` is a sector offset here but a dirent slot is 64 bytes -> dirent_test 1 hits slot 8, not slot 1*/
 	uint32_t dirent_lba = (uint32_t)(nothfs_root.volume_start_lba + nothfs_root.superblock.root_start + add);
-	/*TODO: test_clus is hardcoded and never reserved in the bitmap, so data can land on live metadata*/
 	uint64_t data_lba = nothfs_root.volume_start_lba + test_clus;/*where clus actually points on disk*/
 	kprint_num((uint64_t)dirent_lba, WHITE);
 	dummy->attr = NOTHFS_ATTR_CONTIG;
@@ -151,7 +142,6 @@ fake_nothfs_dirent_test(int add)
 	 *include its terminating NUL*/
 	dummy->size = sizeof(payload) - 1;
 	/*write the card into the root directory*/
-	/*TODO: whole zeroed sector -> wipes the other 7 dirent slots in this sector; needs read-modify-write*/
 	int a = nothfs_root.dev->write(nothfs_root.dev, dirent_lba, 1, buffer);
 	if (a != 0) {
 		kp_log("Fake-nothfs_dirent_t_test_fail. ", NOT_DONE);
@@ -170,18 +160,14 @@ fake_nothfs_dirent_test(int add)
 	uint8_t another_buffer[512];
 	memset(another_buffer, 0, sizeof(another_buffer));/*cleanup*/
 	struct nothfs_dirent_t *dummy_dir = (struct nothfs_dirent_t *)another_buffer;
-	/*TODO: LBA 263 is the 2nd sector *of* the root dir (262-264), not after it -> shows up in the scan*/
 	uint32_t dirent2_lba = (uint32_t)(nothfs_root.volume_start_lba + nothfs_root.superblock.root_start + 1 + add);/*the next sector after
 	the root dir, LBA 263*/
-	/*TODO: unused; and this table is never zeroed, it only looks empty because the disk is*/
 	uint64_t data_lba2 = nothfs_root.volume_start_lba + test_clus2;/*LBA 276*/
 	kprint(" ", WHITE);kprint_num((uint64_t)dirent2_lba, WHITE);
 	dummy_dir->attr = NOTHFS_ATTR_DIR | NOTHFS_ATTR_CONTIG;
 	kstrcpy((char *)dummy_dir->name, "docs");
 	dummy_dir->clus = test_clus2;
-	/*TODO: 1024 assumes 512-byte sectors and no reader honours it (they still scan 3 sectors)*/
 	dummy_dir->size = 1024; /*size for directories are different, every directory apart from root dir is 2 sectors*/
-	/*TODO: same whole-sector wipe as above; zeroes 7 slots in the target sector*/
 	int b = nothfs_root.dev->write(nothfs_root.dev, dirent2_lba, 1, another_buffer);
 	if (b != 0)
 	{
@@ -194,7 +180,6 @@ fake_nothfs_dirent_test(int add)
 int
 nothfs_read(struct vfs_file_t *file, void *buffer, uint64_t size)
 {
-    /*TODO: no VFS_DIR check -> cat-ing a directory returns its entry table as file data*/
     if (!file || !file->node || !buffer)
         return -1;
     /*the superblock is the authority; fall back to the format default if a
@@ -212,7 +197,6 @@ nothfs_read(struct vfs_file_t *file, void *buffer, uint64_t size)
     {
         uint64_t sector_index = file->offset / sector_size;
         uint64_t byte_offset = file->offset % sector_size;/*position inside sector*/
-        /*TODO: no bound against total_sectors; a corrupt size walks off the volume*/
         uint64_t lba = nothfs_root.volume_start_lba + starting_clus + sector_index;/*volume sector -> disk LBA*/
         if (nothfs_root.dev->read(nothfs_root.dev, lba, 1, temp) != 0)
         {
@@ -246,7 +230,6 @@ nothfs_lookup(struct vfs_node_t *dir, const char *name)
     else dir_start_clus = (uint64_t)(uintptr_t)dir->fs_data;
 	uint64_t current_lba = nothfs_root.volume_start_lba + dir_start_clus;/*dir cluster -> disk LBA*/
 	/*read the 3 directory sectors*/
-	/*TODO: a subdir claims 1024 bytes (2 sectors) but this always reads 3 -> 1 sector past its table*/
 	uint8_t *buffer = kmalloc(NOTHFS_DIR_SECTORS * NOTHFS_SECTOR_SIZE);
 	if (!buffer) return NULL;
 	if (nothfs_root.dev->read(nothfs_root.dev, current_lba, NOTHFS_DIR_SECTORS, buffer) != 0){
@@ -261,7 +244,6 @@ nothfs_lookup(struct vfs_node_t *dir, const char *name)
 			continue;
 		if (dirent[i].attr & NOTHFS_ATTR_DELETED)
 			continue;
-		/*TODO: name may fill all 38 bytes with no NUL -> strcmp reads into clus/size*/
 		if(strcmp((char *)dirent[i].name, name) == 0)
 		{
 			/*we now make a new vfs_node_t*/
@@ -281,7 +263,6 @@ nothfs_lookup(struct vfs_node_t *dir, const char *name)
 			nnode->fs_data = (void *)(uintptr_t)dirent[i].clus;
 			kfree(buffer);
 			return nnode;
-			/*TODO: stale comment: `dir` is used above to pick the start cluster*/
 		}
 	}
 	kfree(buffer);
