@@ -267,7 +267,7 @@ execute_command(const char *cmd)
 		/*this is a minimal test for finddir*/
 		int dir = nothfs_readdir();
 		if (dir == 0)
-			kp_log("(NOTHFS)No files found\n", PURPLE);
+			kp_log("(NOTHFS)No files found", NOT_DONE);
 	} else if (strncmp(cmd, "cat ", 4) == 0) {
 		const char *dirent_name = &cmd[4];
 		struct vfs_file_t nothfs_file;

@@ -94,8 +94,7 @@ nothfs_readdir(void)
 			continue;
 		if (dirent[i].attr & NOTHFS_ATTR_DELETED)
 			continue;
-		if (dirent[i].attr & (NOTHFS_ATTR_DIR | NOTHFS_ATTR_CONTIG) ||
-			dirent[i].attr & NOTHFS_ATTR_DIR)
+		if (dirent[i].attr & NOTHFS_ATTR_DIR)
 		{
 			/*every directory is 2 sectors?*/
 			kprint((char *)dirent[i].name, BLUE);
@@ -161,7 +160,7 @@ fake_nothfs_dirent_test(int add)
 	kstrcpy((char *)dummy_dir->name, "docs");
 	dummy_dir->clus = test_clus2;
 	dummy_dir->size = 1024; /*size for directories are different, every directory apart from root dir is 2 sectors*/
-	int b = nothfs_root.dev->write(nothfs_root.dev, dirent2_lba, 1, buffer);
+	int b = nothfs_root.dev->write(nothfs_root.dev, dirent2_lba, 1, another_buffer);
 	if (b != 0)
 	{
 		kp_log("Fake-nothfs_dirent2_test failure. ", NOT_DONE);
