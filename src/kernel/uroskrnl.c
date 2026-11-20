@@ -105,7 +105,17 @@ uroskrnl_main_entry_point(uint32_t memory_entries_count, struct MemoryMapEntry_t
 	kp_log("(NOTHFS & VFS)Implement NothFS and VFS Drivers. ", DONE);
 	kp_log("(NOTHFS)Mount Successful. ", DONE);
 	kp_log("(UTILS)Starting shell...", ONLINE);
-	sleep(900);
+	/*strtok test*/
+    kprint("\n\n===TEST FOR STRTOK===\n\n", PURPLE);
+    char some_string[] = "Final|Bump|Fred|Mason|Kernel|TLB";
+    char *res = k_strtok(some_string, "|");
+    while (res)
+    {
+        kprint(res, WHITE); kprint("\n", WHITE);
+        res = k_strtok(NULL, "|");
+    }
+    /*end of strtok test*/
+    sleep(900);
 	shell_init();
     /* infinte loop */
 	while (1)
