@@ -94,7 +94,8 @@ nothfs_readdir(void)
 			continue;
 		if (dirent[i].attr & NOTHFS_ATTR_DELETED)
 			continue;
-		if (dirent[i].attr & NOTHFS_ATTR_DIR)
+		if (dirent[i].attr & (NOTHFS_ATTR_DIR | NOTHFS_ATTR_CONTIG) ||
+			dirent[i].attr & NOTHFS_ATTR_DIR)
 		{
 			/*every directory is 2 sectors?*/
 			kprint((char *)dirent[i].name, BLUE);
