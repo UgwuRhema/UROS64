@@ -103,22 +103,29 @@ strlen(const char *str)
 	return count;
 }
 
-char *
-k_strchr(char * s, char c)
+int
+k_str_compare(char *x, char *y)
 {
-	while (*s)
+	while (*x && *y)
 	{
-		if (*s == c)
-			return s;
-		s++;
+		if (*x++ != *y++)/*no match*/
+			return 0;
 	}
-	return NULL;
+	return (*y == '\0');
 }
 
 char *
 k_strstr(char * haystack, char * needle)
 {
-	return k_strchr(haystack, *needle);
+	while (*haystack)
+	{
+		if (*haystack == *needle && k_str_compare(haystack, needle))
+		{
+			return haystack;
+		}
+		haystack++;
+	}
+	return NULL;
 }
 
 int
