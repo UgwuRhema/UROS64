@@ -10,7 +10,7 @@
 extern char cmd_buf[CMD_MAX_LEN]; /* command buffer */
 extern size_t cmd_idx;
 
-extern void execute_command(const char *);
+extern void execute_command(int, char **);
 extern void shell_init(void);
 extern void shell_update(void);
 

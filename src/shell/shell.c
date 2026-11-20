@@ -10,9 +10,10 @@ char cmd_buf[CMD_MAX_LEN] = {0};
 size_t cmd_idx = 0;
 
 void
-execute_command(const char *cmd)
+execute_command(int argc, char **argv)
 {
-    if (strlen(cmd) == 0) return;
+    if (argc == 0 || !argv || !argv[0]) return;
+    const char *cmd = argv[0];
     if (strcmp(cmd, "help") == 0)
     {
         kprint("UROS USH Available Commands:\n", WHITE);
@@ -24,7 +25,7 @@ execute_command(const char *cmd)
         kprint(" Filesys: disk  dir finddir  dirent_test  nothfs_vfs_test\n", GREEN);
         kprint(" Debug  : info registers  trigger_pf_panic  trigger_dz_panic  trigger_uo_panic\n", GREEN);
         kprint(" Misc   : puts <text> cat <file>\n", GREEN);
-    } else if (strcmp(cmd, "info registers") == 0) {
+    } else if (argc == 2 && strcmp(cmd, "info") == 0 && strcmp(argv[1], "registers") == 0) {
 		uint64_t rax, rbx, rcx, rdx, rsi, rdi, rsp, rbp, rip; /* general purpose registers */
 		uint64_t cr0, cr2, cr3, cr4; /* control registers */
 		/* fixed constraints so reading one register cannot clobber another */
@@ -124,13 +125,23 @@ execute_command(const char *cmd)
 		__asm__ volatile ("cli");
 		while (1)
 			__asm__ volatile ("hlt");
-	} else if (strncmp(cmd, "sleep ", 6) == 0){
-		const char *value = &cmd[6]; /* store the number(in seconds as a string for now) */
+	} else if (strcmp(cmd, "sleep") == 0){
+		if (argc < 2) {
+			kprint("Usage: sleep <seconds>\n", BLUE);
+			return;
+		}
+		const char *value = argv[1]; /* store the number(in seconds as a string for now) */
 		uint64_t seconds = string_to_int(value);
 		sleep(seconds * 1000);
-	} else if (strncmp(cmd, "puts ", 5) == 0){
-		const char *val = &cmd[5];
-		kprint(val, WHITE);
+	} else if (strcmp(cmd, "puts") == 0){
+		if (argc < 2) {
+			kprint("Usage: puts <text>\n", BLUE);
+			return;
+		}
+		for (int i = 1; i < argc; ++i) {
+			if (i > 1) kprint(" ", WHITE);
+			kprint(argv[i], WHITE);
+		}
 		kprint("\n", WHITE);
 	} else if (strcmp(cmd, "memmap") == 0){
 		pmm_dump_map();
@@ -140,8 +151,12 @@ execute_command(const char *cmd)
 		smap_info();
 	} else if (strcmp(cmd, "heap") == 0){
 		heap_walk();
-	} else if (strncmp(cmd, "ata_read ", 9) == 0){
-		const char *val = &cmd[9]; /* get the LBA we would like to read */
+	} else if (strcmp(cmd, "ata_read") == 0){
+		if (argc < 2) {
+			kprint("Usage: ata_read <lba>\n", BLUE);
+			return;
+		}
+		const char *val = argv[1]; /* get the LBA we would like to read */
 		uint32_t lba = (uint32_t)string_to_int(val);
 		kprint("Reading LBA ", WHITE); kprint_num(lba, GREEN); kprint("\n", WHITE);
 		uint8_t *buffer = (uint8_t *)kernel_heap_malloc(512); /* allocate memory for the buffer */
@@ -163,8 +178,12 @@ execute_command(const char *cmd)
 			kernel_heap_free((void *)buffer);
 			kprint("Buffer freed\n", WHITE);
 		}
-	} else if (strncmp(cmd, "ata_write ", 10) == 0){
-        const char *val = &cmd[10];
+	} else if (strcmp(cmd, "ata_write") == 0){
+        if (argc < 2) {
+            kprint("Usage: ata_write <lba>\n", BLUE);
+            return;
+        }
+        const char *val = argv[1];
         uint32_t lba = (uint32_t)string_to_int(val);
         uint8_t *buffer = (uint8_t *)kernel_heap_malloc(512);/*this is the buffer that will be written at the give lba*/
         if (!buffer)
@@ -182,8 +201,12 @@ execute_command(const char *cmd)
             kp_log("(DRV)ATA PIO Driver LBA Sector write success. ", DONE);
             kernel_heap_free((void *)buffer);
         }
-    } else if (strncmp(cmd, "mkfs.nothfs ", 12) == 0) {
-		uint32_t lba = (uint32_t)string_to_int(&cmd[12]);
+    } else if (strcmp(cmd, "mkfs.nothfs") == 0) {
+		if (argc < 2) {
+			kprint("Usage: mkfs.nothfs <lba>\n", BLUE);
+			return;
+		}
+		uint32_t lba = (uint32_t)string_to_int(argv[1]);
 		struct nothfs_superblock sb;
 		memset(&sb, 0, sizeof(sb));
 		memcpy(sb.signature, "NOTHFS", 6);/*label signature*/
@@ -202,11 +225,11 @@ execute_command(const char *cmd)
 			kp_log("(DRV)ATA PIO Driver timeout during Status polling. ", NOT_DONE);
 		else
 			kp_log("(DRV)ATA PIO Driver LBA Sector write success. ", DONE);
-	} else if (strncmp(cmd, "tmp_alloc ", 10) == 0){
-		const char *val = &cmd[10];
-		if (!val || *val == ' ')
+	} else if (strcmp(cmd, "tmp_alloc") == 0){
+		if (argc < 2)
 			kprint("Usage: tmp_alloc <bytes>\n", BLUE);
 		else {
+			const char *val = argv[1];
 			uint64_t bytes = string_to_int(val);
 			uint64_t *temp_pointer = (uint64_t *)kernel_heap_malloc(bytes);
             if (!temp_pointer)
@@ -219,8 +242,8 @@ execute_command(const char *cmd)
 			kprint("Address_Id: ", WHITE); kprint_num((uint64_t)temp_pointer, BLUE);
 			kprint("\n", WHITE);
 		}
-	} else if (strncmp(cmd, "tmp_free ", 9) == 0){
-		uint64_t addr = string_to_int(&cmd[9]);
+	} else if (strcmp(cmd, "tmp_free") == 0){
+		uint64_t addr = (argc < 2) ? 0 : string_to_int(argv[1]);
 		/* so currently that's a string and we need to convert it to a void *, so that kernel_heap_free can de-allocate it */
 		if (addr == 0)
 			kprint("Usage: tmp_free <address>\nNote: tmp_alloc returns the address_id which is just the address in decimal, pass it as the argument to tmp_free.\n", BLUE);
@@ -249,8 +272,12 @@ execute_command(const char *cmd)
 		} else {
 			kprint("Invalid Response! \n", PURPLE);
 		}
-	} else if (strncmp(cmd, "dirent_test ", 12) == 0) {
-		int offset = (int)string_to_int(&cmd[12]);
+	} else if (strcmp(cmd, "dirent_test") == 0) {
+		if (argc < 2) {
+			kprint("Usage: dirent_test <offset>\n", BLUE);
+			return;
+		}
+		int offset = (int)string_to_int(argv[1]);
 		fake_nothfs_dirent_test(offset);
 	} else if (strcmp(cmd,"cpuinfo") == 0){
 		char vendor[13];
@@ -268,8 +295,12 @@ execute_command(const char *cmd)
 		int dir = nothfs_readdir();
 		if (dir == 0)
 			kp_log("(NOTHFS)No files found", NOT_DONE);
-	} else if (strncmp(cmd, "cat ", 4) == 0) {
-		const char *dirent_name = &cmd[4];
+	} else if (strcmp(cmd, "cat") == 0) {
+		if (argc < 2) {
+			kprint("Usage: cat <file>\n", BLUE);
+			return;
+		}
+		const char *dirent_name = argv[1];
 		struct vfs_file_t nothfs_file;
 		if (vfs_open(dirent_name, &nothfs_file) == 0)/*we open the file, -1 on file not found*/
 		{
@@ -356,9 +387,15 @@ shell_update(void)
 	int argc = 0;/*argument counter*/
     if (c == '\n')
     {
-        kprint("\n", WHITE);
         cmd_buf[cmd_idx] = '\0';
-        execute_command(cmd_buf);
+        char *curr = k_strtok(cmd_buf, " ");/*make whitespace the delimiter*/
+        while (curr && argc < 16)/*make sure argv cannot overflow*/
+        {
+            argv[argc++] = curr;
+            curr = k_strtok(NULL, " ");
+        }
+        kprint("\n", WHITE);
+        execute_command(argc, argv);
         /* reset command line */
         cmd_idx = 0;
         memset(cmd_buf, 0, CMD_MAX_LEN);
