@@ -34,7 +34,7 @@ vfs_open(const char *path, struct vfs_file_t *file)
 		}
 		/*find the end of this component*/
 		const char *end = ptr;
-		if (*end && *end != '/')
+		while (*end && *end != '/')
 		{
 			end++;
 		}
