@@ -130,13 +130,17 @@ k_strstr(char * haystack, char * needle)
 }
 
 char *
-k_strchr(const char *str, char c)
+k_strchr(const char *str, int c)
 {
-    char *tmp = str;
-    while (*tmp++)
-        if (c == *tmp)
-            return tmp;
-    return NULL;
+    char ch = (char)c;
+    for (;;)
+    {
+        if (*str == ch)
+            return (char *)str;/*match->return*/
+        if (*str == '\0')
+            return NULL;
+        str++;
+    }
 }
 
 size_t
