@@ -158,9 +158,38 @@ k_strcspn(const char *s, const char *reject)
 }
 
 char *
-k_strtok(const char *string, const char * delimiter)
+k_strtok_r(char *string, const char *delimiter, char **saveptr)
 {
-    return NULL;
+    /*resume where we left off*/
+    if (string == NULL)
+        string = *saveptr;
+    if (string == NULL)
+        return NULL;
+    /*skip leading delimiters*/
+    string += k_strspn(string, delimiter);
+    /*hit the end?*/
+    if (*string == '\0')
+    {
+        *saveptr = string;
+        return NULL;
+    }
+    /*find end of this token*/
+    char *end = string + k_strcspn(string, delimiter);
+    if (*end == '\0')
+        /*last token, no trailing delimiter*/
+        *saveptr = end;
+    else {
+        *end = '\0';
+        *saveptr = end + 1;/*terminate token*/
+    }
+    return string;
+}
+
+char *
+k_strtok(char *string, const char * delimiter)
+{
+    static char *saveptr;
+    return k_strtok_r(string, delimiter, &saveptr);
 }
 
 int

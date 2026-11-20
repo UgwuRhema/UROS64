@@ -31,7 +31,8 @@ extern char *k_strstr(char *, char *);
 /*complex string functions*/
 extern size_t k_strspn(const char *, const char *);
 extern size_t k_strcspn(const char *, const char *);
-extern char *k_strtok(const char *, const char *);
+extern char * k_strtok_r(char *, const char *, char **);
+extern char *k_strtok(char *, const char *);
 /*CPU functions*/
 extern void get_cpu_vendor_name(char *);
 extern void get_cpu_brand_string(char *);
