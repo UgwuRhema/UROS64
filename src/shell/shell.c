@@ -291,7 +291,14 @@ execute_command(int argc, char **argv)
 		kprint(" CPU Cores: ", WHITE); kprint_num((uint64_t)get_cpu_cores(), GREEN);
 		kprint("\n", WHITE);
 	} else if (strcmp(cmd, "finddir") == 0 || strcmp(cmd, "dir") == 0){
-		/*this is a minimal test for finddir*/
+		if (argc > 1)
+        {
+            if (strcmp(argv[1], "-l") == 0) {
+                kprint("dir: coming soon!\n", WHITE);
+                return;
+            }
+        }
+        /*this is a minimal test for finddir*/
 		int dir = nothfs_readdir();
 		if (dir == 0)
 			kp_log("(NOTHFS)No files found", NOT_DONE);
