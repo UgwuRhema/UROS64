@@ -77,7 +77,6 @@ idt_init(void)
         idt[i].offset_high  = 0;
         idt[i].zero         = 0;
     }
-    
     /* let's check it out... */
     idt_set_entry(0, 0, (uint64_t)divide_by_zero, 0x08, 0x8e);
     idt_set_entry(1, 0, (uint64_t)debug, 0x08, 0x8e);
@@ -97,27 +96,20 @@ idt_init(void)
     idt_set_entry(17, 0, (uint64_t)alignment_check, 0x08, 0x8e);
     idt_set_entry(18, 0, (uint64_t)machine_check, 0x08, 0x8e);
     idt_set_entry(19, 0, (uint64_t)simd_error, 0x08, 0x8e);
-
     /* hardware IRQs */
     idt_set_entry(0x20, 0, (uint64_t)timer_handler, 0x08, 0x8e);
 	idt_set_entry(0x21, 0, (uint64_t)keyboard_handler, 0x08, 0x8e);
 	idt_set_entry(0x2c, 0, (uint64_t)mouse_handler, 0x08, 0x8e);
 	/* COM1 serial port handler */idt_set_entry(0x24, 0, (uint64_t)com1_handler, 0x08, 0x8e);
-
     idt_load();
-
     /* disable legacy PIC */
     pic_disable();
     //bring up APIC hardware
     lapic_init();
-    
 	enable_pit(1000);
-
 	serial_init();
 	/* route keyboard (IRQ 1) to  vector 33 or 0x21 */
-   
 	mouse_init();
-
 	/* for some reason the PIT on at IOAPIC Pin 2 */
 	ioapic_map_irq(2, 0x20, 0);
 	ioapic_map_irq(0, 0x20, 0);/*also map the Timer IRQ on PIN 0, incase of real hardware*/

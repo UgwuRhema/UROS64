@@ -27,37 +27,30 @@ pmm_init(uint32_t count, struct MemoryMapEntry_t *entries)
 	/* save entries state, not for anything in particular */
 	smap_saved = entries;
 	smap_saved_count = count;
-
 	/* everything is used by default */
 	for (uint64_t i = 0; i < BITMAP_SIZE; ++i) *(pmm_bitmap + i) = 0xff;
-
 	for (uint32_t i = 0; i < count; ++i)
 	{
 		if (entries[i].type != 1) continue; /* type 1 means available RAM per E820/BIOS memory map*/
 		uint64_t start = (*(entries + i)).base_address;
 		uint64_t end = (*(entries + i)).base_address + (*(entries + i)).length;
-
 		if (start >= MAX_PHYS_ADDR) continue;
 		if (end > MAX_PHYS_ADDR) end = MAX_PHYS_ADDR;
-		
 		/* we now align page...start up and end down */
 		start = (start + PAGE_SIZE - 1) & ~(PAGE_SIZE - 1);
 		end = end & ~(PAGE_SIZE - 1);
-
 		for (uint64_t a = start; a < end; a += PAGE_SIZE)
 		{
 			bitmap_clear(a / PAGE_SIZE);
 			free_pages++;
 		}
 	}
-
 	/* here we now re-reserve non-free memory... */
 	/* first 1mb, BIOS, VGA, IVT, BDA, and also uboot(out bootloader), page tables... */
 	for (uint64_t a = 0; a < 0x100000; a += PAGE_SIZE)
 	{
 		if (!bitmap_test(a / PAGE_SIZE)) { bitmap_set(a /PAGE_SIZE); free_pages--; }
 	}
-
 	/* kernel image itself */
 	uint64_t kstart = (uint64_t)__kernel_start;
 	uint64_t kend = (uint64_t)__kernel_end;
@@ -67,7 +60,6 @@ pmm_init(uint32_t count, struct MemoryMapEntry_t *entries)
 	{
 		if (!bitmap_test(a / PAGE_SIZE)) { bitmap_set(a / PAGE_SIZE); free_pages--; }
 	}
-
 	/* at the very end of pmm_init, after the kernel reservation loop */
     kprint("pmm_init END: saved=", WHITE); kprint_hex((uint64_t)smap_saved, WHITE);
     kprint(" count=", WHITE); kprint_num(smap_saved_count, WHITE);
@@ -111,18 +103,15 @@ pmm_dump_stats(void)
 	kprint("\nPMM: free pages = ", WHITE);
 	kprint_hex(free_pages, GREEN);
 	kprint("\n", WHITE);
-
 	/* let's try some tests here */
 	void *a = pmm_alloc();
 	void *b = pmm_alloc();
 	pmm_free(a);
 	void *c = pmm_alloc();
-
 	kprint("PMM: alloc a = ", WHITE); kprint_hex((uint64_t)a, GREEN);
 	kprint("  b = ", WHITE); kprint_hex((uint64_t)b, GREEN);
 	kprint("  c = ", WHITE); kprint_hex((uint64_t)c, GREEN);
 	kprint("\n", WHITE);
-
 	if (a == c && a != b) kprint("PMM: self-test OK\n", GREEN);
 	else kprint("PMM: self-test FAILED\n", GREEN);
 }
@@ -158,52 +147,41 @@ pmm_dump_map(void)
 	kprint(" free=", WHITE); kprint_num(free_pages, WHITE);
 	kprint("\n", WHITE);
     kprint("Memory Map\n", GREEN);
-
     /* Compute installed usable RAM from SMAP */
     uint64_t usable_bytes = 0;
     uint32_t usable_regions = 0;
     for (uint32_t i = 0; i < smap_saved_count; ++i) {
 		if (smap_saved[i].type != 1) continue;
-
 		uint64_t start = smap_saved[i].base_address;
 		uint64_t end = smap_saved[i].base_address + smap_saved[i].length;
 		if (end > MAX_PHYS_ADDR) end = MAX_PHYS_ADDR;
 		if (start >= end) continue;
-
 		usable_bytes += end - start;
 		usable_regions++;
     }
-
     /* Summary */
     kprint("Bitmap covers:  ", WHITE);
     kprint_size(TOTAL_PAGES * PAGE_SIZE);
     kprint(" (", WHITE); kprint_num(TOTAL_PAGES, WHITE); kprint(" pages)\n", WHITE);
-
     kprint("Installed RAM:  ", WHITE);
     kprint_size(usable_bytes);
     kprint(" (", WHITE); kprint_num(usable_bytes / PAGE_SIZE, WHITE); kprint(" pages)\n", WHITE);
-
     kprint("Free:           ", WHITE);
     kprint_size(free_pages * PAGE_SIZE);
     kprint(" (", WHITE); kprint_num(free_pages, WHITE); kprint(" pages)\n", WHITE);
-
     kprint("Used/Reserved:  ", WHITE);
     kprint_size((TOTAL_PAGES - free_pages) * PAGE_SIZE);
     kprint(" (", WHITE); kprint_num(TOTAL_PAGES - free_pages, WHITE); kprint(" pages)\n", WHITE);
-
     /* Per-region dump */
     kprint("\nSMAP regions (", WHITE);
     kprint_num(smap_saved_count, WHITE);
     kprint(" total, ", WHITE);
     kprint_num(usable_regions, WHITE);
     kprint(" usable):\n", WHITE);
-
     for (uint32_t i = 0; i < smap_saved_count; ++i) {
         struct MemoryMapEntry_t *e = &smap_saved[i];
-
         if (e->type == 1) kprint("  [usable]   ", GREEN);
         else              kprint("  [reserved] ", WHITE);
-
         kprint_hex(e->base_address, WHITE);
         kprint(" - ", WHITE);
         kprint_hex(e->base_address + e->length, WHITE);

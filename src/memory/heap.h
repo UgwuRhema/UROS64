@@ -3,18 +3,22 @@
 #include "../func/func.h"
 
 #define HEAP_START_ADDR (VMM_BASE + 0x10000000ULL) /* 256MB above base */
-#define HEAP_MAGIC 0xDEADBEEF
+#define HEAP_MAGIC 0xDEADBEEF /*just a magic number*/
 
 /* the header struct */
 struct header_t
 {
-	uint64_t size;
+	uint64_t size;/*size of current block*/
 	int is_free;
 	struct header_t *next;
 	uint32_t magic; /* this would be used for memory corruption detection */
 };
 
+/*initializes the kernel heap*/
 extern void kheap_init(uint64_t);
+/*kernel heap allocatpor*/
 extern void *kernel_heap_malloc(uint64_t);
+/*kernel heap deallocator*/
 extern void kernel_heap_free(void *);
+/*kernel heap test function*/
 extern void heap_walk(void);
