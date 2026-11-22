@@ -155,11 +155,11 @@ qtmp:
 		-drive format=raw,file=$(IMG),index=0,if=ide \
 		-drive format=raw,file=$(IMG2),index=1,if=ide \
 		-m 512M \
-		-smp 2 \
-		-cpu Opteron_G2 \
+		-smp 3 \
+		-cpu EPYC \
 		-machine pc,pcspk-audiodev=snd0 \
 		-audiodev alsa,id=snd0 \
-		-display gtk,gl=on \
+		-display gtk \
 		-vga std \
 		-serial stdio	
 
