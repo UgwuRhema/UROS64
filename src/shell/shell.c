@@ -297,7 +297,9 @@ execute_command(int argc, char **argv)
 		if (argc > 1)
         {
             if (strcmp(argv[1], "-l") == 0) {
-                kprint("dir: coming soon!\n", WHITE);
+                int a = nothfs_readdir2();
+				if (a == 0)
+					kp_log("(NOTHFS)No files found. ", NOT_DONE);
                 return;
             }
         }
