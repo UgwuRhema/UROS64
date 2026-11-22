@@ -85,33 +85,39 @@ kernel_heap_malloc(uint64_t size)
 {
 	if (size == 0) return NULL;
 	size = (size + (8 - 1)) & ~(8 - 1); /* rounding size up to alignment */
-	/* let's walk the list now... */
-	struct header_t *curr = heap_start;
-	while (curr)
+	/* two passes: 1) walk the free list, 2) grow the heap and walk again */
+	for (int attempt = 0; attempt < 2; ++attempt)
 	{
-		if (curr->is_free && 
-				curr->size >= size)
+		/* let's walk the list now... */
+		struct header_t *curr = heap_start;
+		while (curr)
 		{
-			/* if the block is much bigger than neede, split it... */
-			if (curr->size >= size + sizeof(struct header_t) + MIN_SPLIT)
+			if (curr->is_free && 
+					curr->size >= size)
 			{
-				struct header_t *tail = (struct header_t *)((char *)curr + sizeof(struct header_t) + size);
-				tail->next = curr->next;
-				tail->size = curr->size - size - sizeof(struct header_t);
-				tail->is_free = 1;
-				tail->magic = HEAP_MAGIC;
-				curr->next = tail;
-				curr->size = size;
+				/* if the block is much bigger than neede, split it... */
+				if (curr->size >= size + sizeof(struct header_t) + MIN_SPLIT)
+				{
+					struct header_t *tail = (struct header_t *)((char *)curr + sizeof(struct header_t) + size);
+					tail->next = curr->next;
+					tail->size = curr->size - size - sizeof(struct header_t);
+					tail->is_free = 1;
+					tail->magic = HEAP_MAGIC;
+					curr->next = tail;
+					curr->size = size;
+				}
+				curr->is_free = 0;
+				/* hand back the pointer! */
+				return (void *)((char *)curr + sizeof(struct header_t));
 			}
-			curr->is_free = 0;
-			/* hand back the pointer! */
-			return (void *)((char *)curr + sizeof(struct header_t));
+			curr = curr->next;
 		}
-		curr = curr->next;
+		/*heap full? map more pages and try the walk one more time*/
+		if (kernel_heap_grow(size + sizeof(struct header_t)) != 0)
+			return NULL; /*could not map any pages*/
 	}
-	/*look here, when we couldn't we claim we are out memory but we can map 
-	 * more pages */
-	/*heap full?*/
+	/*this almost won't meet but still the function
+	 * needs and end-point*/
 	return NULL; /*default end point*/
 }
 
