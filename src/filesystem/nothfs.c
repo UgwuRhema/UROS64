@@ -100,7 +100,6 @@ nothfs_readdir(void)
 			/*every directory is 2 sectors?*/
 			kprint((char *)dirent[i].name, BLUE);
 			kprint(" ", WHITE);
-			kprint_num(dirent[i].size, GREEN);kprint("\n", WHITE);
 			file_count++; /*a directory is still a file*/
 		}
 		if (dirent[i].attr & NOTHFS_ATTR_CONTIG) {
@@ -110,8 +109,61 @@ nothfs_readdir(void)
 				continue;
 			kprint((char *)dirent[i].name, WHITE);
 			kprint(" ", WHITE);/*space between*/
-			kprint_num(dirent[i].size, GREEN); kprint("\n", WHITE);
 			file_count++;
+		} else {
+			kprint("Not a File\n", PURPLE);
+		}
+	}
+	kernel_heap_free(buffer);
+	return file_count;
+}
+
+int
+nothfs_readdir2(void)
+{
+	struct nothfs_dirent_t *dirent;
+	uint64_t current_lba = nothfs_root.volume_start_lba + nothfs_root.superblock.root_start;/*root_start is volume-relative*/
+	int file_count = 0;
+	/*read the 3 directory sectors*/
+	uint8_t *buffer = kernel_heap_malloc(NOTHFS_DIR_SECTORS * NOTHFS_SECTOR_SIZE);
+	if (!buffer)/*malloc failure*/
+		return -1;
+	if (nothfs_root.dev->read(nothfs_root.dev, current_lba, NOTHFS_DIR_SECTORS, buffer) != 0){
+		/*read failure*/
+		kernel_heap_free(buffer);
+		return -1;
+	}
+	dirent = (struct nothfs_dirent_t *)buffer;
+	/*scan every 64-byte dirent slot*/
+	for (int i = 0; i < (int)((NOTHFS_DIR_SECTORS * NOTHFS_SECTOR_SIZE) / sizeof(struct nothfs_dirent_t)); ++i)
+	{
+		/*attr 0 means this slot is free not EOD, an empty
+		 * slot can sit before a valid entry so we keep scanning instead of breaking out early like before*/
+		 /* so raw file data with attr!=0 becomes a "file"*/
+		if (dirent[i].attr == 0)
+			continue;
+		if (dirent[i].attr & NOTHFS_ATTR_DELETED)
+			continue;
+		if (dirent[i].attr & NOTHFS_ATTR_DIR)
+		{
+			/*every directory is 2 sectors?*/
+			kprint_num((uint64_t)dirent[i].attr, PURPLE);/*file-type attribute*/
+			kprint(" - ", WHITE);
+			kprint((char *)dirent[i].name, BLUE);
+			kprint(" - ", WHITE); kprint_num(dirent[i].size, WHITE);
+			kprint("\n", WHITE);
+			file_count++;
+		}
+		if (dirent[i].attr & NOTHFS_ATTR_CONTIG) {
+			/*just a debug*/
+			if (dirent[i].attr & NOTHFS_ATTR_DIR) /*if we find a dir because dir's also have
+			NOTHFS_ATTR_CONTIG */
+				continue;
+			kprint_num((uint64_t)dirent[i].attr, PURPLE); /*same thing*/
+			kprint(" - ", WHITE);
+			kprint((char *)dirent[i].name, YELLOW);
+			kprint(" - ", WHITE); kprint_num(dirent[i].size, WHITE);
+			kprint("\n", WHITE);
 		} else {
 			kprint("Not a File\n", PURPLE);
 		}
@@ -196,7 +248,7 @@ nothfs_read(struct vfs_file_t *file, void *buffer, uint64_t size)
     while (total_bytes_read < size && 
 			file->offset < file->node->size)
     {
-        uint64_t sector_index = file->offset / sector_size;
+        uint64_t sector_index = file->offset / sector_size;/*sector index*/
         uint64_t byte_offset = file->offset % sector_size;/*position inside sector*/
         uint64_t lba = nothfs_root.volume_start_lba + starting_clus + sector_index;/*volume sector -> disk LBA*/
         if (nothfs_root.dev->read(nothfs_root.dev, lba, 1, temp) != 0)
@@ -217,6 +269,7 @@ nothfs_read(struct vfs_file_t *file, void *buffer, uint64_t size)
         file->offset += chunk;
         total_bytes_read += chunk;
     }
+	/*cleanup*/
     kernel_heap_free(temp);
     return (int)total_bytes_read;
 }
@@ -246,6 +299,7 @@ nothfs_lookup(struct vfs_node_t *dir, const char *name)
 			continue;
 		if (dirent[i].attr & NOTHFS_ATTR_DELETED)
 			continue;
+		/*match name*/
         if(strncmp((char *)dirent[i].name, name, NOTHFS_NAME_LEN) == 0)
         {
             /*we now make a new vfs_node_t*/
