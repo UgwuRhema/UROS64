@@ -147,7 +147,7 @@ nothfs_readdir2(void)
 		if (dirent[i].attr & NOTHFS_ATTR_DIR)
 		{
 			/*every directory is 2 sectors?*/
-			kprint_num((uint64_t)dirent[i].attr, PURPLE);/*file-type attribute*/
+			kprint("ATTR_DIR", WHITE);/*file-type attribute*/
 			kprint(" - ", WHITE);
 			kprint((char *)dirent[i].name, BLUE);
 			kprint(" - ", WHITE); kprint_num(dirent[i].size, WHITE);
@@ -159,9 +159,9 @@ nothfs_readdir2(void)
 			if (dirent[i].attr & NOTHFS_ATTR_DIR) /*if we find a dir because dir's also have
 			NOTHFS_ATTR_CONTIG */
 				continue;
-			kprint_num((uint64_t)dirent[i].attr, PURPLE); /*same thing*/
+			kprint("ATTR_CONTIG", WHITE); /*same thing*/
 			kprint(" - ", WHITE);
-			kprint((char *)dirent[i].name, YELLOW);
+			kprint((char *)dirent[i].name, WHITE);
 			kprint(" - ", WHITE); kprint_num(dirent[i].size, WHITE);
 			kprint("\n", WHITE);
 		} else {

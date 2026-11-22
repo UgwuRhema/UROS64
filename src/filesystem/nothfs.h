@@ -4,12 +4,14 @@
 #include <stdint.h>
 #include "blockdev.h"
 
-#define NOTHFS_MAGIC "NOTHFS\0" 
-#define NOTHFS_VOLUME_LBA 256
+#define NOTHFS_MAGIC "NOTHFS\0" /*magic the superblock*/
+#define NOTHFS_VOLUME_LBA 256 /*nothfs
+superblock defailt logical block address*/
 
-#define NOTHFS_DIRENT_SIZE 64
-#define NOTHFS_NAME_LEN 38
+#define NOTHFS_DIRENT_SIZE 64 /*default dirent size*/
+#define NOTHFS_NAME_LEN 38 /*max filename len*/
 
+/*each sector size*/
 #define NOTHFS_SECTOR_SIZE 512
 /*number of sectors we scan at the start of a directory*/
 #define NOTHFS_DIR_SECTORS 3
@@ -18,9 +20,11 @@
 #define NOTHFS_ATTR_CONTIG (1 << 1)
 #define NOTHFS_ATTR_DELETED (1 << 2)
 
+/*nothfs_dirent_t struct to represent a nothfs directory entry
+ * which are either files or directories*/
 struct nothfs_dirent_t
 {
-	uint16_t attr;
+	uint16_t attr;/*FILE, DIR or DELETED*/
 	uint8_t name[NOTHFS_NAME_LEN];/*null terminated filename*/
 	uint64_t clus;/*starting sector, relative to volume start*/
 	uint64_t size;/*file size in bytes*/
@@ -29,6 +33,7 @@ struct nothfs_dirent_t
 } __attribute__((packed));
 
 /*we match the exact one used in mkfs.nothfs*/
+/*single nothfs_superblock*/
 struct nothfs_superblock {
 	uint8_t signature[8];
 	uint32_t version;
@@ -41,17 +46,21 @@ struct nothfs_superblock {
 	uint8_t reserved[512 - 56];/*padding*/
 } __attribute__((packed));
 
-/*tracker*/
+/*tracker
+ * we use this to track every bit of the nothfs disk
+ * after it has been mounted*/
 struct nothfs_mount_info_t {
 	struct block_device *dev;
 	uint64_t volume_start_lba;
 	struct nothfs_superblock superblock;
 };
 
+/*important pre-definitions*/
 struct vfs_file_t;
 struct vfs_node_t;
 struct vfs_ops_t;
 
+/*nothfs functions*/
 extern struct nothfs_mount_info_t nothfs_root;
 
 extern struct vfs_ops_t nothfs_ops;
