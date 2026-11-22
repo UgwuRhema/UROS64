@@ -2,6 +2,8 @@
 #include "../vga/vga.h"
 
 static struct header_t *heap_start = NULL;
+/*to track the last mapped VA*/
+static uint64_t heap_end_virt = HEAP_START_ADDR;
 
 void 
 kheap_init(uint64_t initial_pages)
@@ -22,9 +24,57 @@ kheap_init(uint64_t initial_pages)
 	heap_start->is_free = 1;
 	heap_start->magic = HEAP_MAGIC;
 	heap_start->next = NULL;
+	/*set the boundary checker*/
+	heap_end_virt = HEAP_START_ADDR + (initial_pages * PAGE_SIZE);
 }
 
 #define MIN_SPLIT 32 /* bumped UP! */
+
+#define EXTRA_ADD_PAGES (256 * 1024) /*this is the additional
+amount of bytes we want to map to increase the kernel heap
+when the already current heap is out of memory*/
+
+/*grows the heap to a particular amount*/
+static int
+kernel_heap_grow(size_t how_much)
+{
+	size_t actual_bytes = (how_much > EXTRA_ADD_PAGES) ? how_much : EXTRA_ADD_PAGES;
+	size_t pages = (actual_bytes + PAGE_SIZE - 1) / PAGE_SIZE;
+	uint64_t base_va = heap_end_virt;/*end of heap*/
+	size_t done = 0;/*tracker*/
+	for (; done < pages; ++done)
+	{
+		/*calculate the virtual address*/
+		uint64_t virt = base_va + (done * PAGE_SIZE);
+		void *pa = pmm_alloc();
+		if (!pa) break;
+		memset(pa, 0, PAGE_SIZE); /*clean newly allocated page*/
+		if (!vmm_map(virt, (uint64_t)pa, PTE_WRITABLE))
+		{
+			pmm_free(pa);
+			break;
+		}
+	}
+	if (done == 0) return -1;/*-1 on errors, failed to allocate any pages*/
+	/*now that we have increase pages and the heap size, let's create a header
+	 * for the newly created heap space*/
+	struct header_t *new_block = (struct header_t *)base_va;
+	new_block->size = (done * PAGE_SIZE) - sizeof(struct header_t);
+	new_block->is_free = 1;
+	new_block->magic = HEAP_MAGIC;/*set magic canary*/
+	new_block->next = NULL;
+	/*so now let's find the last block in the list and link the new one*/
+	struct header_t *curr = heap_start;
+	while (curr->next != NULL)
+	{
+		/*traverses till the it reaches the block whose next points
+		 * to NULL*/
+		curr = curr->next;
+	}
+	curr->next = new_block;/*link it*/
+	heap_end_virt = base_va + (done * PAGE_SIZE);/*update global tracker*/
+	return 0;/*success*/
+}
 
 void *
 kernel_heap_malloc(uint64_t size)
@@ -35,7 +85,8 @@ kernel_heap_malloc(uint64_t size)
 	struct header_t *curr = heap_start;
 	while (curr)
 	{
-		if (curr->is_free && curr->size >= size)
+		if (curr->is_free && 
+				curr->size >= size)
 		{
 			/* if the block is much bigger than neede, split it... */
 			if (curr->size >= size + sizeof(struct header_t) + MIN_SPLIT)
@@ -54,9 +105,10 @@ kernel_heap_malloc(uint64_t size)
 		}
 		curr = curr->next;
 	}
-	kprint("(kernel_heap_malloc)Heap Exhausted or Insufficient memory\n", PURPLE);
-	return NULL; /* when heap is exhausted! */
-	/* this is temporary and we will implement a way to grow our heap later */
+	/*look here, when we couldn't we claim we are out memory but we can map 
+	 * more pages */
+	/*heap full?*/
+	return NULL; /*default end point*/
 }
 
 void

@@ -193,7 +193,8 @@ nothfs_read(struct vfs_file_t *file, void *buffer, uint64_t size)
     uint64_t starting_clus = (uint64_t)(uintptr_t)file->node->fs_data;/*okay we get the startin cluster*/
     uint8_t *dest = (uint8_t *)buffer;/*advance this, not buffer itself*/
     uint64_t total_bytes_read = 0;
-    while (total_bytes_read < size && file->offset < file->node->size)
+    while (total_bytes_read < size && 
+			file->offset < file->node->size)
     {
         uint64_t sector_index = file->offset / sector_size;
         uint64_t byte_offset = file->offset % sector_size;/*position inside sector*/
