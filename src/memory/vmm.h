@@ -28,7 +28,7 @@ typedef uint8_t u8;
 /*initializes thge virtual memory manager*/
 extern void vmm_init(void);
 /*map and virtual address to a physical address*/
-extern void vmm_map(u64, u64, u64);
+extern int vmm_map(u64, u64, u64);
 /*unmap a virtual page*/
 extern void vmm_unmap(u64);
 /*translates a virtual address to its mapped physical 

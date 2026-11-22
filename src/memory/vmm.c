@@ -62,12 +62,14 @@ walk_to_pt(u64 virt, int create)
 }
 
 /* this should be accurate */
-void
+int
 vmm_map(u64 virt, u64 phys, u64 flags)
 {
 	u64 *pt = walk_to_pt(virt, 1);
+	if (!pt) return -1;
 	pt[PT_IDX(virt)] = phys | flags | PTE_PRESENT;
 	__asm__ volatile ("invlpg (%0)" :: "r"(virt));
+	return 0;/*success*/
 }
 
 void

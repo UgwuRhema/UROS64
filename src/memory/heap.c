@@ -17,7 +17,11 @@ kheap_init(uint64_t initial_pages)
 			/* memory allocation failure */
 			panic(); /* this functions just clears interrupts and halts the CPU */
 		}
-		vmm_map(virt, (uint64_t)phys, PTE_WRITABLE);
+		if (vmm_map(virt, (uint64_t)phys, PTE_WRITABLE) != 0)
+		{
+			pmm_free(phys);
+			panic();
+		}
 	}
 	heap_start = (struct header_t *)HEAP_START_ADDR;
 	heap_start->size = initial_pages * PAGE_SIZE - sizeof(struct header_t);
@@ -49,7 +53,7 @@ kernel_heap_grow(size_t how_much)
 		void *pa = pmm_alloc();
 		if (!pa) break;
 		memset(pa, 0, PAGE_SIZE); /*clean newly allocated page*/
-		if (!vmm_map(virt, (uint64_t)pa, PTE_WRITABLE))
+		if (vmm_map(virt, (uint64_t)pa, PTE_WRITABLE) != 0)
 		{
 			pmm_free(pa);
 			break;
