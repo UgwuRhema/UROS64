@@ -19,11 +19,9 @@ walk_to_pt(u64 virt, int create)
 	u64 *pdpt;
 	u64 *pd;
 	u64 *pt;
-
 	u64 i4 = PML4_IDX(virt);
 	u64 i3 = PDPT_IDX(virt);
 	u64 i2 = PD_IDX(virt);
-	
 	/* Page Map Level 4 Entry */
 	if (!(pml4[i4] & PTE_PRESENT))
 	{
@@ -33,11 +31,8 @@ walk_to_pt(u64 virt, int create)
 		for (int j = 0; j < 512; ++j) new[j] = 0;
 		pml4[i4] = (u64)new | PTE_PRESENT | PTE_WRITABLE;
 	}
-
 	/* Page Directory Pointer Table */
 	pdpt = (u64 *)(pml4[i4] & ~0xfffULL);
-
-
 	if (!(pdpt[i3] & PTE_PRESENT))
 	{
 		if (!create) return NULL;
@@ -46,16 +41,13 @@ walk_to_pt(u64 virt, int create)
 		for (int j = 0; j < 512; ++j) new[j] = 0;
 		pdpt[i3] = (u64)new | PTE_PRESENT | PTE_WRITABLE;
 	}
-
 	/* Page Directory */
 	pd = (u64 *)(pdpt[i3] & ~0xfffULL);
-
 	if (pd[i2] & PTE_HUGE)
 	{
 		/* this VA is covered by a huge page */
 		return NULL;
 	}
-
 	if (!(pd[i2] & PTE_PRESENT))
 	{
 		if (!create) return NULL;
@@ -64,10 +56,8 @@ walk_to_pt(u64 virt, int create)
 		for (int j = 0; j < 512; ++j) new[j] = 0;
 		pd[i2] = (u64)new | PTE_PRESENT | PTE_WRITABLE;
 	}
-
 	/* Page Table */
 	pt = (u64 *)(pd[i2] & ~0xfffULL);
-
 	return pt;
 }
 
@@ -98,7 +88,6 @@ vmm_translate(u64 virt)
 	u64 *pt = walk_to_pt(virt, 0);
 	if (pt)
 		return (pt[PT_IDX(virt)] & ~0xfffULL);
-	
 	return 0;
 }
 
@@ -108,25 +97,20 @@ vmm_test(void)
 	kprint("Starting the VMM TEST!\n", PURPLE);
 	void *phys = pmm_alloc(); /* a physical address */
 	u64 virt = VMM_BASE + 0x1000;
-
 	kprint("phys=", WHITE); kprint_hex((u64)phys, GREEN); kprint("\n", WHITE);
 	kprint("virt=", WHITE); kprint_hex(virt, PURPLE); kprint("\n", WHITE);
-	
 	vmm_map(virt, (u64)phys, PTE_WRITABLE);
 	kprint("translated=", WHITE); kprint_hex(vmm_translate(virt), GREEN);
 	kprint("\n", WHITE);
-
 	*(volatile u64 *)virt = 0xCAFEBABE12345678ULL;
 	kprint("readback=", WHITE);
 	kprint_hex(*(volatile u64 *)virt, PURPLE); kprint("\n", WHITE);
-
 	if (*(volatile u64 *)virt == 0xCAFEBABE12345678ULL)
 	{
 		kprint("VMM: pass\n", GREEN);
 	} else {
 		kprint("VMM: fail\n", PURPLE);
 	}
-
 	vmm_unmap(virt);
 	pmm_free(phys);
 }
