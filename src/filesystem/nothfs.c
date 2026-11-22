@@ -151,6 +151,9 @@ nothfs_readdir2(void)
 			kprint(" - ", WHITE);
 			kprint((char *)dirent[i].name, BLUE);
 			kprint(" - ", WHITE); kprint_num(dirent[i].size, WHITE);
+			kprint(" - ", WHITE);
+			kprint_num(dirent[i].datetime,
+						WHITE);
 			kprint("\n", WHITE);
 			file_count++;
 		}
@@ -163,6 +166,7 @@ nothfs_readdir2(void)
 			kprint(" - ", WHITE);
 			kprint((char *)dirent[i].name, WHITE);
 			kprint(" - ", WHITE); kprint_num(dirent[i].size, WHITE);
+			kprint(" - ", WHITE); kprint_num((uint64_t)dirent[i].datetime, WHITE);
 			kprint("\n", WHITE);
 		} else {
 			kprint("Not a File\n", PURPLE);
