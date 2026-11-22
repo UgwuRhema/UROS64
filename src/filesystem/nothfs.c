@@ -197,6 +197,7 @@ fake_nothfs_dirent_test(int add)
 	/*size is a byte count, not a sector count, and a file does not
 	 *include its terminating NUL*/
 	dummy->size = sizeof(payload) - 1;
+	dummy->datetime = 214822112026;
 	/*write the card into the root directory*/
 	int a = nothfs_root.dev->write(nothfs_root.dev, dirent_lba, 1, buffer);
 	if (a != 0) {
@@ -224,6 +225,7 @@ fake_nothfs_dirent_test(int add)
 	kstrcpy((char *)dummy_dir->name, "docs");
 	dummy_dir->clus = test_clus2;
 	dummy_dir->size = 1024; /*size for directories are different, every directory apart from root dir is 2 sectors*/
+	dummy_dir->datetime = 214922112026;/*21:49 22|11|2026*/
 	int b = nothfs_root.dev->write(nothfs_root.dev, dirent2_lba, 1, another_buffer);
 	if (b != 0)
 	{
