@@ -2,6 +2,7 @@
 #define VGA_H
 
 #include <stdint.h>
+#include <stdarg.h>
 
 typedef uint16_t u16;
 
@@ -32,7 +33,10 @@ extern uint64_t cursor_pos;
 extern void kprint_c(char, u16);
 extern void kprint(const char *, u16);
 extern void clear_screen(void);
+/*kp(kernel print)_log function to print logs*/
 extern void kp_log(const char *, enum status);
+/*variadic kp_log function*/
+extern void kp_log_var(const char *, ...);
 extern void kprint_hex(uint64_t, u16);
 extern void kprint_num(uint64_t, u16);
 extern void vga_scroll(void);

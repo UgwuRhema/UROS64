@@ -79,6 +79,17 @@ kp_log(const char *str, enum status s)
 }
 
 void
+kp_log_var(const char *fmt, ...)
+{
+	va_list args;
+	va_start(args, fmt);
+	char *data = va_arg(args,char *);
+	kprint(fmt, WHITE); kprint("", WHITE);
+	kprint(data, WHITE);
+	va_end(args);
+}
+
+void
 kprint_hex(uint64_t num, u16 color)
 {
     const char *hex = "0123456789ABCDEF"; /* valid hexadecimal values */
