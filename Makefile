@@ -208,7 +208,7 @@ gdb:
 		-S \
 		-hda $(IMG) \
 		-m 512 \
-		-d int,cpu_reset,guest_errors -D debug/qemu.log \
+		-d int,cpu_reset,guest_errors -D log/qemu.log \
 		-no-reboot -no-shutdown \
 		-display gtk \
 		-monitor stdio

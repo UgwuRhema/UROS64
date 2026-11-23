@@ -114,6 +114,7 @@ nothfs_readdir(void)
 			kprint("Not a File\n", PURPLE);
 		}
 	}
+	kprint_c('\n', WHITE);/*goog newline*/
 	kernel_heap_free(buffer);
 	return file_count;
 }
