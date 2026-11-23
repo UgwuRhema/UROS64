@@ -238,7 +238,7 @@ fake_nothfs_dirent_test(int add)
 	char payload2[] = "I have divine intellect! God gave me divin intellect\n";
 	uint8_t buffer3[512];
 	memset(buffer3, 0, sizeof(buffer3));/*clean*/
-	struct nothfs_dirent_t *file = (struct nothfs_dirent_t)buffer3;
+	struct nothfs_dirent_t *file = (struct nothfs_dirent_t *)buffer3;
 	/*it is going to be placed in the clus sector of the "docs" directory entry*/
 	uint32_t file_lba = (uint32_t)(data_lba2);/*right? I know this is a hardcode but it's a test*/
 	/*for some reason i feel like this should be relative to it's underlying dir
