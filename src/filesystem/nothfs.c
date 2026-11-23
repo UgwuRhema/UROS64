@@ -233,6 +233,17 @@ fake_nothfs_dirent_test(int add)
 		return;
 	}
 	/*has no data yet*/
+	/*let's crate it's data now, a new nothfs_dirent file*/
+	const uint64_t test_clus3 = 30;/*the new file's data cluster*/
+	uint8_t buffer3[512];
+	memset(buffer3, 0, sizeof(buffer3));/*clean*/
+	struct nothfs_dirent_t *file = (struct nothfs_dirent_t)buffer3;
+	/*it is going to be placed in the clus sector of the "docs" directory entry*/
+	uint32_t file_lba = (uint32_t)(data_lba2);/*right? I know this is a hardcode but it's a test*/
+	/*for some reason i feel like this should be relative to it's underlying dir
+	 * that is in this case docs clus...that file data should be at dirent2_lba + test_clus3 */
+	uint64_t file_data = nothfs_root.volume_start_lba + test_clus3;
+	kprint();
 }
 
 int
