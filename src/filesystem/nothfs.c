@@ -235,6 +235,7 @@ fake_nothfs_dirent_test(int add)
 	/*has no data yet*/
 	/*let's crate it's data now, a new nothfs_dirent file*/
 	const uint64_t test_clus3 = 30;/*the new file's data cluster*/
+	char payload2[] = "I have divine intellect! God gave me divin intellect\n";
 	uint8_t buffer3[512];
 	memset(buffer3, 0, sizeof(buffer3));/*clean*/
 	struct nothfs_dirent_t *file = (struct nothfs_dirent_t)buffer3;
@@ -243,7 +244,25 @@ fake_nothfs_dirent_test(int add)
 	/*for some reason i feel like this should be relative to it's underlying dir
 	 * that is in this case docs clus...that file data should be at dirent2_lba + test_clus3 */
 	uint64_t file_data = nothfs_root.volume_start_lba + test_clus3;
-	kprint();
+	kprint("", WHITE); kprint_num((uint64_t)file_lba, WHITE);
+	file->attr = NOTHFS_ATTR_CONTIG;
+	kstrcpy((char *)file->name, "docs_file.txt");
+	file->clus = test_clus3;
+	file->size = sizeof(payload2) - 1;
+	file->size = 122923112026;
+	if (nothfs_root.dev->write(nothfs_root.dev, file_lba, 1, buffer3) != 0)
+	{
+		kp_log("NOthfs_test write failure! ", NOT_DONE);
+		return;
+	}
+	/*let's write the data while we can*/
+	memset(buffer3, 0, sizeof(buffer3));
+	kstrcpy((char *)buffer3, payload2);
+	if (nothfs_root.dev->write(nothfs_root.dev, file_data, 1, buffer3) != 0)
+	{
+		kp_log("Failed to write file data to specifide cluster\n", NOT_DONE);
+		return;
+	}
 }
 
 int
