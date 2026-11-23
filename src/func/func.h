@@ -15,13 +15,17 @@ extern void outb(u16, u8);
 extern u8 inb(u16);
 extern void outw(u16, u16);
 extern u16 inw(u16);
+/*clear memory region with n number of bytes*/
 extern void memset(void *, u8, u32);
+/*copy data from one memory region to another*/
 extern void *memcpy(void * restrict, const void * restrict, size_t);
 extern void wrmsr(u32, u64);
 extern u64 rdmsr(u32);
 /*string functions*/
 extern int strcmp(const char *, const char *);
+/*get string length*/
 extern size_t strlen(const char *);
+/*QEMU shutdown*/
 extern void shutdown(void);
 extern int64_t string_to_int(const char *);
 extern int strncmp(const char *, const char *, size_t);
