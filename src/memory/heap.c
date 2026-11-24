@@ -110,6 +110,7 @@ kernel_heap_malloc(uint64_t size)
 				/* hand back the pointer! */
 				return (void *)((char *)curr + sizeof(struct header_t));
 			}
+			/*increment*/
 			curr = curr->next;
 		}
 		/*heap full? map more pages and try the walk one more time*/
@@ -128,7 +129,7 @@ kernel_heap_free(void *ptr)
 	struct header_t *header = (struct header_t *)((char *)ptr - sizeof(struct header_t));
 	if (!header)
 	{
-		kprint("KFREE failed because the hader is NULL\n", BLUE);
+		kprint("Kernel_heap_free failed because the hader is NULL\n", BLUE);
 		__asm__ volatile ("cli");
 		while (1)
 			__asm__ volatile ("hlt");
