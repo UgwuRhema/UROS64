@@ -105,7 +105,6 @@ uroskrnl_main_entry_point(uint32_t memory_entries_count, struct MemoryMapEntry_t
 	kp_log("(NOTHFS & VFS)Implement NothFS and VFS Drivers. ", DONE);
 	kp_log("(NOTHFS)Mount Successful. ", DONE);
 	/*let's bake the dirent test directly for debugging purposes*/
-	fake_nothfs_dirent_test(0);
 	kp_log("(UTILS)Starting shell...", ONLINE);
     /*finish strtok test*/
     sleep(900);
