@@ -153,6 +153,9 @@ kernel_heap_free(void *ptr)
 	}
 }
 
+/*
+ * Just a simple heap test function
+ */
 void
 heap_walk(void)
 {
