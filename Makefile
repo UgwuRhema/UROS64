@@ -4,7 +4,7 @@ AS := /usr/bin/nasm
 ASF := -f bin
 ASF2 := -f elf64
 CC := /usr/bin/cc
-CFLAGS := -ffreestanding -c -fno-pie -fno-stack-protector -mgeneral-regs-only -nostdlib -fno-builtin -Wall -Wextra -O2 -march=x86-64 -mno-red-zone
+CFLAGS := -ffreestanding -c -fno-pie -fno-stack-protector -mgeneral-regs-only -nostdlib -fno-builtin -Wall -Wextra -O2 -march=x86-64 -mno-red-zone -g
 LD := /usr/bin/ld
 LDFLAGS := -nostdlib -static
 LINK := ./src/linker.ld
