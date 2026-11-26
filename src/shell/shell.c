@@ -297,14 +297,14 @@ execute_command(int argc, char **argv)
 		if (argc > 1)
         {
             if (strcmp(argv[1], "-l") == 0) {
-                int a = nothfs_readdir2();
+                int a = nothfs_readdir2(NULL);
 				if (a == 0)
 					kp_log("(NOTHFS)No files found. ", NOT_DONE);
                 return;
             }
         }
         /*this is a minimal test for finddir*/
-		int dir = nothfs_readdir();
+		int dir = nothfs_readdir(vfs_root);/*pipe it in*/
 		if (dir == 0)
 			kp_log("(NOTHFS)No files found", NOT_DONE);
 	} else if (strcmp(cmd, "cat") == 0) {
