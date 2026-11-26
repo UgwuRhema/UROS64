@@ -65,14 +65,15 @@ extern struct nothfs_mount_info_t nothfs_root;
 
 extern struct vfs_ops_t nothfs_ops;
 
+/*mount the block device*/
 extern int nothfs_mount(struct block_device *);
 
 extern void nothfs_test(void);
 
-extern int nothfs_readdir(void);/*less*/
-extern int nothfs_readdir2(void);/*more verbose*/
+extern int nothfs_readdir(struct vfs_node_t *);/*less*/
+extern int nothfs_readdir2(struct vfs_node_t *);/*more verbose*/
 
-extern void fake_nothfs_dirent_test(int);
+extern void fake_nothfs_dirent_test(int);/*test*/
 extern int nothfs_read(struct vfs_file_t *, void *, uint64_t);
 extern struct vfs_node_t *nothfs_lookup(struct vfs_node_t *, const char *);
 

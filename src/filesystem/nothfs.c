@@ -71,15 +71,19 @@ nothfs_test(void)
 
 /*returns no of files/directories found or -1 on error*/
 int
-nothfs_readdir(void)
+nothfs_readdir(struct vfs_node_t *dir)
 {
 	struct nothfs_dirent_t *dirent;
-	uint64_t current_lba = nothfs_root.volume_start_lba + nothfs_root.superblock.root_start;/*root_start is volume-relative*/
+    uint64_t spec_clus = 0;/*get the cluster from the fs_data in the node*/
+	if (!dir) spec_clus = nothfs_root.superblock.root_start; else spec_clus = (uint64_t)(uintptr_t)dir->fs_data; 
+    uint64_t current_lba = nothfs_root.volume_start_lba + spec_clus;/*made it relative if there was a vfs_node_t passed
+    as a dir argument*/
 	int file_count = 0;
 	/*read the 3 directory sectors*/
 	uint8_t *buffer = kernel_heap_malloc(NOTHFS_DIR_SECTORS * NOTHFS_SECTOR_SIZE);
 	if (!buffer)
 		return -1;
+    /*read data into the buffer from the LBA*/
 	if (nothfs_root.dev->read(nothfs_root.dev, current_lba, NOTHFS_DIR_SECTORS, buffer) != 0){
 		kernel_heap_free(buffer);
 		return -1;
@@ -120,8 +124,9 @@ nothfs_readdir(void)
 }
 
 int
-nothfs_readdir2(void)
+nothfs_readdir2(struct vfs_node_t *dir)
 {
+    (void)dir;/*just test*/
 	struct nothfs_dirent_t *dirent;
 	uint64_t current_lba = nothfs_root.volume_start_lba + nothfs_root.superblock.root_start;/*root_start is volume-relative*/
 	int file_count = 0;
