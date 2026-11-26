@@ -322,8 +322,10 @@ execute_command(int argc, char **argv)
             } else {
                 /*else default traverse the root directory*/
                 int res = nothfs_readdir2(vfs_root);
-                kprint("(UTILS)dir: couldn't read contents of root directory\n", WHITE);
-                return;
+                if (res != 0) {
+                    kprint("(UTILS)dir: couldn't read contents of root directory\n", WHITE);
+                    return;
+                }
             }
         } else {
             /*when just a normal dir is passed*/
