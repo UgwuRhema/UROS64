@@ -298,20 +298,27 @@ execute_command(int argc, char **argv)
         if (argc > 1 &&
                 strcmp(argv[1], "-l") == 0)/*verbose rule*/
         {
-            if (argv[2])
+            if (argc > 2)
             {
                 struct vfs_file_t file;
                 char *dir_name = argv[2];/*get the directory name*/
                 /*we open the file*/
                 if (vfs_open(dir_name, &file) == 0)
                 {
+                    if (file.node->flags == VFS_FILE)
+                    {
+                        kprint("(UTILS)dir: not a directory\n", WHITE);
+                        vfs_close(&file);
+                        return;
+                    }
                     /*once we find ir, we just call readdir2 on the 
                      * node in the vfs_file_t*/
                     int res = nothfs_readdir2(file.node);/*yes*/
-                    if (res != 0)
+                    if (res == 0)
                     {
                         kprint("(UTILS)dir: couldn't read contents of ", WHITE);
                         kprint(dir_name, WHITE); kprint_c('\n', WHITE);
+                        vfs_close(&file);
                         return;
                     }
                 } else {
@@ -322,7 +329,7 @@ execute_command(int argc, char **argv)
             } else {
                 /*else default traverse the root directory*/
                 int res = nothfs_readdir2(vfs_root);
-                if (res != 0) {
+                if (res == 0) {
                     kprint("(UTILS)dir: couldn't read contents of root directory\n", WHITE);
                     return;
                 }
@@ -336,11 +343,18 @@ execute_command(int argc, char **argv)
                 struct vfs_file_t file;
                 if (vfs_open(dirname, &file) == 0)
                 {
+                    if (file.node->flags == VFS_FILE)
+                    {
+                        kprint("(UTILS)dir: not a directory\n", WHITE);
+                        vfs_close(&file);
+                        return;
+                    }
                     /*now we call normal readdir*/
-                    if (nothfs_readdir(file.node) != 0)
+                    if (nothfs_readdir(file.node) == 0)
                     {
                         kprint("(UTILS)dir: couldn't read contents of ", WHITE);
                         kprint(dirname, WHITE); kprint_c('\n', WHITE);
+                        vfs_close(&file);
                         return;
                     }
                     return;
