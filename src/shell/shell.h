@@ -2,7 +2,7 @@
 #define SHELL_H
 
 //#include "../vga/vga.h"
-#include "../ints/handlers.h"
+#include "../interrupts/handlers.h"
 #include "../func/func.h"
 
 #define CMD_MAX_LEN 256
