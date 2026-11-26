@@ -176,6 +176,7 @@ nothfs_readdir2(struct vfs_node_t *dir)
 			kprint(" - ", WHITE); kprint_num(dirent[i].size, WHITE);
 			kprint(" - ", WHITE); kprint_num((uint64_t)dirent[i].datetime, WHITE);
 			kprint("\n", WHITE);
+            file_count++; /*haha i alos forgot to increment for files*/
 		} else {
 			kprint("Not a File\n", PURPLE);
 		}
