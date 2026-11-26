@@ -337,7 +337,7 @@ execute_command(int argc, char **argv)
                 if (vfs_open(dirname, &file) == 0)
                 {
                     /*now we call normal readdir*/
-                    if (nothfs_readdir2(file.node) != 0)
+                    if (nothfs_readdir(file.node) != 0)
                     {
                         kprint("(UTILS)dir: couldn't read contents of ", WHITE);
                         kprint(dirname, WHITE); kprint_c('\n', WHITE);
