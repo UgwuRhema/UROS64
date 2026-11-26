@@ -109,8 +109,11 @@ uroskrnl_main_entry_point(uint32_t memory_entries_count, struct MemoryMapEntry_t
     /*finish strtok test*/
     /*let's test the op kp_log_var*/
 	int *ptr = (int *)kernel_heap_malloc(sizeof(int));
+	*ptr = 16;
 	/*this should print an address relative to VMM base*/
-	kp_log_var("(kp_log_var test)pointer %p\n", DONE, ptr);
+	kp_log_var("(kp_log_var test)pointer %p", DONE, ptr);
+	kp_log_var("(kp_Log_var test)hexadecimal of val 0x%x", DONE, *ptr);
+	kp_log_var("(kp_log_var test)val %d", DONE, *ptr);
 	kernel_heap_free(ptr);
 	sleep(900);
 	shell_init();
