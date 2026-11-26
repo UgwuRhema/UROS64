@@ -294,20 +294,65 @@ execute_command(int argc, char **argv)
 		kprint(" CPU Cores: ", WHITE); kprint_num((uint64_t)get_cpu_cores(), GREEN);
 		kprint("\n", WHITE);
 	} else if (strcmp(cmd, "finddir") == 0 || strcmp(cmd, "dir") == 0){
-		if (argc > 1)
+	    /*okay let's carry out a normal test*/
+        if (argc > 1 &&
+                strcmp(argv[1], "-l") == 0)/*verbose rule*/
         {
-            if (strcmp(argv[1], "-l") == 0) {
-                int a = nothfs_readdir2(vfs_root);
-				if (a == 0)
-					kp_log("(NOTHFS)No files found. ", NOT_DONE);
+            if (argv[2])
+            {
+                struct vfs_file_t file;
+                char *dir_name = argv[2];/*get the directory name*/
+                /*we open the file*/
+                if (vfs_open(dir_name, &file) == 0)
+                {
+                    /*once we find ir, we just call readdir2 on the 
+                     * node in the vfs_file_t*/
+                    int res = nothfs_readdir2(file.node);/*yes*/
+                    if (res != 0)
+                    {
+                        kprint("(UTILS)dir: couldn't read contents of ", WHITE);
+                        kprint(dir_name, WHITE); kprint_c('\n', WHITE);
+                        return;
+                    }
+                } else {
+                    kprint("(UTILS)dir: couldn't open ", WHITE); kprint(dir_name, WHITE);
+                    kprint(", doesn't exist\n", WHITE);
+                    return;
+                }
+            } else {
+                /*else default traverse the root directory*/
+                int res = nothfs_readdir2(vfs_root);
+                kprint("(UTILS)dir: couldn't read contents of root directory\n", WHITE);
                 return;
             }
+        } else {
+            /*when just a normal dir is passed*/
+            if (argc > 1)
+            {
+                char *dirname = argv[1];
+                /*we call open*/
+                struct vfs_file_t file;
+                if (vfs_open(dirname, &file) == 0)
+                {
+                    /*now we call normal readdir*/
+                    if (nothfs_readdir2(file.node) != 0)
+                    {
+                        kprint("(UTILS)dir: couldn't read contents of ", WHITE);
+                        kprint(dirname, WHITE); kprint_c('\n', WHITE);
+                        return;                   
+                    }
+                    return;
+                } else {
+                    kprint("(UTILS)dir: couldn't open ", WHITE); kprint(dirname, WHITE);
+                    kprint(", doesn't exist\n", WHITE);
+                    return;
+                }
+            } else {
+               (void)nothfs_readdir(vfs_root); 
+            }
+            return;
         }
-        /*this is a minimal test for finddir*/
-		int dir = nothfs_readdir(vfs_root);/*pipe it in*/
-		if (dir == 0)
-			kp_log("(NOTHFS)No files found", NOT_DONE);
-	} else if (strcmp(cmd, "cat") == 0) {
+    } else if (strcmp(cmd, "cat") == 0) {
 		if (argc < 2) {
 			kprint("Usage: cat <file>\n", BLUE);
 			return;
