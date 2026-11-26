@@ -38,13 +38,13 @@ nothfs_mount(struct block_device *dev)
 void
 nothfs_test(void)
 {
-	kp_log("(DRV)Drive Test", DONE);
+	kp_log_var("(DRV)Drive Test", DONE);
 	//struct block_device *ata = primary_create();
 	//blockdev_register(ata);
 	struct block_device *disk = blockdev_get_primary();
 	if (!disk)
 	{
-		kp_log("NULL blockdevice", NOT_DONE);
+		kp_log_var("NULL blockdevice", NOT_DONE);
 		return;
 	}
 	int mnt = nothfs_mount(disk);
@@ -61,10 +61,10 @@ nothfs_test(void)
 		kprint("Sector Size: ", PURPLE);
 		kprint_num((uint64_t)nothfs_root.superblock.sector_size, GREEN); kprint("\n", WHITE);
 	} else if (mnt < 0){
-		kp_log("NULL blockdevice", NOT_DONE);
+		kp_log_var("NULL blockdevice", NOT_DONE);
 		return;
 	} else {
-		kp_log("Disk is not formatted to NothFS, Signatures don't match", NOT_DONE);
+		kp_log_var("Disk is not formatted to NothFS, Signatures don't match", NOT_DONE);
 		return;
 	}
 }
@@ -210,7 +210,7 @@ fake_nothfs_dirent_test(int add)
 	/*write the card into the root directory*/
 	int a = nothfs_root.dev->write(nothfs_root.dev, dirent_lba, 1, buffer);
 	if (a != 0) {
-		kp_log("Fake-nothfs_dirent_t_test_fail. ", NOT_DONE);
+		kp_log_var("Fake-nothfs_dirent_t_test_fail. ", NOT_DONE);
 		return;
 	}
 	/*write the file data as well, so the test is self-contained*/
@@ -218,7 +218,7 @@ fake_nothfs_dirent_test(int add)
 	kstrcpy((char *)buffer, payload);
 	a = nothfs_root.dev->write(nothfs_root.dev, data_lba, 1, buffer);
 	if (a != 0)
-		kp_log("Fake-nothfs_data_test_fail. ", NOT_DONE);
+		kp_log_var("Fake-nothfs_data_test_fail. ", NOT_DONE);
 	/*we will now create anothre fake dirent*/
 	/*this new nothfs_dirent will have attribute NOTHFS_DIR | NOTHFS_CONTIG to represent
 	 * a directory */
@@ -238,7 +238,7 @@ fake_nothfs_dirent_test(int add)
 	int b = nothfs_root.dev->write(nothfs_root.dev, dirent2_lba, 1, another_buffer);
 	if (b != 0)
 	{
-		kp_log("Fake-nothfs_dirent2_test failure. ", NOT_DONE);
+		kp_log_var("Fake-nothfs_dirent2_test failure. ", NOT_DONE);
 		return;
 	}
 	/*has no data yet*/
@@ -261,7 +261,7 @@ fake_nothfs_dirent_test(int add)
 	file->datetime = 122923112026;/*FIX: from file->size to file->datetime*/
 	if (nothfs_root.dev->write(nothfs_root.dev, file_lba, 1, buffer3) != 0)
 	{
-		kp_log("NOthfs_test write failure! ", NOT_DONE);
+		kp_log_var("NOthfs_test write failure! ", NOT_DONE);
 		return;
 	}
 	/*let's write the data while we can*/
@@ -269,7 +269,7 @@ fake_nothfs_dirent_test(int add)
 	kstrcpy((char *)buffer3, payload2);
 	if (nothfs_root.dev->write(nothfs_root.dev, file_data, 1, buffer3) != 0)
 	{
-		kp_log("Failed to write file data to specifide cluster\n", NOT_DONE);
+		kp_log_var("Failed to write file data to specifide cluster\n", NOT_DONE);
 		return;
 	}
 }

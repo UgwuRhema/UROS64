@@ -37,25 +37,25 @@ uroskrnl_main_entry_point(uint32_t memory_entries_count, struct MemoryMapEntry_t
 	kprint("x86-64-bit Unrestricted Kernel written in C & ASM, porting to URSL soon\n", WHITE);
 	/*kprint("\n", WHITE); */
 	skprint("Entering setup....\n");
-	kp_log("(HARD)Enabled PC Speaker. ", DONE);
+	kp_log_var("(HARD)Enabled PC Speaker. ", DONE);
 	kprint("Setting up... \n", WHITE);
-	kp_log("(MEM)Enable 64-bit Paging. ", DONE);
+	kp_log_var("(MEM)Enable 64-bit Paging. ", DONE);
 	sleep(100);
-	kp_log("(VGA)Setup up VGA and VGA functions. ", DONE);
+	kp_log_var("(VGA)Setup up VGA and VGA functions. ", DONE);
 	sleep(100);
-	kp_log("(INT)Set up Interrupt Descriptor Table and load CPU Exceptions. ", DONE);
+	kp_log_var("(INT)Set up Interrupt Descriptor Table and load CPU Exceptions. ", DONE);
 	sleep(100);
-	kp_log("(INT)Enable LAPIC and IOAPIC Hardware Interrupts. ", DONE);
+	kp_log_var("(INT)Enable LAPIC and IOAPIC Hardware Interrupts. ", DONE);
 	sleep(100);
-	kp_log("(DRVS)Set up PS/2 Keyboard Driver and Model. ", DONE);
+	kp_log_var("(DRVS)Set up PS/2 Keyboard Driver and Model. ", DONE);
 	sleep(100);
-	kp_log("(INT)Initialized IRQ 2 and the PIT(Programmable Interval Timer). ", DONE);
+	kp_log_var("(INT)Initialized IRQ 2 and the PIT(Programmable Interval Timer). ", DONE);
 	sleep(100);
-	kp_log("(DRVS)Activated the COM1 and initialize the Serial Driver. ", DONE);
+	kp_log_var("(DRVS)Activated the COM1 and initialize the Serial Driver. ", DONE);
 	sleep(100);
-	kp_log("(DRVS)Initailized the PS/2 Mouse Interrupt Handler and Driver. ", DONE);
+	kp_log_var("(DRVS)Initailized the PS/2 Mouse Interrupt Handler and Driver. ", DONE);
 	sleep(100);
-	kp_log("(MEM)Memory Map Entries Online. ", ONLINE);
+	kp_log_var("(MEM)Memory Map Entries Online. ", ONLINE);
 	kprint("SMAP count= ", WHITE); kprint_hex(memory_entries_count, PURPLE); kprint("\n", WHITE);
 	for (uint32_t i = 0; i < memory_entries_count; i++) {
 		kprint("base_address=", WHITE); kprint_hex(mmap_entries[i].base_address, PURPLE);
@@ -66,46 +66,46 @@ uroskrnl_main_entry_point(uint32_t memory_entries_count, struct MemoryMapEntry_t
 	}
 	pmm_init(memory_entries_count, mmap_entries); /* this might fail, we hope it won't */
 	pmm_debug_state("after init"); //dbg A
-	kp_log("(MEM)Implemt Physical Memory Manager. Active. ", DONE);
-	kp_log("(MEM)PMM Dump Stats. Online. ", ONLINE);
+	kp_log_var("(MEM)Implemt Physical Memory Manager. Active. ", DONE);
+	kp_log_var("(MEM)PMM Dump Stats. Online. ", ONLINE);
 	pmm_dump_stats();
 	/* we will not dump stats for now, let's verify it doesn't cause a triple fault... */
 	pmm_debug_state("after stats"); //dbg B
 	pmm_dump_map();
 	sleep(100);
 	vmm_init();
-	kp_log("(MEM)Implement Virtual Memory Manager. Active. ", DONE);
-	kp_log("(MEM)VMM Dump Test. ", ONLINE);
+	kp_log_var("(MEM)Implement Virtual Memory Manager. Active. ", DONE);
+	kp_log_var("(MEM)VMM Dump Test. ", ONLINE);
 	vmm_test();
 	kheap_init(256); /* Initialization of the kernel heap, 256 Pages for now! */
-	kp_log("(MEM)Kernel Heap Initialized and Online. ", DONE);
-	kp_log("(MEM)Kernel Heap Allocator and De-Allocator Online. (kernel_heap_malloc & kernel_heap_free)", ONLINE);
-	kp_log("(DRV)Initialize ATA PIO Driver. ATA_READ_SECTOR ACTIVE. ", DONE);
+	kp_log_var("(MEM)Kernel Heap Initialized and Online. ", DONE);
+	kp_log_var("(MEM)Kernel Heap Allocator and De-Allocator Online. (kernel_heap_malloc & kernel_heap_free)", ONLINE);
+	kp_log_var("(DRV)Initialize ATA PIO Driver. ATA_READ_SECTOR ACTIVE. ", DONE);
 	uint8_t initial_status = inb(0x1f7);
 	kprint(" ATA Intial Status=", WHITE); kprint_hex((uint64_t)initial_status, PURPLE);
 	kprint("\n", WHITE);
-	kp_log("(DRV)ATA PIO Driver Subsystem ata_read_sector test success. ", DONE);
+	kp_log_var("(DRV)ATA PIO Driver Subsystem ata_read_sector test success. ", DONE);
 	struct block_device *ata = primary_create();/*create the block device*/
 	blockdev_register(ata);/*and register it to the list of block devices*/
-	kp_log("(DRV)ATA BlockDevice Created and Registered. ", DONE);
+	kp_log_var("(DRV)ATA BlockDevice Created and Registered. ", DONE);
 	int is_mounted = 0;/*mount tracker*/
 	int mnt = nothfs_mount(ata);
 	if (mnt != 0) {
-		kp_log("(DRV)Block Device failed to initialize. ", NOT_DONE);
+		kp_log_var("(DRV)Block Device failed to initialize. ", NOT_DONE);
 	} else {
 		is_mounted = 1; /*we set the mount tracker*/
 	}
 	int vfs_init_res = vfs_init();/*initialize Virtual File System*/
     if (vfs_init_res != 0)
     {
-        kp_log("(VFS)Failed to initialize VFS. ", NOT_DONE);
+        kp_log_var("(VFS)Failed to initialize VFS. ", NOT_DONE);
     }
-    kp_log("(NOTHFS)NothFS Online. Volume 256 Format->NothFS. ", DONE);
-	kp_log("(VFS)Initialize Virtual File System. ", DONE);
-	kp_log("(NOTHFS & VFS)Implement NothFS and VFS Drivers. ", DONE);
-	kp_log("(NOTHFS)Mount Successful. ", DONE);
+    kp_log_var("(NOTHFS)NothFS Online. Volume 256 Format->NothFS. ", DONE);
+	kp_log_var("(VFS)Initialize Virtual File System. ", DONE);
+	kp_log_var("(NOTHFS & VFS)Implement NothFS and VFS Drivers. ", DONE);
+	kp_log_var("(NOTHFS)Mount Successful. ", DONE);
 	/*let's bake the dirent test directly for debugging purposes*/
-	kp_log("(UTILS)Starting shell...", ONLINE);
+	kp_log_var("(UTILS)Starting shell...", ONLINE);
     /*finish strtok test*/
     sleep(900);
 	shell_init();

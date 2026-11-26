@@ -72,21 +72,21 @@ execute_command(int argc, char **argv)
 		char cpu_brand_name[49] = {0};
 		get_cpu_vendor_name(cpu_vendor_name); /* the new function we just made to get the name */
 		get_cpu_brand_string(cpu_brand_name);
-        kp_log("OS: UROS (Unrestricted Runtime Operating System) ", ONLINE);
-        kp_log("Kernel: UROS KERNEL(uroskrnl.ubin/uroskrnl) ", ONLINE);
+        kp_log_var("OS: UROS (Unrestricted Runtime Operating System) ", ONLINE);
+        kp_log_var("Kernel: UROS KERNEL(uroskrnl.ubin/uroskrnl) ", ONLINE);
 		kprint(" Uptime: ", WHITE); 
 		kprint_num(hours, GREEN); kprint("h ", WHITE);
 		kprint_num(minutes, GREEN); kprint("m ", WHITE);
 		kprint_num(seconds, GREEN); kprint("s\n", WHITE);
-        kp_log("Architecture: x86-64 Ring 0 Flat Architecture ", ONLINE);
+        kp_log_var("Architecture: x86-64 Ring 0 Flat Architecture ", ONLINE);
 		kprint(" CPU Vendor Name: ", WHITE);
 		kprint(cpu_vendor_name, GREEN); kprint("\n", WHITE);
 		kprint(" CPU Brand Name: ", WHITE);
 		kprint(cpu_brand_name, GREEN); kprint("\n", WHITE);
 		kprint(" CPU Cores: ", WHITE);
 		kprint_num((uint64_t)get_cpu_cores(), GREEN); kprint("\n", WHITE);
-        kp_log("APIC Status: LAPIC/IOAPIC Online. ", ONLINE);
-        kp_log("Identity Map: 0 - 4GB (2MB Pages) ", ONLINE);
+        kp_log_var("APIC Status: LAPIC/IOAPIC Online. ", ONLINE);
+        kp_log_var("Identity Map: 0 - 4GB (2MB Pages) ", ONLINE);
     } else if (strcmp(cmd, "vols") == 0) {
 		/*this is a rip-off vols command, i just added this so i could test*/
 		/*ata_identify_slave that's all, will improve later on!*/
@@ -94,7 +94,7 @@ execute_command(int argc, char **argv)
 		(void)main_drive;
 		int another_drive = ata_identify_slave();
 		if (another_drive == 0)
-			kp_log("(DRV)No external drive detected. ", NOT_DONE);
+			kp_log_var("(DRV)No external drive detected. ", NOT_DONE);
 	} else if (strcmp(cmd, "vreboot") == 0){
         kprint("Rebooting...\n", WHITE);
 		sleep(1400);
@@ -118,8 +118,8 @@ execute_command(int argc, char **argv)
 		__asm__ volatile ("ud2");
 	} else if (strcmp(cmd, "powerdown") == 0 || 
 			strcmp(cmd, "off") == 0){
-		kp_log("Deactivating all services and components", DONE);
-		kp_log("Done...You may now turn off the computer", DONE);
+		kp_log_var("Deactivating all services and components", DONE);
+		kp_log_var("Done...You may now turn off the computer", DONE);
 		kprint(" Halting...", WHITE);
 		sleep(2000); /* 2 seconds */
 		/* if on QEMU this shuts down the VM */
@@ -169,10 +169,10 @@ execute_command(int argc, char **argv)
         }
         int read = ata_read_sector(lba, buffer);
 		if (read < 0) {
-			kp_log("(DRV)ATA PIO Driver LBA sector read fail. ", NOT_DONE);
+			kp_log_var("(DRV)ATA PIO Driver LBA sector read fail. ", NOT_DONE);
 		    kernel_heap_free((void *)buffer); 
         } else {
-			kp_log("(DRV)ATA PIO Driver LBA sector read success. ", DONE);
+			kp_log_var("(DRV)ATA PIO Driver LBA sector read success. ", DONE);
 			kprint("Contents: \n", PURPLE);
 			/* let's try showing each character by character */
 			for (int i = 0; i < 512; ++i)
@@ -195,13 +195,13 @@ execute_command(int argc, char **argv)
         kstrcpy((char *)buffer, "Hello World\n");
         int write = ata_write_sector(lba, buffer);
         if (write < 0) {
-            kp_log("(DRV)ATA PIO Driver LBA Sector write fail. ", NOT_DONE);
+            kp_log_var("(DRV)ATA PIO Driver LBA Sector write fail. ", NOT_DONE);
             kernel_heap_free((void *)buffer);
         } else if (write > 0) {
-            kp_log("(DRV)ATA PIO Driver timeout during Status polling. ", NOT_DONE);
+            kp_log_var("(DRV)ATA PIO Driver timeout during Status polling. ", NOT_DONE);
             kernel_heap_free((void *)buffer);
         } else {
-            kp_log("(DRV)ATA PIO Driver LBA Sector write success. ", DONE);
+            kp_log_var("(DRV)ATA PIO Driver LBA Sector write success. ", DONE);
             kernel_heap_free((void *)buffer);
         }
     } else if (strcmp(cmd, "mkfs.nothfs") == 0) {
@@ -223,11 +223,11 @@ execute_command(int argc, char **argv)
 		/*now we call ata_write_sector*/
 		int write = ata_write_sector(lba, (uint8_t *)&sb);
 		if (write < 0)
-			kp_log("(DRV)ATA PIO Driver LBA Sector write fail. ", NOT_DONE);
+			kp_log_var("(DRV)ATA PIO Driver LBA Sector write fail. ", NOT_DONE);
 		else if (write > 0)
-			kp_log("(DRV)ATA PIO Driver timeout during Status polling. ", NOT_DONE);
+			kp_log_var("(DRV)ATA PIO Driver timeout during Status polling. ", NOT_DONE);
 		else
-			kp_log("(DRV)ATA PIO Driver LBA Sector write success. ", DONE);
+			kp_log_var("(DRV)ATA PIO Driver LBA Sector write success. ", DONE);
 	} else if (strcmp(cmd, "tmp_alloc") == 0){
 		if (argc < 2)
 			kprint("Usage: tmp_alloc <bytes>\n", BLUE);
@@ -266,7 +266,7 @@ execute_command(int argc, char **argv)
 		kprint("\n", WHITE);
 		if (response == 'y')
 		{
-			kp_log("(SYS)Halt. ", DONE);
+			kp_log_var("(SYS)Halt. ", DONE);
 			__asm__ volatile ("cli");
 			while (1)
 				__asm__ volatile ("hlt");
@@ -379,7 +379,7 @@ execute_command(int argc, char **argv)
 		{
 			if (nothfs_file.node->flags == VFS_DIR) { /*if vfs_file_t is holding the node of type
 			VFS_DIR, normally cat shouldn't be able to display contents of a directory*/
-				kp_log("(UTILS)cat: Cannot cat a directory. ", NOT_DONE);
+				kp_log_var("(UTILS)cat: Cannot cat a directory. ", NOT_DONE);
 				return;
 			}
 			/*real men use the heap*/
@@ -428,7 +428,7 @@ execute_command(int argc, char **argv)
 		kprint("\n", WHITE);
 	} else if (strcmp(cmd, "mnt") == 0) {
 		if (nothfs_mount(nothfs_root.dev) != 0)
-			kp_log("(NOTHFS)Failed to mount disk, LBA 256 doesn't contain NothFS Superblock\n"
+			kp_log_var("(NOTHFS)Failed to mount disk, LBA 256 doesn't contain NothFS Superblock\n"
 					, NOT_DONE);
 	} else {
         kprint("Unknown Command: ", PURPLE);

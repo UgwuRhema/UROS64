@@ -61,32 +61,131 @@ clear_screen(void)
     cursor_pos = 0;
 }
 
-void
-kp_log(const char *str, enum status s)
+static void
+kprint_int(int64_t num, u16 color)
 {
-	kprint(" ", WHITE);
-    kprint(str, WHITE);
-    kprint(" [", WHITE);
-    if (s == 0)
-    {
-        kprint("d", GREEN);
-    } else if (s == 1){
-        kprint("fail", PURPLE);
-    } else {
-        kprint("o", GREEN);
-    }
-    kprint("] \n", WHITE);
+	if (num < 0)
+	{
+		kprint_c('-', color);
+		/* -(INT64_MIN) overflows, so negate after adding one */
+		kprint_num((uint64_t)(-(num + 1)) + 1, color);
+	}
+	else
+	{
+		kprint_num((uint64_t)num, color);
+	}
+}
+
+static void
+kprint_hex_raw(uint64_t num, u16 color, int uppercase)
+{
+	const char *digits = uppercase ? "0123456789ABCDEF" : "0123456789abcdef";
+	char buf[16];
+	int i = 0;
+
+	if (num == 0)
+	{
+		kprint_c('0', color);
+		return;
+	}
+	while (num > 0)
+	{
+		buf[i++] = digits[num & 0xf];
+		num >>= 4;
+	}
+	while (i > 0)
+		kprint_c(buf[--i], color);
+}
+
+/*print fmt with basic printf-style specifiers*/
+static void
+kvprint(const char *fmt, va_list args, u16 color)
+{
+	for (const char *p = fmt; *p; ++p)
+	{
+		if (*p != '%')
+		{
+			kprint_c(*p, color);
+			continue;
+		}
+		++p;
+		if (*p == '\0')
+		{
+			kprint_c('%', color);
+			break;
+		}
+		int is_64 = 0;
+		while (*p == 'l') /*%l and %ll both mean 64-bit here*/
+		{
+			is_64 = 1;
+			++p;
+		}
+		if (*p == '\0') /*format ended after the length modifier*/
+		{
+			kprint_c('%', color);
+			break;
+		}
+		switch (*p)
+		{
+			case 'd':
+			case 'i':
+				if (is_64)
+					kprint_int(va_arg(args, int64_t), color);
+				else
+					kprint_int(va_arg(args, int), color);
+				break;
+			case 'u':
+				if (is_64)
+					kprint_num(va_arg(args, uint64_t), color);
+				else
+					kprint_num(va_arg(args, unsigned int), color);
+				break;
+			case 'x':
+			case 'X':
+				if (is_64)
+					kprint_hex_raw(va_arg(args, uint64_t), color, *p == 'X');
+				else
+					kprint_hex_raw(va_arg(args, unsigned int), color, *p == 'X');
+				break;
+			case 'p':
+				kprint_hex((uint64_t)(uintptr_t)va_arg(args, void *), color);
+				break;
+			case 's':
+			{
+				char *str = va_arg(args, char *);
+				kprint(str ? str : "(null)", color);
+				break;
+			}
+			case 'c':
+				kprint_c((char)va_arg(args, int), color);
+				break;
+			case '%':
+				kprint_c('%', color);
+				break;
+			default: /*unknown specifier, print it as-is*/
+				kprint_c('%', color);
+				kprint_c(*p, color);
+				break;
+		}
+	}
 }
 
 void
-kp_log_var(const char *fmt, ...)
+kp_log_var(const char *fmt, enum status s, ...)
 {
 	va_list args;
-	va_start(args, fmt);
-	char *data = va_arg(args,char *);
-	kprint(fmt, WHITE); kprint("", WHITE);
-	kprint(data, WHITE);
+	va_start(args, s);
+	kprint(" ", WHITE);
+	kvprint(fmt, args, WHITE);
 	va_end(args);
+	kprint(" [", WHITE);
+	if (s == DONE)
+		kprint("d", GREEN);
+	else if (s == NOT_DONE)
+		kprint("fail", PURPLE);
+	else
+		kprint("o", GREEN);
+	kprint("] \n", WHITE);
 }
 
 void
