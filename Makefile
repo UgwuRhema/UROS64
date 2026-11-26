@@ -145,7 +145,8 @@ q:
 		-audiodev alsa,id=snd0 \
 		-display gtk \
 		-vga std \
-		-serial stdio
+		-serial stdio \
+		2> /dev/null
 
 #this is like a temporary build
 #for every new addition that i wanted to test but not make default

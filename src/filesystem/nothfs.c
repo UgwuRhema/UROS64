@@ -126,9 +126,11 @@ nothfs_readdir(struct vfs_node_t *dir)
 int
 nothfs_readdir2(struct vfs_node_t *dir)
 {
-    (void)dir;/*just test*/
 	struct nothfs_dirent_t *dirent;
-	uint64_t current_lba = nothfs_root.volume_start_lba + nothfs_root.superblock.root_start;/*root_start is volume-relative*/
+    uint64_t spec_clus = 0;
+    /*get the specified cluster*/
+    if (!dir) spec_clus = nothfs_root.superblock.root_start; else spec_clus = (uint64_t)(uintptr_t)dir->fs_data;
+	uint64_t current_lba = nothfs_root.volume_start_lba + spec_clus;/*root_start is volume-relative*/
 	int file_count = 0;
 	/*read the 3 directory sectors*/
 	uint8_t *buffer = kernel_heap_malloc(NOTHFS_DIR_SECTORS * NOTHFS_SECTOR_SIZE);

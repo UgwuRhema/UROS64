@@ -297,7 +297,7 @@ execute_command(int argc, char **argv)
 		if (argc > 1)
         {
             if (strcmp(argv[1], "-l") == 0) {
-                int a = nothfs_readdir2(NULL);
+                int a = nothfs_readdir2(vfs_root);
 				if (a == 0)
 					kp_log("(NOTHFS)No files found. ", NOT_DONE);
                 return;
