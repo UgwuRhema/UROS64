@@ -107,7 +107,12 @@ uroskrnl_main_entry_point(uint32_t memory_entries_count, struct MemoryMapEntry_t
 	/*let's bake the dirent test directly for debugging purposes*/
 	kp_log_var("(UTILS)Starting shell...", ONLINE);
     /*finish strtok test*/
-    sleep(900);
+    /*let's test the op kp_log_var*/
+	int *ptr = (int *)kernel_heap_malloc(sizeof(int));
+	/*this should print an address relative to VMM base*/
+	kp_log_var("(kp_log_var test)pointer %p\n", DONE, ptr);
+	kernel_heap_free(ptr);
+	sleep(900);
 	shell_init();
     /* infinte loop */
 	while (1)
