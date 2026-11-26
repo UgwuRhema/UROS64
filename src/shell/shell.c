@@ -341,7 +341,7 @@ execute_command(int argc, char **argv)
                     {
                         kprint("(UTILS)dir: couldn't read contents of ", WHITE);
                         kprint(dirname, WHITE); kprint_c('\n', WHITE);
-                        return;                   
+                        return;
                     }
                     return;
                 } else {
