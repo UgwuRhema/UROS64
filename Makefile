@@ -76,6 +76,7 @@ script01:
 	$(CC) -Wall -Wextra -g -O0 -march=native -o $(SCRIPT1_OUT) $(SCRIPT1)
 
 kernel:
+	$(MAKE) -C .
 	$(AS) $(ASF2) -o $(KE_O) $(KE_SRC)
 	$(CC) $(CFLAGS)	-o $(K_O) $(K)
 	$(CC) $(CFLAGS) -o $(VGA_O) $(VGA)
