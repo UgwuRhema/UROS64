@@ -258,7 +258,7 @@ fake_nothfs_dirent_test(int add)
 	kstrcpy((char *)file->name, "docs_file.txt");
 	file->clus = test_clus3;
 	file->size = sizeof(payload2) - 1;
-	file->size = 122923112026;
+	file->datetime = 122923112026;/*FIX: from file->size to file->datetime*/
 	if (nothfs_root.dev->write(nothfs_root.dev, file_lba, 1, buffer3) != 0)
 	{
 		kp_log("NOthfs_test write failure! ", NOT_DONE);
